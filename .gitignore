@@ -2,7 +2,10 @@
 **/node_modules/
 **/dist/
 **/ssl/
+**/logs/
 
+**/bun.lock
+**/package.lock.json
 **/NOTES.md
 
 **/.env

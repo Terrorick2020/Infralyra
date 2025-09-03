@@ -6,9 +6,10 @@
 
 **/bun.lock
 **/package.lock.json
+**/config.yml
 **/NOTES.md
-
 **/.env
+
 **/*.crt
 **/*.key
 **/*.pem

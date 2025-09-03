@@ -1,0 +1,11 @@
+**/.vscode/
+**/node_modules/
+**/dist/
+**/ssl/
+
+**/NOTES.md
+
+**/.env
+**/*.crt
+**/*.key
+**/*.pem

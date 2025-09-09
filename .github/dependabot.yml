@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/apps/app"
+    schedule:
+      interval: "yearly"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "app"
+
+  - package-ecosystem: "gomod"
+    directory: "/apps/api"
+    schedule:
+      interval: "yearly"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "api"

@@ -1,0 +1,40 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  frontend:
+    name: Frontend CI (Next.js)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - run: npm ci
+        working-directory: ./apps/app
+      - run: npm test
+        working-directory: ./apps/app
+      - run: npm run build
+        working-directory: ./apps/app
+
+  backend:
+    name: Backend CI (Go)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+      - run: go mod download
+        working-directory: ./apps/api
+      - run: go test ./...
+        working-directory: ./apps/api

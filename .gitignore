@@ -6,7 +6,7 @@
 
 **/bun.lock
 **/package.lock.json
-**/config.yml
+**/go.sum
 **/NOTES.md
 **/.env
 

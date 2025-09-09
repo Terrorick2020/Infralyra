@@ -1,0 +1,27 @@
+name: Deploy Pipeline
+
+on:
+  push:
+    branches:
+      - main        # деплой только из main
+  workflow_dispatch:  # возможность ручного запуска
+
+jobs:
+  deploy:
+    name: Deploy to Server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup environment
+        run: echo "Настройка переменных окружения и доступов"
+
+      - name: Deploy frontend
+        run: |
+          echo "Команды деплоя фронтенда"
+          # пример: scp/rsync/docker push
+
+      - name: Deploy backend
+        run: |
+          echo "Команды деплоя бэкенда"
+          # пример: ssh/deploy скрипт

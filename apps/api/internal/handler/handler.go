@@ -31,5 +31,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("/sign-up", AuthMiddleware(), AdmineOnlyMiddleware(), h.signUp)
 	}
 
+	sniff := router.Group("/sniff")
+	sniff.Use(AuthMiddleware())
+	{
+		sniff.GET("/start", h.snifStart)
+		sniff.GET("/finish", h.snifFinish)
+	}
+
 	return router
 }

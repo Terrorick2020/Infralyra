@@ -8,6 +8,7 @@
 **/package.lock.json
 **/go.sum
 **/NOTES.md
+**/NOTES.pdf
 **/.env
 
 **/*.crt

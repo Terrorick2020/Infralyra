@@ -62,7 +62,7 @@ func InitConfig() error {
 		return err
 	}
 
-	log.Println("✔️  Инициализация конфигурации прошла успешно")
+	log.Println("✔️   Инициализация конфигурации прошла успешно")
 
 	return nil
 }

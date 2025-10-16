@@ -41,6 +41,7 @@ func (r *RedisRepoClient) Set(ctx context.Context, key string, value any, ttl ti
 			key,
 			err.Error(),
 		)
+		
 		return err
 	}
 	return r.rdb.Set(ctx, key, data, ttl).Err()
@@ -49,13 +50,19 @@ func (r *RedisRepoClient) Set(ctx context.Context, key string, value any, ttl ti
 func (r *RedisRepoClient) Get(ctx context.Context, key string, dest any) error {
 	data, err := r.rdb.Get(ctx, key).Bytes()
 	if err != nil {
-		logger.Logger.Errorf(
-			"❌ Ошибка получения данных по ключу: %s в redis. %s",
-			key,
-			err.Error(),
-		)
+		if err == redis.Nil {
+			logger.Logger.Warnf("⚠️  Ключ %s не найден в Redis", key)
+		} else {
+			logger.Logger.Errorf(
+				"❌ Ошибка получения данных по ключу: %s в redis. %s",
+				key,
+				err.Error(),
+			)
+		}
+
 		return err
 	}
+
 	return json.Unmarshal(data, dest)
 }
 

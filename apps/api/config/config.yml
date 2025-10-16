@@ -17,10 +17,10 @@ psql_db:
 redis_db:
   host: "localhost"
   port: "6379"
-  db: "0"
+  db: 0
 
 auth:
-  access_token_ttl: 15m
-  refresh_token_ttl: 7d
+  access_token_ttl: "15m"
+  refresh_token_ttl: "168h"
   rate_limit_count: 20
-  rate_limit_ttl: 1m
+  rate_limit_ttl: "1m"

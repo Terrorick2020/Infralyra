@@ -23,6 +23,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	router.Use(RateLimiterMiddleware(h.service.Authorization))
 
+	router.GET("/ping", h.Ping)
+
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sign-in", h.signIn)

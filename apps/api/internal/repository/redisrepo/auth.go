@@ -21,6 +21,14 @@ func (rra *RedisRepoAuth) GetRateLimit(ctx context.Context, ip string) (int, err
 
 	err := rra.client.Get(ctx, key, &count)
 
+	if err == redis.Nil {
+		count = 0
+
+		err = rra.client.Set(ctx, key, count, config.InfralyraConfig.Auth.RateLimitTTL)
+
+		return count, err
+	}
+
 	return count, err
 }
 

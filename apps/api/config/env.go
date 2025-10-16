@@ -59,7 +59,7 @@ func InitEnv() error {
 		AuthSecret: os.Getenv("AUTH_SECRET"),
 	}
 
-	log.Println("✔️  Инициализация переменных окружения прошла успешно")
+	log.Println("✔️   Инициализация переменных окружения прошла успешно")
 
 	return nil
 }

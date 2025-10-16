@@ -34,7 +34,7 @@ func InitPsqlDbConnect() (*sqlx.DB, error) {
 	}
 
 	log.Printf(
-		"✔️ Успешное подключение к базе данных %s\n",
+		"✔️  Успешное подключение к базе данных %s\n",
 		config.InfralyraConfig.PsqlDb.Dbname,
 	)
 
@@ -59,7 +59,7 @@ func InitPsqlDbMigration() error {
 		return err
 	}
 
-	log.Println("✔️ Успешное выполнение psql миграций")
+	log.Println("✔️  Успешное выполнение psql миграций")
 
 	return nil
 }
@@ -70,7 +70,7 @@ func CloseConnect(db *sqlx.DB) error {
 	}
 
 	log.Printf(
-		"✔️ Успешное закрытие соединения с базой данных %s",
+		"✔️  Успешное закрытие соединения с базой данных %s",
 		config.InfralyraConfig.PsqlDb.Dbname,
 	)
 

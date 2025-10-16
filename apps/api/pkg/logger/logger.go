@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	dirLogPath = "logs"
+	dirLogPath  = "logs"
 	fileLogPath = "logs/infralyra.log"
 )
 
@@ -70,7 +70,7 @@ func InitLogger() error {
 		Logger.SetFormatter(terminalFormatter)
 	}
 
-	log.Println("✔️  Инициализация системы логирования прошла успешно")
+	log.Println("✔️   Инициализация системы логирования прошла успешно")
 
 	return nil
 }

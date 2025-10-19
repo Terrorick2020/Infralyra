@@ -16,11 +16,6 @@ type AuthService struct {
 	redisRepo redisrepo.Authorization
 }
 
-type TokenClaims struct {
-	UserId int           `json:"user_id"`
-	Role   psqlrepo.Role `json:"role"`
-}
-
 func NewAuthService(
 	psqlRepo psqlrepo.Users,
 	redisRepo redisrepo.Authorization,
@@ -67,7 +62,7 @@ func (as *AuthService) InitUser(ctx context.Context, meta redisrepo.UserClient, 
 	}
 
 	accToken, err := utils.GenerateToken(
-		TokenClaims{user.ID, user.Role},
+		dto.TokenClaims{UserId: user.ID, Role: user.Role},
 		config.InfralyraConfig.Auth.AccessTokenTTL,
 		config.InfralyraEnv.AuthSecret,
 	)
@@ -79,7 +74,7 @@ func (as *AuthService) InitUser(ctx context.Context, meta redisrepo.UserClient, 
 	}
 
 	refToken, err := utils.GenerateToken(
-		TokenClaims{user.ID, user.Role},
+		dto.TokenClaims{UserId: user.ID, Role: user.Role},
 		config.InfralyraConfig.Auth.RefreshTokenTTL,
 		config.InfralyraEnv.AuthSecret,
 	)
@@ -120,6 +115,6 @@ func (as *AuthService) CreateUser(ctx context.Context, data dto.SignUpDto) error
 	if err != nil {
 		logger.Logger.Errorf("❌ Ошибка создания нового пользователя psql: %s", err.Error())
 	}
-	
+
 	return err
 }

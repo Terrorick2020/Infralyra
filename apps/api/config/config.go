@@ -13,6 +13,7 @@ type GlobalConfig struct {
 	PsqlDb  PasqlDbConfig `mapstructure:"psql_db"`
 	RedisDb RedisConfig   `mapstructure:"redis_db"`
 	Auth    AuthConfig    `mapstructure:"auth"`
+	Inter   InterConfig   `mapstructure:"interfaces"`
 }
 
 type ServerConfig struct {
@@ -45,6 +46,10 @@ type AuthConfig struct {
 	RefreshTokenTTL time.Duration `mapstructure:"refresh_token_ttl"`
 	RateLimitTTL    time.Duration `mapstructure:"rate_limit_ttl"`
 	RateLimitCount  int           `mapstructure:"rate_limit_count"`
+}
+
+type InterConfig struct {
+	SaveTTL time.Duration `mapstructure:"save_ttl"`
 }
 
 var InfralyraConfig *GlobalConfig

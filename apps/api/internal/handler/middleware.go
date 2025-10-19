@@ -2,6 +2,7 @@ package handler
 
 import (
 	"InfralyraApi/config"
+	"InfralyraApi/internal/handler/dto"
 	"InfralyraApi/internal/repository/psqlrepo"
 	"InfralyraApi/internal/service"
 	"InfralyraApi/pkg/logger"
@@ -42,7 +43,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		claims, err := utils.ParseToken[service.TokenClaims](token, config.InfralyraEnv.AuthSecret)
+		claims, err := utils.ParseToken[dto.TokenClaims](token, config.InfralyraEnv.AuthSecret)
 		if err != nil {
 			errRes := ErrRes[*struct{}](ErrAuthUser, nil)
 			SendResponse(ctx, http.StatusUnauthorized, errRes)
@@ -54,14 +55,14 @@ func AuthMiddleware() gin.HandlerFunc {
 		ip := ctx.ClientIP()
 
 		logger.Logger.Infof("Пользователь ip: %s успешно прошёл авторизацию", ip)
-		
+
 		ctx.Next()
 	}
 }
 
 func AdmineOnlyMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		claims, err := utils.GetClaims[service.TokenClaims](ctx, CtxUserClaimsName)
+		claims, err := utils.GetClaims[dto.TokenClaims](ctx, CtxUserClaimsName)
 		if err != nil || claims.Role != psqlrepo.Admine {
 			errRes := ErrRes[*struct{}](ErrAuthForbidden, nil)
 			SendResponse(ctx, http.StatusForbidden, errRes)

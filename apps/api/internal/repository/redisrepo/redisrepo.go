@@ -1,6 +1,7 @@
 package redisrepo
 
 import (
+	"InfralyraApi/pkg/scan"
 	"context"
 	"time"
 
@@ -20,14 +21,21 @@ type Authorization interface {
 	IncrRateLimit(ctx context.Context, ip string) error
 }
 
+type Scan interface {
+	GetInterfaces(ctx context.Context) ([]scan.InterfaceInfo, error)
+	SetInterfaces(ctx context.Context, data []scan.InterfaceInfo) error
+}
+
 type RedisRepo struct {
 	Client
 	Authorization
+	Scan
 }
 
 func NewRedisRepo(rdb *redis.Client) *RedisRepo {
 	return &RedisRepo{
 		Client: NewRedisRepoClient(rdb),
 		Authorization: NewRedisRepoAuth(rdb),
+		Scan: NewRedisRepoScan(rdb),
 	}
 }

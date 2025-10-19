@@ -24,3 +24,6 @@ auth:
   refresh_token_ttl: "168h"
   rate_limit_count: 20
   rate_limit_ttl: "1m"
+
+interfaces:
+  save_ttl: "6h"

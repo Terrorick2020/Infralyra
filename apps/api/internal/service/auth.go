@@ -8,6 +8,7 @@ import (
 	"InfralyraApi/pkg/logger"
 	"InfralyraApi/pkg/utils"
 	"context"
+	"errors"
 	"fmt"
 )
 
@@ -45,20 +46,20 @@ func (as *AuthService) CheckRateLimit(ctx context.Context, ip string) (int, erro
 }
 
 func (as *AuthService) InitUser(ctx context.Context, meta redisrepo.UserClient, data dto.SignInDto) (string, error) {
-	pswdHash, err := utils.HashStr(data.Password)
-
-	if err != nil {
-		logger.Logger.Errorf("❌ Ошибка хеширования пароля: %s", err.Error())
-
-		return "", err
-	}
-
-	user, err := as.psqlRepo.GetUser(ctx, data.Username, pswdHash)
+	user, err := as.psqlRepo.GetUser(ctx, data.Username)
 
 	if err != nil {
 		logger.Logger.Errorf("❌ Ошибка идентификации пользователя: %s", err.Error())
 
 		return "", err
+	}
+
+	passRes := utils.CheckStrHash(user.Password, data.Username)
+
+	if !passRes {
+		logger.Logger.Errorf("❌ Ошибка вводимого пароля для: %s", data.Username)
+
+		return "", errors.New("неверный пароль пользователя")
 	}
 
 	accToken, err := utils.GenerateToken(
@@ -92,7 +93,7 @@ func (as *AuthService) InitUser(ctx context.Context, meta redisrepo.UserClient, 
 		return "", nil
 	}
 
-	token := fmt.Sprintf("Bearer %s", accToken)
+	token := fmt.Sprintf("%s %s", dto.AuthTokenPref, accToken)
 
 	if err := as.redisRepo.SetPrevInfoRepoAuth(ctx, user.ID, meta); err != nil {
 		logger.Logger.Errorf("❌ Ошибка установки переменных данных пользователя в redis: %s", err.Error())
@@ -104,11 +105,19 @@ func (as *AuthService) InitUser(ctx context.Context, meta redisrepo.UserClient, 
 }
 
 func (as *AuthService) CreateUser(ctx context.Context, data dto.SignUpDto) error {
-	err := as.psqlRepo.CreateUser(
+	pswdHash, err := utils.HashStr(data.Password)
+
+	if err != nil {
+		logger.Logger.Errorf("❌ Ошибка хеширования пароля: %s", err.Error())
+
+		return err
+	}
+	
+	err = as.psqlRepo.CreateUser(
 		ctx,
 		data.Name,
 		data.Username,
-		data.Password,
+		pswdHash,
 		data.Role,
 	)
 

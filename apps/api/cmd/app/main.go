@@ -67,9 +67,9 @@ func main() {
 	srv := new(server.Server)
 
 	switch config.InfralyraConfig.Server.Mode {
-	case "release":
+	case config.Release:
 		gin.SetMode(gin.ReleaseMode)
-	case "test":
+	case config.Test:
 		gin.SetMode(gin.TestMode)
 	default:
 		gin.SetMode(gin.DebugMode)

@@ -7,6 +7,14 @@ import (
 	"github.com/spf13/viper"
 )
 
+type InfralyraMode string
+
+const (
+	Release InfralyraMode = "release"
+	Test    InfralyraMode = "test"
+	Debug   InfralyraMode = "debug"
+)
+
 type GlobalConfig struct {
 	Server  ServerConfig  `mapstructure:"server"`
 	Logger  LogConfig     `mapstructure:"logger"`
@@ -17,9 +25,9 @@ type GlobalConfig struct {
 }
 
 type ServerConfig struct {
-	Host string `mapstructure:"host"`
-	Port string `mapstructure:"port"`
-	Mode string `mapstructure:"mode"`
+	Host string        `mapstructure:"host"`
+	Port string        `mapstructure:"port"`
+	Mode InfralyraMode `mapstructure:"mode"`
 }
 
 type LogConfig struct {

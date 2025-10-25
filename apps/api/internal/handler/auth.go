@@ -59,7 +59,7 @@ func (h *Handler) signIn(ctx *gin.Context) {
 	ttl := int(config.InfralyraConfig.Auth.AccessTokenTTL.Seconds())
 
 	ctx.SetSameSite(http.SameSiteLaxMode)
-	ctx.SetCookie("Authorize", token, ttl, "/", "", true, true)
+	ctx.SetCookie(dto.AuthTokenName, token, ttl, "/", "", true, true)
 
 	cuccessRes := SuccessRes[*struct{}]("Успешный вход в систему", nil)
 	SendResponse(ctx, http.StatusOK, cuccessRes)

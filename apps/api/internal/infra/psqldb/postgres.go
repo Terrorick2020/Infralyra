@@ -3,6 +3,7 @@ package psqldb
 import (
 	"InfralyraApi/config"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -42,12 +43,57 @@ func InitPsqlDbConnect() (*sqlx.DB, error) {
 }
 
 func InitPsqlDbMigration() error {
-	m, err := migrate.New(
-		mPath,
-		config.InfralyraEnv.PsqlDb.Url,
-	)
+	m, err := migrate.New(mPath, config.InfralyraEnv.PsqlDb.Url)
 	if err != nil {
 		return err
+	}
+
+	version, dirty, verr := m.Version()
+	if verr != nil && !errors.Is(verr, migrate.ErrNilVersion) {
+		log.Printf("⚠️ Не удалось получить версию миграций: %v", verr)
+	}
+
+	if dirty {
+		log.Printf("🧹 Обнаружено dirty-состояние миграций (версия %d). Исправляем...", version)
+		if err := m.Force(int(version)); err != nil {
+			log.Printf("❌ Ошибка сброса dirty-состояния: %v", err)
+			return err
+		}
+		log.Println("✅ Dirty-состояние успешно сброшено.")
+	}
+
+	if config.InfralyraConfig.Server.Mode == config.Debug {
+		log.Printf("🧨 [%s] Очистка схемы public перед применением миграций...\n", config.Debug)
+
+		db, err := NewDBMS(DBMSConfig{
+			Type:     config.InfralyraConfig.PsqlDb.Type,
+			Host:     config.InfralyraConfig.PsqlDb.Host,
+			Port:     config.InfralyraConfig.PsqlDb.Port,
+			Username: config.InfralyraEnv.PsqlDb.Username,
+			Password: config.InfralyraEnv.PsqlDb.Password,
+			DbName:   config.InfralyraConfig.PsqlDb.Dbname,
+			SslMode:  config.InfralyraConfig.PsqlDb.Sslmode,
+		})
+		if err != nil {
+			return err
+		}
+		defer db.Close()
+
+		query := fmt.Sprintf(`
+			DROP SCHEMA public CASCADE;
+			CREATE SCHEMA public;
+			GRANT ALL ON SCHEMA public TO %s;
+			GRANT ALL ON SCHEMA public TO public;
+		`, config.InfralyraEnv.PsqlDb.Username)
+
+		if _, err = db.Exec(query); err != nil {
+			return err
+		}
+
+		m, err = migrate.New(mPath, config.InfralyraEnv.PsqlDb.Url)
+		if err != nil {
+			return err
+		}
 	}
 
 	err = m.Up()

@@ -36,21 +36,21 @@ func RateLimiterMiddleware(authService service.Authorization) gin.HandlerFunc {
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		token, err := ctx.Cookie("Authorization")
+		token, err := ctx.Cookie(dto.AuthTokenName)
 		if err != nil {
 			errRes := ErrRes[*struct{}](ErrAuthUser, nil)
 			SendResponse(ctx, http.StatusUnauthorized, errRes)
 			return
 		}
 
-		claims, err := utils.ParseToken[dto.TokenClaims](token, config.InfralyraEnv.AuthSecret)
+		claims, err := utils.ParseToken[dto.TokenClaims](token, config.InfralyraEnv.AuthSecret, dto.AuthTokenPref)
 		if err != nil {
 			errRes := ErrRes[*struct{}](ErrAuthUser, nil)
 			SendResponse(ctx, http.StatusUnauthorized, errRes)
 			return
 		}
 
-		ctx.Set(CtxUserClaimsName, claims)
+		ctx.Set(dto.CtxUserClaimsName, claims)
 
 		ip := ctx.ClientIP()
 
@@ -62,8 +62,8 @@ func AuthMiddleware() gin.HandlerFunc {
 
 func AdmineOnlyMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		claims, err := utils.GetClaims[dto.TokenClaims](ctx, CtxUserClaimsName)
-		if err != nil || claims.Role != psqlrepo.Admine {
+		claims, err := utils.GetClaims[dto.TokenClaims](ctx, dto.CtxUserClaimsName)
+		if err != nil || claims.Role != psqlrepo.Admin {
 			errRes := ErrRes[*struct{}](ErrAuthForbidden, nil)
 			SendResponse(ctx, http.StatusForbidden, errRes)
 			return
@@ -71,7 +71,7 @@ func AdmineOnlyMiddleware() gin.HandlerFunc {
 
 		ip := ctx.ClientIP()
 
-		logger.Logger.Infof("Пользователь ip: %s успешно прошёл проверку на роль: %s", ip, psqlrepo.Admine)
+		logger.Logger.Infof("Пользователь ip: %s успешно прошёл проверку на роль: %s", ip, psqlrepo.Admin)
 
 		ctx.Next()
 	}

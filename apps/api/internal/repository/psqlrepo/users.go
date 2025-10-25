@@ -16,11 +16,11 @@ func NewUsersPsqlRepos(db *sqlx.DB) *UsersPsqlRepos {
 	return &UsersPsqlRepos{db: db}
 }
 
-func (upr *UsersPsqlRepos) GetUser(ctx context.Context, username, password string) (User, error) {
+func (upr *UsersPsqlRepos) GetUser(ctx context.Context, username string) (User, error) {
 	var user User
 
-	query := fmt.Sprintf("SELECT * FROM %s WHERE username=$1 AND password=$2", psqldb.UsersTableName)
-	err := upr.db.Get(&user, query, username, password)
+	query := fmt.Sprintf("SELECT * FROM %s WHERE username=$1", psqldb.UsersTableName)
+	err := upr.db.Get(&user, query, username)
 
 	return user, err
 }

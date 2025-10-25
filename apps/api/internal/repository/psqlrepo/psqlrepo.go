@@ -7,7 +7,7 @@ import (
 )
 
 type Users interface {
-	GetUser(ctx context.Context, username, password string) (User, error)
+	GetUser(ctx context.Context, username string) (User, error)
 	CreateUser(ctx context.Context, name, username, password string, role Role) error
 }
 

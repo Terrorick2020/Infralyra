@@ -3,6 +3,8 @@ package utils
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -14,8 +16,8 @@ func HashStr(str string) (string, error) {
 	return string(bytes), err
 }
 
-func CheckStrHash(str, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(str))
+func CheckStrHash(hash, plain string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(plain))
 	return err == nil
 }
 
@@ -43,12 +45,16 @@ func GenerateToken[T any](data T, ttl time.Duration, secret string) (string, err
 	return signedToken, nil
 }
 
-func ParseToken[T any](tokenString string, secret string) (T, error) {
+func ParseToken[T any](tokenString string, secret, prefix string) (T, error) {
 	var result T
+
+	if strings.HasPrefix(tokenString, fmt.Sprintf("%s ", prefix)) {
+		tokenString = strings.TrimPrefix(tokenString, fmt.Sprintf("%s ", prefix))
+	}
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("Неожиданный метод подписи")
+			return nil, errors.New("неожиданный метод подписи")
 		}
 		return []byte(secret), nil
 	})
@@ -67,5 +73,5 @@ func ParseToken[T any](tokenString string, secret string) (T, error) {
 		return result, nil
 	}
 
-	return result, errors.New("Неправильный токен")
+	return result, errors.New("неправильный токен")
 }

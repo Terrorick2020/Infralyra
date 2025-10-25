@@ -6,10 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	CtxUserClaimsName = "userClaims"
-)
-
 type Handler struct {
 	service *service.Service
 }

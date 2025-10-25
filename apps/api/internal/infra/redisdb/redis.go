@@ -30,7 +30,7 @@ func InitRedisDbConnect() (*redis.Client, error) {
 		return nil, err
 	}
 
-	log.Println("✔️ Успешное подключение к базе данных 'redis'")
+	log.Println("✔️  Успешное подключение к базе данных 'redis'")
 
 	return rdb, nil
 }

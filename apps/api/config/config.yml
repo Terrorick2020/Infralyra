@@ -1,6 +1,7 @@
 server:
   host: "localhost"
-  port: "8080"
+  http_port: "8080"
+  socket_port: "9000"
   mode: "debug"
 
 logger:
@@ -24,6 +25,7 @@ auth:
   refresh_token_ttl: "168h"
   rate_limit_count: 20
   rate_limit_ttl: "1m"
+  sock_room_ttl: "8h"
 
 interfaces:
   save_ttl: "6h"

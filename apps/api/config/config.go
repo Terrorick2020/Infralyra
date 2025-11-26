@@ -25,9 +25,10 @@ type GlobalConfig struct {
 }
 
 type ServerConfig struct {
-	Host string        `mapstructure:"host"`
-	Port string        `mapstructure:"port"`
-	Mode InfralyraMode `mapstructure:"mode"`
+	Host       string        `mapstructure:"host"`
+	HttpPort   string        `mapstructure:"http_port"`
+	SocketPort string        `mapstructure:"socket_port"`
+	Mode       InfralyraMode `mapstructure:"mode"`
 }
 
 type LogConfig struct {
@@ -53,6 +54,7 @@ type AuthConfig struct {
 	AccessTokenTTL  time.Duration `mapstructure:"access_token_ttl"`
 	RefreshTokenTTL time.Duration `mapstructure:"refresh_token_ttl"`
 	RateLimitTTL    time.Duration `mapstructure:"rate_limit_ttl"`
+	SockRoomTTL     time.Duration `mapstructure:"sock_room_ttl"`
 	RateLimitCount  int           `mapstructure:"rate_limit_count"`
 }
 

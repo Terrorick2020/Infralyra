@@ -7,10 +7,16 @@ import (
 	"InfralyraApi/internal/service"
 	"InfralyraApi/pkg/logger"
 	"InfralyraApi/pkg/utils"
+	"context"
+	"errors"
 	"net/http"
+	"reflect"
 
 	"github.com/gin-gonic/gin"
+	socketio "github.com/googollee/go-socket.io"
 )
+
+type SockMiddleHandler[T any] = func(conn socketio.Conn, data T) error
 
 func RateLimiterMiddleware(authService service.Authorization) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
@@ -74,5 +80,40 @@ func AdmineOnlyMiddleware() gin.HandlerFunc {
 		logger.Logger.Infof("Пользователь ip: %s успешно прошёл проверку на роль: %s", ip, psqlrepo.Admin)
 
 		ctx.Next()
+	}
+}
+
+func CheckCorrectSockUser[T any](
+	authService service.Authorization,
+	handler SockMiddleHandler[T],
+) SockMiddleHandler[T] {
+	return func(conn socketio.Conn, data T) error {
+		v := reflect.ValueOf(data)
+
+		field := v.FieldByName(dto.SockObligField)
+
+		if v.Kind() != reflect.Struct || !field.IsValid() || field.Kind() != reflect.String {
+			logger.Logger.Errorf(
+				"Пользователь ip: %s не прошёл проверку наличия `Username` в запросе",
+				conn.RemoteAddr().String(),
+			)
+			return errors.New("Неправильный формат данных события")
+		}
+
+		username := field.String()
+		ctx := context.WithValue(context.Background(), "CheckCorrectSockUser", conn.ID())
+		ip := conn.RemoteAddr().String()
+
+		if err := authService.CheckCorrectSockEmit(ctx, ip, username); err != nil {
+			logger.Logger.Errorf(
+				"Пользователь ip: %s usrname: %s не прошёл проверку налиция статуса `online`",
+				conn.RemoteAddr().String(),
+				username,
+			)
+
+			return errors.New("Этот пользователь не может подключиться")
+		}
+
+		return handler(conn, data)
 	}
 }

@@ -4,12 +4,14 @@ import (
 	"InfralyraApi/config"
 	"InfralyraApi/internal/handler/dto"
 	"InfralyraApi/internal/repository/redisrepo"
+	"context"
 	"net"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
+	socketio "github.com/googollee/go-socket.io"
 	"github.com/gin-gonic/gin"
 )
 
@@ -83,4 +85,34 @@ func (h *Handler) signUp(ctx *gin.Context) {
 
 	cuccessRes := SuccessRes[*struct{}]("Пользователь успешно зарегистрирован", nil)
 	SendResponse(ctx, http.StatusOK, cuccessRes)
+}
+
+func (h *Handler) joinRoom(conn socketio.Conn, data dto.JoinRoomDto) error {
+	ctx := context.WithValue(context.Background(), dto.SockJRCtxKey, conn.ID())
+
+	roomName, err := h.service.JoinRoom(ctx, conn.Namespace(), data)
+	if err != nil { return err }
+
+	res := dto.JoinRoomRes{ RoomName: roomName }
+	successRes := SuccessRes("Пользователь успешно подключился к комнате", &res)
+
+	conn.Join(roomName)
+	conn.Emit(dto.SockMEmitJRoom, successRes)
+
+	return nil
+}
+
+func (h *Handler) leaveRoom(conn socketio.Conn, data dto.LeaveRooDto) error {
+	ctx := context.WithValue(context.Background(), dto.SockLRCtxKey, conn.ID())
+
+    if err := h.service.LeaveRoom(ctx, conn.Namespace(), data); err != nil {
+        return err
+    }
+
+	cuccessRes := SuccessRes[*struct{}]("Пользователь успешно вышел из комнаты", nil)
+
+	conn.Leave(data.RoomName)
+	conn.Emit(dto.SockMEmitLRoom, cuccessRes)
+
+	return nil
 }

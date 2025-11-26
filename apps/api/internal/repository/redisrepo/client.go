@@ -14,6 +14,7 @@ const (
 	rateLimitTemplate = "rl:%s"
 	tokenKeyTemplate = "refresh_token:%v"
 	userKeyTemplate  = "user:%v"
+	roomNameKeyTemplate = "room:%v:user:%v"
 )
 
 type RedisKey interface {
@@ -24,8 +25,13 @@ type RedisRepoClient struct {
 	rdb *redis.Client
 }
 
-func createKey[T RedisKey](tmpl string, value T) string {
-	return fmt.Sprintf(tmpl, value)
+func createKey[T RedisKey](tmpl string, values ...T) string {
+	args := make([]interface{}, len(values))
+	for i, v := range values {
+		args[i] = v
+	}
+
+	return fmt.Sprintf(tmpl, args...)
 }
 
 func NewRedisRepoClient(rdb *redis.Client) *RedisRepoClient {
@@ -44,7 +50,24 @@ func (r *RedisRepoClient) Set(ctx context.Context, key string, value any, ttl ti
 		
 		return err
 	}
+	
 	return r.rdb.Set(ctx, key, data, ttl).Err()
+}
+
+func (r *RedisRepoClient) JsonSet(ctx context.Context, key string, path string, value any) error {
+	if err := r.rdb.JSONSet(ctx, key, path, value).Err(); err != nil {
+		logger.Logger.Errorf(
+			"❌ Ошибка установки значения: %+v в поле: %s по ключу: %s в redis. %s",
+			value,
+			path,
+			key,
+			err.Error(),
+		)
+		
+		return err
+	}
+
+	return nil
 }
 
 func (r *RedisRepoClient) Get(ctx context.Context, key string, dest any) error {

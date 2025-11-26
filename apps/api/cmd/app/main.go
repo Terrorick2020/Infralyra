@@ -64,7 +64,19 @@ func main() {
 	service := service.NewService(repos)
 	handler := handler.NewHandler(service)
 
-	srv := new(server.Server)
+	httpSrv := new(server.HtttpServer)
+	httpPath := fmt.Sprintf(
+		"%s:%s",
+		config.InfralyraConfig.Server.Host,
+		config.InfralyraConfig.Server.HttpPort,
+	)
+
+	socketSrv := new(server.SocketServer)
+	socketPath := fmt.Sprintf(
+		"%s:%s",
+		config.InfralyraConfig.Server.Host,
+		config.InfralyraConfig.Server.SocketPort,
+	)
 
 	switch config.InfralyraConfig.Server.Mode {
 	case config.Release:
@@ -75,24 +87,33 @@ func main() {
 		gin.SetMode(gin.DebugMode)
 	}
 
-	serverErrChan := make(chan error, 1)
+	httpSrvErrChan := make(chan error, 1)
 
 	go func() {
-		path := fmt.Sprintf(
-			"%s:%s",
-			config.InfralyraConfig.Server.Host,
-			config.InfralyraConfig.Server.Port,
-		)
-
-		if err := srv.Run(path, handler.InitRoutes()); err != nil {
-			serverErrChan <- err
+		if err := httpSrv.RunHttp(httpPath, handler.InitHttpRoutes()); err != nil {
+			httpSrvErrChan <- err
 		}
 	}()
 
 	logger.Logger.Infof(
-		"🚀 Сервер стартовал по адресу: http://%s:%s",
-		config.InfralyraConfig.Server.Host,
-		config.InfralyraConfig.Server.Port,
+		"🚀 HTTP Сервер стартовал по адресу: http://%s",
+		httpPath,
+	)
+
+	socketSrvErrChan := make(chan error, 1)
+
+	go func() {
+		initEvents := handler.InitSocketEvents()
+		initRoutes := handler.InitSocketRoutes()
+
+		if err := socketSrv.RunSocket(socketPath, initEvents, initRoutes); err != nil {
+			socketSrvErrChan <- err
+		}
+	}()
+
+	logger.Logger.Infof(
+		"🚀 Socket Сервер стартовал по адресу: ws://%s",
+		socketPath,
 	)
 
 	quit := make(chan os.Signal, 1)
@@ -100,17 +121,23 @@ func main() {
 
 	select {
 	case sig := <-quit:
-		logger.Logger.Infof("❗ Получен сигнал: %s. Остановка сервера...", sig)
-	case err := <-serverErrChan:
-		logger.Logger.Errorf("❌ Сервер завершился с ошибкой: %s", err)
+		logger.Logger.Infof("❗ Получен сигнал: %s. Остановка серверов...", sig)
+	case err := <-httpSrvErrChan:
+		logger.Logger.Errorf("❌ HTTP Сервер завершился с ошибкой: %s", err)
+	case err := <-socketSrvErrChan:
+		logger.Logger.Errorf("❌ Socket Сервер завершился с ошибкой: %s", err)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if err := srv.ShutDown(ctx); err != nil {
-		logger.Logger.Errorf("❌ Ошибка остановки сервера: %s", err.Error())
+	if err := httpSrv.ShutDownHttp(ctx); err != nil {
+		logger.Logger.Errorf("❌ Ошибка остановки HTTP сервера: %s", err.Error())
 	}
 
-	logger.Logger.Infof("🏁 Сервер завершил свою работу")
+	if err := socketSrv.ShutDownSocket(ctx); err != nil {
+		logger.Logger.Errorf("❌ Ошибка остановки Socket сервера: %s", err.Error())
+	}
+
+	logger.Logger.Infof("🏁 Сервера завершили свою работу")
 }

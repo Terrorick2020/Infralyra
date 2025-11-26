@@ -10,6 +10,7 @@ import (
 
 type Client interface {
 	Set(ctx context.Context, key string, value any, ttl time.Duration) error
+	JsonSet(ctx context.Context, key string, path string, value any) error
 	Get(ctx context.Context, key string, dest any) error
 	Delete(ctx context.Context, key string) error
 }
@@ -26,10 +27,17 @@ type Scan interface {
 	SetInterfaces(ctx context.Context, data []scan.InterfaceInfo) error
 }
 
+type User interface {
+	GetUserClient(ctx context.Context, id int) (UserClient, error)
+	CreateRoomName(ctx context.Context, nsp, username, roomName string) error
+	DeleteRoomName(ctx context.Context, nsp, username, roomName string) error
+}
+
 type RedisRepo struct {
 	Client
 	Authorization
 	Scan
+	User
 }
 
 func NewRedisRepo(rdb *redis.Client) *RedisRepo {
@@ -37,5 +45,6 @@ func NewRedisRepo(rdb *redis.Client) *RedisRepo {
 		Client: NewRedisRepoClient(rdb),
 		Authorization: NewRedisRepoAuth(rdb),
 		Scan: NewRedisRepoScan(rdb),
+		User: NewRedisRepoUser(rdb),
 	}
 }

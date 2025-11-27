@@ -65,3 +65,11 @@ func (rra *RedisRepoAuth) SetPrevInfoRepoAuth(ctx context.Context, id int, data 
 
 	return err
 }
+
+func (rra *RedisRepoAuth) SetUClientStatus(ctx context.Context, id int, value Status) error {
+	key := createKey(userKeyTemplate, id)
+
+	err := rra.client.JsonSet(ctx, key, "status", value)
+	
+	return err
+}

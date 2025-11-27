@@ -7,9 +7,9 @@ type IPAddress struct {
 }
 
 type InterfaceInfo struct {
-	PCAPName    string      `json:"pcap_name"`
+	PCAPName    string      `json:"pcapName"`
 	Description string      `json:"description,omitempty"`
-	LocalName   string      `json:"local_name,omitempty"`
+	LocalName   string      `json:"localName,omitempty"`
 	MAC         string      `json:"mac,omitempty"`
 	MTU         int         `json:"mtu,omitempty"`
 	Index       int         `json:"index,omitempty"`
@@ -19,11 +19,36 @@ type InterfaceInfo struct {
 }
 
 type IfaceStats struct {
-	PCAPName   string  `json:"pcap_name"`
-	BytesSent  uint64  `json:"bytes_sent"`
-	BytesRecv  uint64  `json:"bytes_recv"`
-	SentSpeed  float64 `json:"sent_speed_kbps"`
-	RecvSpeed  float64 `json:"recv_speed_kbps"`
-	PacketsIn  uint64  `json:"packets_in"`
-	PacketsOut uint64  `json:"packets_out"`
+	PCAPName   string  `json:"pcapName"`
+	BytesSent  uint64  `json:"bytesSent"`
+	BytesRecv  uint64  `json:"bytesRecv"`
+	SentSpeed  float64 `json:"sentSpeedKbps"`
+	RecvSpeed  float64 `json:"recvSpeedKbps"`
+	PacketsIn  uint64  `json:"packetsIn"`
+	PacketsOut uint64  `json:"packetsOut"`
+}
+
+type PacketInfoEther struct {
+	SrcMAC string `json:"srcMAC"`
+	DstMAC string `json:"dstMAC"`
+}
+
+type PacketInfoNet struct {
+	Version  string `json:"version"`
+	SrcIP    string `json:"srcIP"`
+	DstIP    string `json:"dstIP"`
+	Protocol string `json:"protocol"`
+}
+
+type PacketInfoTrans struct {
+	Proto   string `json:"proto"`
+	SrcPort uint16 `json:"srcPort"`
+	DstPort uint16 `json:"dstPort"`
+}
+
+type PacketInfo struct {
+	Ethernet    PacketInfoEther `json:"ethernet"`
+	Network     PacketInfoNet   `json:"network"`
+	Transport   PacketInfoTrans `json:"transport"`
+	Application []byte          `json:"application"`
 }

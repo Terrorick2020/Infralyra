@@ -109,6 +109,17 @@ func (as *AuthService) InitUser(ctx context.Context, meta redisrepo.UserClient, 
 	return token, nil
 }
 
+func (as *AuthService) UserOff(ctx context.Context, id int) error {
+	err := as.redisRepoAuth.SetUClientStatus(ctx, id, redisrepo.Offline)
+	if err != nil {
+		logger.Logger.Errorf("❌ Ошибка отключения пользователя в redis: %s", err.Error())
+
+		return err
+	}
+
+	return nil
+}
+
 func (as *AuthService) CreateUser(ctx context.Context, data dto.SignUpDto) error {
 	pswdHash, err := utils.HashStr(data.Password)
 
@@ -189,5 +200,17 @@ func (as *AuthService) JoinRoom(ctx context.Context, nsp string, data dto.JoinRo
 }
 
 func (as *AuthService) LeaveRoom(ctx context.Context, nsp string, data dto.LeaveRooDto) error {
+	err := as.redisRepoUser.DeleteRoomName(ctx, nsp, data.Username, data.RoomName)
+	if err != nil {
+		logger.Logger.Errorf(
+			"❌ Ошибка выхода из `roomName` в conn.ID: %s для пользователя: %s: %s",
+			ctx.Value(dto.SockJRCtxKey),
+			data.Username,
+			err.Error(),
+		)
+
+		return err
+	}
+
 	return nil
 }

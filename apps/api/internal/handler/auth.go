@@ -67,6 +67,26 @@ func (h *Handler) signIn(ctx *gin.Context) {
 	SendResponse(ctx, http.StatusOK, cuccessRes)
 }
 
+func (h *Handler) signOut(ctx *gin.Context) {
+	val := ctx.Value(dto.CtxUserClaimsName)
+	claims, ok := val.(dto.TokenClaims)
+	if !ok {
+		errRes := ErrRes[*struct{}](ErrServerMsg, nil)
+		SendResponse(ctx, http.StatusInternalServerError, errRes)
+		return
+	}
+
+	err := h.service.Authorization.UserOff(ctx.Request.Context(), claims.UserId)
+	if err != nil {
+		errRes := ErrRes[*struct{}](ErrServerMsg, nil)
+		SendResponse(ctx, http.StatusInternalServerError, errRes)
+		return
+	}
+
+	cuccessRes := SuccessRes[*struct{}]("Успешный выход из системы", nil)
+	SendResponse(ctx, http.StatusOK, cuccessRes)
+}
+
 func (h *Handler) signUp(ctx *gin.Context) {
 	var req dto.SignUpDto
 

@@ -15,6 +15,6 @@ const (
 )
 
 type TokenClaims struct {
-	UserId int           `json:"user_id"`
+	UserId int           `json:"userId"`
 	Role   psqlrepo.Role `json:"role"`
 }

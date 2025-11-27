@@ -12,9 +12,7 @@ type ScanService struct {
 	redisRepo redisrepo.Scan
 }
 
-func NewScanService(
-	redisRepo redisrepo.Scan,
-) *ScanService {
+func NewScanService(redisRepo redisrepo.Scan) *ScanService {
 	return &ScanService{
 		redisRepo: redisRepo,
 	}

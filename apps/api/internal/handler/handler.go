@@ -27,6 +27,7 @@ func (h *Handler) InitHttpRoutes() *gin.Engine {
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sign-in", h.signIn)
+		auth.GET("/sign-in", AuthMiddleware(), h.signOut)
 		auth.POST("/sign-up", AuthMiddleware(), AdmineOnlyMiddleware(), h.signUp)
 	}
 
@@ -35,13 +36,6 @@ func (h *Handler) InitHttpRoutes() *gin.Engine {
 	{
 		scan.GET("/get-interfaces", h.getInterfaces)
 		scan.GET("/get-activity", h.getActivity)
-	}
-
-	sniff := router.Group("/sniff")
-	sniff.Use(AuthMiddleware())
-	{
-		sniff.GET("/start", h.snifStart)
-		sniff.GET("/finish", h.snifFinish)
 	}
 
 	return router

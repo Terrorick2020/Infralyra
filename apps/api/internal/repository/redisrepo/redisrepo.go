@@ -20,6 +20,7 @@ type Authorization interface {
 	SetPrevInfoRepoAuth(ctx context.Context, id int, data UserClient) error
 	GetRateLimit(ctx context.Context, ip string) (int, error)
 	IncrRateLimit(ctx context.Context, ip string) error
+	SetUClientStatus(ctx context.Context, id int, value Status) error
 }
 
 type Scan interface {
@@ -42,9 +43,9 @@ type RedisRepo struct {
 
 func NewRedisRepo(rdb *redis.Client) *RedisRepo {
 	return &RedisRepo{
-		Client: NewRedisRepoClient(rdb),
+		Client:        NewRedisRepoClient(rdb),
 		Authorization: NewRedisRepoAuth(rdb),
-		Scan: NewRedisRepoScan(rdb),
-		User: NewRedisRepoUser(rdb),
+		Scan:          NewRedisRepoScan(rdb),
+		User:          NewRedisRepoUser(rdb),
 	}
 }

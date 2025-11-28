@@ -17,4 +17,4 @@
     - Windows: `choco install make; make --version`;
     - Linux (Debian/Ubuntu, bash): `sudo apt update && sudo apt install build-essential && make --version`;
     - MacOS: `brew install make && make --version`;
- 5) Запустить системы: `make setup`;
+ 5) Запустить систему: `make setup`;

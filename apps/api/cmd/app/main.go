@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"InfralyraApi/config"
+	"InfralyraApi/internal/cron"
 	"InfralyraApi/internal/handler"
 	"InfralyraApi/internal/infra/psqldb"
 	"InfralyraApi/internal/infra/redisdb"
@@ -116,6 +117,13 @@ func main() {
 		socketPath,
 	)
 
+	cronJobs := cron.NewCronJobs(service)
+	runerJobs := cronJobs.RunnerCronJobs()
+	go runerJobs.Start()
+	defer runerJobs.Stop()
+
+	logger.Logger.Infof("🚀 Запущены задачи cron")
+
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 
@@ -139,5 +147,5 @@ func main() {
 		logger.Logger.Errorf("❌ Ошибка остановки Socket сервера: %s", err.Error())
 	}
 
-	logger.Logger.Infof("🏁 Сервера завершили свою работу")
+	logger.Logger.Infof("🏁 Сервера и задачи cron завершили свою работу")
 }

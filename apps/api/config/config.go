@@ -22,6 +22,7 @@ type GlobalConfig struct {
 	RedisDb RedisConfig   `mapstructure:"redis_db"`
 	Auth    AuthConfig    `mapstructure:"auth"`
 	Inter   InterConfig   `mapstructure:"interfaces"`
+	Cron    CronConfig    `mapstructure:"cron"`
 }
 
 type ServerConfig struct {
@@ -56,6 +57,10 @@ type AuthConfig struct {
 	RateLimitTTL    time.Duration `mapstructure:"rate_limit_ttl"`
 	SockRoomTTL     time.Duration `mapstructure:"sock_room_ttl"`
 	RateLimitCount  int           `mapstructure:"rate_limit_count"`
+}
+
+type CronConfig struct {
+	NetScanTttl time.Duration `mapstructure:"net_scan_ttl"`
 }
 
 type InterConfig struct {

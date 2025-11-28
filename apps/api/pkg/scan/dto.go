@@ -1,5 +1,15 @@
 package scan
 
+import (
+	"net"
+
+	"github.com/google/gopacket/pcap"
+)
+
+const (
+	EmptyDeviceAreaVar string = "unknown"
+)
+
 type IPAddress struct {
 	IP      string `json:"ip"`
 	Netmask string `json:"netmask,omitempty"`
@@ -51,4 +61,48 @@ type PacketInfo struct {
 	Network     PacketInfoNet   `json:"network"`
 	Transport   PacketInfoTrans `json:"transport"`
 	Application []byte          `json:"application"`
+}
+
+type ServiceInfo struct {
+	Port     int    `json:"port"`
+	Protocol string `json:"protocol"`
+	Product  string `json:"product"`
+	Version  string `json:"version"`
+	Banner   string `json:"banner"`
+}
+
+type TLSInfo struct {
+	Version    string `json:"version"`
+	Cipher     string `json:"cipher"`
+	CommonName string `json:"commonName"`
+	Issuer     string `json:"issuer"`
+	ValidFrom  string `json:"valid_from"`
+	ValidTo    string `json:"valid_to"`
+}
+
+type Device struct {
+	IP       string `json:"ip"`
+	MAC      string `json:"mac"`
+	Alive    bool   `json:"alive"`
+	Hostname string `json:"hostname"`
+
+	OS       string `json:"os"`
+	OSTTL    int    `json:"osTtl"`
+	OSMethod string `json:"osMethod"`
+
+	Services []ServiceInfo `json:"services"`
+
+	IoT  string `json:"iot"`
+	SNMP string `json:"snmp"`
+	MDNS string `json:"mdns"`
+	SSDP string `json:"ssdp"`
+
+	TLS      *TLSInfo `json:"tls"`
+	WebStack string   `json:"webStack"`
+}
+
+type DeviceWithIp struct {
+	Device    Device          `json:"device"`
+	Interface *pcap.Interface `json:"interface"`
+	Net       *net.IPNet      `json:"net"`
 }

@@ -13,7 +13,11 @@ const (
 	SockMLeaveRoom string = "LeaveRoom"
 	SockMEmitLRoom string = "EmitLRoom"
 
-	SockObligField string = "Username"
+	SockMGetTraffic string = "SockMGetTraffic"
+	SockMEmitGTraff string = "SockMEmitGTraff"
+
+	SockObligFieldUN string = "Username"
+	SockObligFieldRN string = "RoomName"
 )
 
 type JoinRoomDto struct {
@@ -27,4 +31,11 @@ type JoinRoomRes struct {
 type LeaveRooDto struct {
 	Username string `form:"username"`
 	RoomName string `form:"roomname"`
+}
+
+type GetTraficDto struct {
+	Username     string `form:"username"`
+	RoomName     string `form:"roomname"`
+	Inface       string `form:"inface"`
+	PayloadLimit int    `form:"payloadLimit"`
 }

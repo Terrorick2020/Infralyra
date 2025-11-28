@@ -14,7 +14,7 @@ type Handler struct {
 }
 
 func NewHandler(service *service.Service) *Handler {
-	return &Handler{service: service}
+	return &Handler{ service: service }
 }
 
 func (h *Handler) InitHttpRoutes() *gin.Engine {
@@ -48,8 +48,12 @@ func (h *Handler) InitSocketEvents() server.TSInitEvents {
 		joinRoomWithMiddle := CheckCorrectSockUser(h.service.Authorization, h.joinRoom)
 		leaveRoomWithMiddle := CheckCorrectSockUser(h.service.Authorization, h.leaveRoom)
 
+		getTraficWithCheck_1 := CheckCorrectSockUser(h.service.Authorization, h.GetTrafic)
+		getTraficWithCheck_2 := CheckCorrectRoomName(h.service.Authorization, getTraficWithCheck_1)
+
 		srv.OnConnect(nspSniff, h.OnSockConn)
 		srv.OnEvent(nspSniff, dto.SockMJoinRoom, joinRoomWithMiddle)
+		srv.OnEvent(nspSniff, dto.SockMGetTraffic, getTraficWithCheck_2)
 		srv.OnEvent(nspSniff, dto.SockMLeaveRoom, leaveRoomWithMiddle)
 		srv.OnDisconnect(nspSniff, h.OnSockDisconn)
 

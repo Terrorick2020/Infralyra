@@ -28,16 +28,20 @@ type Scan interface {
 	SetInterfaces(ctx context.Context, data []scan.InterfaceInfo) error
 }
 
+type Sniff interface{}
+
 type User interface {
 	GetUserClient(ctx context.Context, id int) (UserClient, error)
 	CreateRoomName(ctx context.Context, nsp, username, roomName string) error
 	DeleteRoomName(ctx context.Context, nsp, username, roomName string) error
+	CheckHasRoomName(ctx context.Context, nsp, username, roomName string) error
 }
 
 type RedisRepo struct {
 	Client
 	Authorization
 	Scan
+	Sniff
 	User
 }
 
@@ -47,5 +51,6 @@ func NewRedisRepo(rdb *redis.Client) *RedisRepo {
 		Authorization: NewRedisRepoAuth(rdb),
 		Scan:          NewRedisRepoScan(rdb),
 		User:          NewRedisRepoUser(rdb),
+		Sniff:         NewRedisRepoSniff(rdb),
 	}
 }

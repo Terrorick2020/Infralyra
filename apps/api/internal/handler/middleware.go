@@ -89,8 +89,7 @@ func CheckCorrectSockUser[T any](
 ) SockMiddleHandler[T] {
 	return func(conn socketio.Conn, data T) error {
 		v := reflect.ValueOf(data)
-
-		field := v.FieldByName(dto.SockObligField)
+		field := v.FieldByName(dto.SockObligFieldUN)
 
 		if v.Kind() != reflect.Struct || !field.IsValid() || field.Kind() != reflect.String {
 			logger.Logger.Errorf(
@@ -103,12 +102,46 @@ func CheckCorrectSockUser[T any](
 		username := field.String()
 		ctx := context.WithValue(context.Background(), "CheckCorrectSockUser", conn.ID())
 		ip := conn.RemoteAddr().String()
-
 		if err := authService.CheckCorrectSockEmit(ctx, ip, username); err != nil {
 			logger.Logger.Errorf(
-				"Пользователь ip: %s usrname: %s не прошёл проверку налиция статуса `online`",
-				conn.RemoteAddr().String(),
+				"Пользователь ip: %s username: %s не прошёл проверку налиция статуса `online`",
+				ip,
 				username,
+			)
+
+			return errors.New("Этот пользователь не может подключиться")
+		}
+
+		return handler(conn, data)
+	}
+}
+
+func CheckCorrectRoomName[T any](
+	authService service.Authorization,
+	handler SockMiddleHandler[T],
+) SockMiddleHandler[T] {
+	return func(conn socketio.Conn, data T) error {
+		v := reflect.ValueOf(data)
+		fieldUN := v.FieldByName(dto.SockObligFieldUN)
+		fieldRN := v.FieldByName(dto.SockObligFieldRN)
+
+		if v.Kind() != reflect.Struct || !fieldUN.IsValid() || fieldUN.Kind() != reflect.String {
+			logger.Logger.Errorf(
+				"Пользователь ip: %s не прошёл проверку наличия `RoomName` и в запросе",
+				conn.RemoteAddr().String(),
+			)
+			return errors.New("Неправильный формат данных события")
+		}
+
+		userName := fieldUN.String()
+		roomName := fieldRN.String()
+		ctx := context.WithValue(context.Background(), "CheckCorrectSockUser", conn.ID())
+		if err := authService.CheckCorrectSockRN(ctx, conn.Namespace(), userName, roomName); err != nil {
+			logger.Logger.Errorf(
+				"Пользователь ip: %s username: %s не прошёл проверку налиция комнаты: %s",
+				conn.RemoteAddr().String(),
+				userName,
+				roomName,
 			)
 
 			return errors.New("Этот пользователь не может подключиться")

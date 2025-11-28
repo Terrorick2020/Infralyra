@@ -172,6 +172,19 @@ func (as *AuthService) CheckCorrectSockEmit(ctx context.Context, ip, username st
 	return nil
 }
 
+func (as *AuthService) CheckCorrectSockRN(ctx context.Context, nsp, username, roomName string) error {
+	if err := as.redisRepoUser.CheckHasRoomName(ctx, nsp, username, roomName); err != nil {
+		logger.Logger.Errorf(
+			"❌ Ошибка полючения комнты пользователя: %s",
+			err.Error(),
+		)
+		
+		return err
+	}
+
+	return nil
+}
+
 func (as *AuthService) JoinRoom(ctx context.Context, nsp string, data dto.JoinRoomDto) (string, error) {
 	roomName, err := uuid.NewV4()
 

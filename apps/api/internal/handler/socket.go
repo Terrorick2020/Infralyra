@@ -13,7 +13,7 @@ func (h *Handler) OnSockConn(conn socketio.Conn) error {
 		conn.URL().Host,
 		conn.Namespace(),
 	)
-	
+
 	conn.SetContext(nil)
 	return nil
 }

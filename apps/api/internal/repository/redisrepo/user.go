@@ -3,6 +3,7 @@ package redisrepo
 import (
 	"InfralyraApi/config"
 	"context"
+	"errors"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -37,4 +38,14 @@ func (rru *RedisRepoUser) DeleteRoomName(ctx context.Context, nsp, username, roo
 	key := createKey(roomNameKeyTemplate, nsp, username)
 
 	return rru.client.Delete(ctx, key)
+}
+
+func (rru *RedisRepoUser) CheckHasRoomName(ctx context.Context, nsp, username, roomName string) error {
+	key := createKey(roomNameKeyTemplate, nsp, username)
+	var value string
+	if err := rru.client.Get(ctx, key, &value); err != nil || value != roomName {
+		return errors.New("Комната не найдена")
+	}
+
+	return nil
 }

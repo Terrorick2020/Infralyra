@@ -11,6 +11,7 @@ import (
 type Authorization interface {
 	CheckRateLimit(ctx context.Context, ip string) (int, error)
 	CheckCorrectSockEmit(ctx context.Context, ip, username string) error
+	CheckCorrectSockRN(ctx context.Context, nsp, username, roomName string) error
 	InitUser(ctx context.Context, meta redisrepo.UserClient, data dto.SignInDto) (string, error)
 	UserOff(ctx context.Context, id int) error
 	CreateUser(ctx context.Context, data dto.SignUpDto) error
@@ -23,9 +24,14 @@ type Scan interface {
 	GetActivity(ctx context.Context) ([]scan.IfaceStats, error)
 }
 
+type Sniff interface {
+	GetPackets(ctx context.Context, data dto.GetTraficDto) (<- chan scan.PacketInfo, error)
+}
+
 type Service struct {
 	Authorization
 	Scan
+	Sniff
 }
 
 func NewService(repository *repository.Repository) *Service {
@@ -36,5 +42,9 @@ func NewService(repository *repository.Repository) *Service {
 			repository.RedisRepo.User,
 		),
 		Scan:  NewScanService(repository.RedisRepo.Scan),
+		Sniff: NewSniffService(
+			repository.PsqlRepo.Sniff,
+			repository.RedisRepo.Scan,
+		),
 	}
 }

@@ -27,12 +27,12 @@ func InitLogger() error {
 	Logger.SetLevel(level)
 
 	if err := os.MkdirAll(dirLogPath, 0755); err != nil {
-		log.Printf("Не удалось создать папку logs: %v", err)
+		log.Printf("❌ Не удалось создать папку logs: %v", err)
 	}
 
 	logFile, err := os.OpenFile(fileLogPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
-		log.Printf("Не удалось открыть файл логов, используем только консоль: %v", err)
+		log.Printf("❌ Не удалось открыть файл логов, используем только консоль: %v", err)
 		logFile = nil
 	}
 

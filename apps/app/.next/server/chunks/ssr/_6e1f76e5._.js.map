@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/src/pages/NotFound/ui/Page.tsx"],"sourcesContent":["export function NotFoundPage() {\r\n    return (\r\n        <div>vfddsfvs</div>\r\n    )\r\n}\r\n"],"names":[],"mappings":";;;;;;AAAO,SAAS;IACZ,qBACI,8OAAC;kBAAI;;;;;;AAEb","debugId":null}},
+    {"offset": {"line": 23, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/src/pages/NotFound/ui/index.ts"],"sourcesContent":["import { NotFoundPage } from './Page';\r\n\r\nexport { NotFoundPage }\r\n"],"names":[],"mappings":";AAAA","debugId":null}},
+    {"offset": {"line": 31, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/src/pages/NotFound/index.ts"],"sourcesContent":["import { NotFoundPage } from './ui';\r\n\r\nexport { NotFoundPage }\r\n"],"names":[],"mappings":";AAAA;AAAA","debugId":null}},
+    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/app/not-found.tsx"],"sourcesContent":["'use client'\r\n\r\nexport const dynamic = 'force-static';\r\nexport { NotFoundPage as default } from '@/src/pages/NotFound';\r\n"],"names":[],"mappings":";;;;AAGA;AAHA;AAEO,MAAM,UAAU","debugId":null}},
+    {"offset": {"line": 64, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/node_modules/next/src/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.ts"],"sourcesContent":["module.exports = (\n  require('../../module.compiled') as typeof import('../../module.compiled')\n).vendored['react-ssr']!.ReactJsxDevRuntime\n"],"names":["module","exports","require","vendored","ReactJsxDevRuntime"],"mappings":"AAAAA,OAAOC,OAAO,GACZC,QAAQ,4HACRC,QAAQ,CAAC,YAAY,CAAEC,kBAAkB","ignoreList":[0],"debugId":null}}]
+}

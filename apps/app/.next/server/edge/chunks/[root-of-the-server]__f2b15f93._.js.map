@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 16, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/middleware.ts"],"sourcesContent":["import { type NextRequest, NextResponse } from 'next/server';\r\n\r\n\r\nexport function middleware(request: NextRequest) {\r\n    const { pathname } = request.nextUrl;\r\n    \r\n    return NextResponse.redirect(new URL('/sign-in', request.url))\r\n}\r\n\r\nexport const config = {\r\n    matcher: '/',\r\n}\r\n"],"names":[],"mappings":";;;;;;AAAA;AAAA;;AAGO,SAAS,WAAW,OAAoB;IAC3C,MAAM,EAAE,QAAQ,EAAE,GAAG,QAAQ,OAAO;IAEpC,OAAO,gMAAY,CAAC,QAAQ,CAAC,IAAI,IAAI,YAAY,QAAQ,GAAG;AAChE;AAEO,MAAM,SAAS;IAClB,SAAS;AACb"}}]
+}

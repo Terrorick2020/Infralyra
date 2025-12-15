@@ -1,0 +1,35 @@
+/* [project]/app/interfont_76ae3e07.module.css [app-client] (css) */
+@font-face {
+  font-family: interFont;
+  src: url("../media/CraftworkGrotesk_Regular-s.p.92405f9c.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: interFont;
+  src: url("../media/CraftworkGrotesk_Medium-s.p.e5e7c30c.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: interFont Fallback;
+  src: local(Arial);
+  ascent-override: 95.1%;
+  descent-override: 19.02%;
+  line-gap-override: 0.0%;
+  size-adjust: 105.15%;
+}
+
+.interfont_76ae3e07-module__bxWDQW__className {
+  font-family: interFont, interFont Fallback;
+}
+
+.interfont_76ae3e07-module__bxWDQW__variable {
+  --font-inter: "interFont", "interFont Fallback";
+}
+
+/*# sourceMappingURL=app_interfont_76ae3e07_module_css_bad6b30c._.single.css.map*/

@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
+    {"offset": {"line": 19, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/src/pages/Interfaces/ui/Page.tsx"],"sourcesContent":["export function InterfacesPage() {\r\n    return (\r\n        <></>\r\n    )\r\n}\r\n"],"names":[],"mappings":";;;;;;AAAO,SAAS;IACZ,qBACI;AAER","debugId":null}},
+    {"offset": {"line": 32, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/src/pages/Interfaces/index.ts"],"sourcesContent":["export { InterfacesPage } from './ui/Page';\r\n"],"names":[],"mappings":";AAAA","debugId":null}},
+    {"offset": {"line": 39, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/app/page.tsx"],"sourcesContent":["import { InterfacesPage } from '@/src/pages/Interfaces';\r\nexport default InterfacesPage;\r\n"],"names":[],"mappings":";;;;AAAA;AAAA;;uCACe,2JAAc","debugId":null}}]
+}

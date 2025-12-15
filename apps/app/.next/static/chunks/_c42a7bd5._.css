@@ -1,0 +1,125 @@
+/* [project]/app/interfont_82f5e103.module.css [app-client] (css) */
+@font-face {
+  font-family: interFont;
+  src: url("../media/InterVariable_latin-s.p.7511f8d7.woff2") format("woff2");
+  font-display: optional;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: interFont;
+  src: url("../media/InterVariable_cyrillic-s.p.53d7b668.woff2") format("woff2");
+  font-display: optional;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: interFont Fallback;
+  src: local(Arial);
+  ascent-override: 89.79%;
+  descent-override: 22.36%;
+  line-gap-override: 0.0%;
+  size-adjust: 107.89%;
+}
+
+.interfont_82f5e103-module__tSimoG__className {
+  font-family: interFont, interFont Fallback;
+}
+
+.interfont_82f5e103-module__tSimoG__variable {
+  --font-inter: "interFont", "interFont Fallback";
+}
+
+/* [project]/app/craftworkfont_bd6d7ba1.module.css [app-client] (css) */
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_Regular-s.p.92405f9c.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_Medium-s.p.e5e7c30c.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_SemiBold-s.p.0c2ff174.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_Bold-s.p.ee1a23f1.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_ExtraBold-s.p.dfb7eeec.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont Fallback;
+  src: local(Arial);
+  ascent-override: 95.1%;
+  descent-override: 19.02%;
+  line-gap-override: 0.0%;
+  size-adjust: 105.15%;
+}
+
+.craftworkfont_bd6d7ba1-module__VOkRQG__className {
+  font-family: craftworkFont, craftworkFont Fallback;
+}
+
+.craftworkfont_bd6d7ba1-module__VOkRQG__variable {
+  --font-craftwork: "craftworkFont", "craftworkFont Fallback";
+}
+
+/* [project]/src/app/layout/Default/Default.module.scss.module.css [app-client] (css) */
+.Default-module-scss-module__lnON8a__default {
+  width: 100%;
+  height: 100vh;
+}
+
+.Default-module-scss-module__lnON8a__default .Default-module-scss-module__lnON8a__box {
+  width: 100%;
+  height: 100%;
+}
+
+/* [project]/src/app/style/global.scss.css [app-client] (css) */
+* {
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #888 rgba(0, 0, 0, 0);
+  margin: 0;
+  padding: 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 8px;
+}
+
+/*# sourceMappingURL=_c42a7bd5._.css.map*/

@@ -1,0 +1,27 @@
+/* [project]/app/craftwork_b148f41.module.css [app-client] (css) */
+@font-face {
+  font-family: craftwork;
+  src: url("../media/CraftworkGrotesk-s.p.dfb7eeec.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftwork Fallback;
+  src: local(Arial);
+  ascent-override: 72.92%;
+  descent-override: 14.58%;
+  line-gap-override: 0.0%;
+  size-adjust: 137.13%;
+}
+
+.craftwork_b148f41-module__XGZLwW__className {
+  font-family: craftwork, craftwork Fallback;
+  font-style: normal;
+}
+
+.craftwork_b148f41-module__XGZLwW__variable {
+  --font-craftwork: "craftwork", "craftwork Fallback";
+}
+
+/*# sourceMappingURL=app_craftwork_b148f41_module_a1ddb7e5.css.map*/

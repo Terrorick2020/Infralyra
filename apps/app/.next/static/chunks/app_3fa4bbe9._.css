@@ -1,0 +1,91 @@
+/* [project]/app/interfont_e9adc697.module.css [app-client] (css) */
+@font-face {
+  font-family: interFont;
+  src: url("../media/InterVariable_latin-s.p.7511f8d7.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: interFont;
+  src: url("../media/InterVariable_сyrillic-s.p.53d7b668.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: interFont Fallback;
+  src: local(Arial);
+  ascent-override: 89.79%;
+  descent-override: 22.36%;
+  line-gap-override: 0.0%;
+  size-adjust: 107.89%;
+}
+
+.interfont_e9adc697-module__qAPDYq__className {
+  font-family: interFont, interFont Fallback;
+}
+
+.interfont_e9adc697-module__qAPDYq__variable {
+  --font-inter: "interFont", "interFont Fallback";
+}
+
+/* [project]/app/craftworkfont_c80b8e87.module.css [app-client] (css) */
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_Regular-s.p.92405f9c.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_Medium-s.p.e5e7c30c.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_SemiBold-s.p.0c2ff174.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_Bold-s.p.ee1a23f1.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_ExtraBold-s.p.dfb7eeec.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont Fallback;
+  src: local(Arial);
+  ascent-override: 95.1%;
+  descent-override: 19.02%;
+  line-gap-override: 0.0%;
+  size-adjust: 105.15%;
+}
+
+.craftworkfont_c80b8e87-module__t4sfCa__className {
+  font-family: craftworkFont, craftworkFont Fallback;
+}
+
+.craftworkfont_c80b8e87-module__t4sfCa__variable {
+  --font-craftwork: "craftworkFont", "craftworkFont Fallback";
+}
+
+/*# sourceMappingURL=app_3fa4bbe9._.css.map*/

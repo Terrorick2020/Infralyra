@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/app/not-found.tsx"],"sourcesContent":["export const dynamic = 'force-static';\r\n// export { NotFoundPage as default } from '@/src/pages/NotFound';\r\n"],"names":[],"mappings":";;;;AAAO,MAAM,UAAU,gBACvB,kEAAkE","debugId":null}}]
+}

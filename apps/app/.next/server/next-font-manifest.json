@@ -1,0 +1,16 @@
+{
+  "app": {
+    "[project]/app/sign-in/page": [
+      "static/media/InterVariable_latin-s.p.7511f8d7.woff2",
+      "static/media/InterVariable_cyrillic-s.p.53d7b668.woff2",
+      "static/media/CraftworkGrotesk_Regular-s.p.92405f9c.woff2",
+      "static/media/CraftworkGrotesk_Medium-s.p.e5e7c30c.ttf",
+      "static/media/CraftworkGrotesk_SemiBold-s.p.0c2ff174.ttf",
+      "static/media/CraftworkGrotesk_Bold-s.p.ee1a23f1.ttf",
+      "static/media/CraftworkGrotesk_ExtraBold-s.p.dfb7eeec.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}

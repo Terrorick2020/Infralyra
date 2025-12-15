@@ -1,0 +1,35 @@
+/* [project]/app/craftworkfont_2eb19e9b.module.css [app-client] (css) */
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_Regular-s.p.92405f9c.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_Bold-s.p.dfb7eeec.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont Fallback;
+  src: local(Arial);
+  ascent-override: 95.1%;
+  descent-override: 19.02%;
+  line-gap-override: 0.0%;
+  size-adjust: 105.15%;
+}
+
+.craftworkfont_2eb19e9b-module__sJ8eXW__className {
+  font-family: craftworkFont, craftworkFont Fallback;
+}
+
+.craftworkfont_2eb19e9b-module__sJ8eXW__variable {
+  --font-craftwork: "craftworkFont", "craftworkFont Fallback";
+}
+
+/*# sourceMappingURL=app_craftworkfont_2eb19e9b_module_0cf065b8.css.map*/

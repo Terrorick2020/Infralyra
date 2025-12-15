@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/src/pages/Error/ui/Page.tsx"],"sourcesContent":["export function ErrorPage() {\r\n    return (\r\n        <></>\r\n    )\r\n}\r\n"],"names":[],"mappings":";;;;;;AAAO,SAAS;IACZ,qBACI;AAER","debugId":null}},
+    {"offset": {"line": 17, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/src/pages/Error/index.ts"],"sourcesContent":["import { ErrorPage } from './ui/Page';\r\n\r\nexport { ErrorPage }"],"names":[],"mappings":";AAAA","debugId":null}},
+    {"offset": {"line": 25, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/app/error.tsx"],"sourcesContent":["import { ErrorPage } from '@/src/pages/Error';\r\n\r\nexport const dynamic = 'force-static';\r\n\r\nexport default function Error() {\r\n    return (<ErrorPage />)\r\n}\r\n"],"names":[],"mappings":";;;;;;;AAAA;AAAA;;;AAEO,MAAM,UAAU;AAER,SAAS;IACpB,qBAAQ,8OAAC,iJAAS;;;;;AACtB","debugId":null}}]
+}

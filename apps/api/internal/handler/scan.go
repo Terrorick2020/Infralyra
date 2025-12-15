@@ -34,3 +34,5 @@ func (h *Handler) getActivity(ctx *gin.Context) {
 	cuccessRes := SuccessRes("Успешное получение активности интерфейсов сети", &activity)
 	SendResponse(ctx, http.StatusOK, cuccessRes)
 }
+
+func (h *Handler) getDevices(ctx *gin.Context) {}

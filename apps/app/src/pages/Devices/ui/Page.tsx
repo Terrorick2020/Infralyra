@@ -1,0 +1,5 @@
+export function DevicesPage() {
+    return (
+        <></>
+    )
+}

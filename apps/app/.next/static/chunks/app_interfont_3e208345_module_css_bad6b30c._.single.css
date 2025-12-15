@@ -1,0 +1,33 @@
+/* [project]/app/interfont_3e208345.module.css [app-client] (css) */
+@font-face {
+  font-family: interFont;
+  src: url("../media/InterVariable_latin-s.p.7511f8d7.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: interFont;
+  src: url("../media/InterVariable_cyrillic-s.p.53d7b668.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: interFont Fallback;
+  src: local(Arial);
+  ascent-override: 89.79%;
+  descent-override: 22.36%;
+  line-gap-override: 0.0%;
+  size-adjust: 107.89%;
+}
+
+.interfont_3e208345-module__rTPZwW__className {
+  font-family: interFont, interFont Fallback;
+}
+
+.interfont_3e208345-module__rTPZwW__variable {
+  --font-inter: "interFont", "interFont Fallback";
+}
+
+/*# sourceMappingURL=app_interfont_3e208345_module_css_bad6b30c._.single.css.map*/

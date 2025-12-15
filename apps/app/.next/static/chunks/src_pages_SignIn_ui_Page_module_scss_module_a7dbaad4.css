@@ -1,0 +1,20 @@
+/* [project]/src/pages/SignIn/ui/Page.module.scss.module.css [app-client] (css) */
+.Page-module-scss-module__j6eFaW__sign-in-page {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+}
+
+.Page-module-scss-module__j6eFaW__sign-in-page .Page-module-scss-module__j6eFaW__widget {
+  width: 100%;
+  max-width: 650px;
+}
+
+.Page-module-scss-module__j6eFaW__sign-in-page .Page-module-scss-module__j6eFaW__widget .Page-module-scss-module__j6eFaW__title {
+  text-align: center;
+  width: 100%;
+}
+
+/*# sourceMappingURL=src_pages_SignIn_ui_Page_module_scss_module_a7dbaad4.css.map*/

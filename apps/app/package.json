@@ -14,7 +14,7 @@
     "@mui/styles": "^6.4.8",
     "@reduxjs/toolkit": "^2.11.1",
     "add": "^2.0.6",
-    "next": "15.5.2",
+    "next": "16.1.1",
     "persist": "^0.2.7",
     "react": "19.1.0",
     "react-dom": "19.1.0",

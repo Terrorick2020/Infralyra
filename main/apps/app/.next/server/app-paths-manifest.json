@@ -1,0 +1,6 @@
+{
+  "/(main)/devices/page": "app/(main)/devices/page.js",
+  "/(main)/trafic/page": "app/(main)/trafic/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/sign-in/page": "app/sign-in/page.js"
+}

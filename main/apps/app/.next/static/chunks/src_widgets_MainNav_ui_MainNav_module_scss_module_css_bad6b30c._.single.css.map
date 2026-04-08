@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///turbopack:///[project]/src/widgets/MainNav/ui/home/anonymous/VsCode/Projects/Infralyra/apps/app/src/widgets/MainNav/ui/MainNav.module.scss"],"sourcesContent":[".nav {\n    width: 100%;\n    height: 100%;\n    background: #0f0e17;\n\n    .list {\n        width: 100%;\n        height: 100%;\n        display: flex;\n        flex-direction: row;\n        align-items: center;\n        justify-content: space-evenly;\n        list-style: none;\n\n        .item {\n\n        }\n    }\n}"],"names":[],"mappings":"AAAA;;;;;;AAKI"}}]
+}

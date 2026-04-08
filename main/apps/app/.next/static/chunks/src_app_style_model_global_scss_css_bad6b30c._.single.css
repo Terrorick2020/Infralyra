@@ -1,0 +1,77 @@
+/* [project]/src/app/style/model/global.scss.css [app-client] (css) */
+:root {
+  --scroll-track-color: none;
+  --scroll-thumb-color: none;
+  --app-sel-bg-color: none;
+  --app-sel-font-color: none;
+}
+
+:root#light {
+  --scroll-track-color: #a7a9be;
+  --scroll-thumb-color: #2e2f3e;
+  --app-sel-bg-color: #e53170;
+  --app-sel-font-color: #fffffe;
+  --app-bg-color: #0f0e17;
+  --card-bg-color: #0f0e17;
+  --head-font-color: #fffffe;
+  --paragrapf-font-color: #a7a9be;
+  --btn-bg-color: #ff8906;
+  --btn-font-color: #fffffe;
+  --stroke-color: #000;
+  --icon-highlight: #ff8906;
+  --icon-secondary: #f25f4c;
+  --icon-tertiary: #e53170;
+}
+
+:root#dark {
+  --scroll-track-color: #a7a9be;
+  --scroll-thumb-color: #2e2f3e;
+  --app-sel-bg-color: #e53170;
+  --app-sel-font-color: #fffffe;
+  --app-bg-color: #1b1927;
+  --card-bg-color: #0f0e17;
+  --head-font-color: #fffffe;
+  --paragrapf-font-color: #a7a9be;
+  --btn-bg-color: #ff8906;
+  --btn-font-color: #fffffe;
+  --input-bg-color: #1b1927;
+  --stroke-color: #000;
+  --icon-highlight: #ff8906;
+  --icon-secondary: #f25f4c;
+  --icon-tertiary: #e53170;
+}
+
+::selection {
+  background: var(--app-sel-bg-color);
+  color: var(--app-sel-font-color);
+}
+
+* {
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb-color) var(--scroll-track-color);
+  margin: 0;
+  padding: 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scroll-track-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb-color);
+  border-radius: 8px;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/*# sourceMappingURL=src_app_style_model_global_scss_css_bad6b30c._.single.css.map*/

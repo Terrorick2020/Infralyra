@@ -1,0 +1,5 @@
+docs/
+.env.example
+prod-plan.yaml
+dev-plan.yaml
+Dockerfile

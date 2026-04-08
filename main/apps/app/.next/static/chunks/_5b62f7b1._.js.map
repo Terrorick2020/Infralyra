@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///home/anonymous/VsCode/Projects/Infralyra/apps/app/src/pages/Error/ui/Page.tsx"],"sourcesContent":["export function ErrorPage() {\n    return (\n        <div>dvsdvvd</div>\n    )\n}\n"],"names":[],"mappings":";;;;;;AAAO,SAAS;IACZ,qBACI,6LAAC;kBAAI;;;;;;AAEb;KAJgB","debugId":null}},
+    {"offset": {"line": 29, "column": 0}, "map": {"version":3,"sources":["file:///home/anonymous/VsCode/Projects/Infralyra/apps/app/src/pages/Error/ui/index.ts"],"sourcesContent":["import { ErrorPage } from './Page';\n\nexport { ErrorPage }\n"],"names":[],"mappings":";AAAA","debugId":null}},
+    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///home/anonymous/VsCode/Projects/Infralyra/apps/app/src/pages/Error/index.ts"],"sourcesContent":["import { ErrorPage } from './ui';\n\nexport { ErrorPage }"],"names":[],"mappings":";AAAA;AAAA","debugId":null}},
+    {"offset": {"line": 52, "column": 0}, "map": {"version":3,"sources":["file:///home/anonymous/VsCode/Projects/Infralyra/apps/app/app/error.tsx"],"sourcesContent":["'use client';\n\nimport { ErrorPage } from '@/src/pages/Error';\nexport const dynamic = 'force-static';\nexport default ErrorPage;\n"],"names":[],"mappings":";;;;;;AAEA;AAAA;AAFA;;AAGO,MAAM,UAAU;uCACR,oJAAS","debugId":null}}]
+}

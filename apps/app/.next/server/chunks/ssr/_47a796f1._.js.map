@@ -1,9 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/src/pages/NotFound/ui/Page.tsx"],"sourcesContent":["export function NotFoundPage() {\r\n    return (\r\n        <div>vfddsfvs</div>\r\n    )\r\n}\r\n"],"names":[],"mappings":";;;;;;AAAO,SAAS;IACZ,qBACI,8OAAC;kBAAI;;;;;;AAEb","debugId":null}},
-    {"offset": {"line": 23, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/src/pages/NotFound/ui/index.ts"],"sourcesContent":["import { NotFoundPage } from './Page';\r\n\r\nexport { NotFoundPage }\r\n"],"names":[],"mappings":";AAAA","debugId":null}},
-    {"offset": {"line": 31, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/src/pages/NotFound/index.ts"],"sourcesContent":["import { NotFoundPage } from './ui';\r\n\r\nexport { NotFoundPage }\r\n"],"names":[],"mappings":";AAAA;AAAA","debugId":null}},
-    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///C:/VS_Code/Go/Infralyra/apps/app/app/not-found.tsx"],"sourcesContent":["import { NotFoundPage } from '@/src/pages/NotFound';\r\nexport const dynamic = 'force-static';\r\nexport default NotFoundPage;\r\n"],"names":[],"mappings":";;;;;;AAAA;AAAA;;AACO,MAAM,UAAU;uCACR,uJAAY","debugId":null}}]
-}

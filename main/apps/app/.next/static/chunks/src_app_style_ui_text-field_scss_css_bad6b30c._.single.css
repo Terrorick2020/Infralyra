@@ -1,0 +1,22 @@
+/* [project]/src/app/style/ui/text-field.scss.css [app-client] (css) */
+:root .MuiFormControl-root.MuiTextField-root {
+  background: none;
+}
+
+:root .MuiFormControl-root.MuiTextField-root .MuiFormLabel-root {
+  color: var(--head-font-color);
+  font-family: var(--font-craftwork);
+}
+
+:root .MuiFormControl-root.MuiTextField-root .MuiInputBase-root {
+  color: var(--paragrapf-font-color);
+  background: var(--input-bg-color);
+  font-family: var(--font-inter);
+}
+
+:root .MuiFormControl-root.MuiTextField-root .MuiOutlinedInput-notchedOutline {
+  border-color: var(--paragrapf-font-color);
+  outline: none;
+}
+
+/*# sourceMappingURL=src_app_style_ui_text-field_scss_css_bad6b30c._.single.css.map*/

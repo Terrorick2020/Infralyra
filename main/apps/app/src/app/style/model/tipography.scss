@@ -1,0 +1,44 @@
+@use "../../../shared/assets/scss/index.scss" as mixins;
+
+body,
+h5,
+h6,
+p,
+a {
+  font-family: var(--font-inter);
+  font-style: normal;
+  font-weight: 400;
+  color: var(--head-font-color);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-craftwork);
+  font-style: normal;
+  font-weight: 600;
+  color: var(--paragrapf-font-color);
+}
+
+h1 {
+  @include mixins.fluidText(52, 30);
+}
+h2 {
+  @include mixins.fluidText(36, 26);
+}
+h3 {
+  @include mixins.fluidText(32, 24);
+}
+h4 {
+  @include mixins.fluidText(28, 22);
+}
+h5 {
+  @include mixins.fluidText(24, 20);
+}
+h6 {
+  @include mixins.fluidText(20, 18);
+}
+p, a {
+  @include mixins.fluidText(16, 14);
+}

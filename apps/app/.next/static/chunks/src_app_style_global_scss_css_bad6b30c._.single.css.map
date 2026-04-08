@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///turbopack:///[project]/src/app/style/C:/VS_Code/Go/Infralyra/apps/app/src/app/style/global.scss"],"sourcesContent":[":root {\r\n    &#light {\r\n\r\n    }\r\n\r\n    &#dark {\r\n\r\n    }\r\n}\r\n\r\n* {\r\n    margin: 0;\r\n    padding: 0;\r\n    box-sizing: border-box;\r\n    scrollbar-width: thin;\r\n    scrollbar-color: #888 transparent;    \r\n}\r\n\r\n*::-webkit-scrollbar {\r\n    width: 8px;\r\n    height: 8px;\r\n}\r\n\r\n*::-webkit-scrollbar-track {\r\n    background: var(--scroll-track);\r\n}\r\n\r\n*::-webkit-scrollbar-thumb {\r\n    background: var(--scroll-thumb);\r\n    border-radius: 8px;\r\n}\r\n\r\n*::-webkit-scrollbar-thumb:hover {\r\n    // background: darken(var(--scroll-thumb), 20%);\r\n    // background: lighten($color: #000000, $amount: 0);\r\n}\r\n\r\n                    // color-mix(\r\n                    //     in srgb,\r\n                    //     var(--bg-block-color) 20%,\r\n                    //     #FFFFFF 80%\r\n                    // ) 0%,"],"names":[],"mappings":"AAUA;;;;;;;;AAQA;;;;;AAKA;;;;AAIA"}}]
-}

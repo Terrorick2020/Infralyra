@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///turbopack:///[project]/src/pages/SignIn/ui/home/anonymous/VsCode/Projects/Infralyra/apps/app/src/pages/SignIn/ui/Page.module.scss"],"sourcesContent":[".sign-in-page {\n    width: 100%;\n    min-height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    overflow-y: auto;\n    overflow-x: hidden;\n}\n"],"names":[],"mappings":"AAAA"}}]
+}

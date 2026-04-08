@@ -1,0 +1,40 @@
+/* [project]/src/features/signIn-form/ui/SignInForm.module.scss.module.css [app-client] (css) */
+.SignInForm-module-scss-module__DxwZ-W__signIn-form {
+  border: 2px solid var(--stroke-color);
+  background: var(--card-bg-color);
+  border-radius: 5px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  width: 100%;
+  max-width: 650px;
+  padding: 25px 50px;
+  display: flex;
+}
+
+.SignInForm-module-scss-module__DxwZ-W__signIn-form .SignInForm-module-scss-module__DxwZ-W__title {
+  text-align: center;
+  width: 100%;
+  color: var(--head-font-color);
+}
+
+.SignInForm-module-scss-module__DxwZ-W__signIn-form .SignInForm-module-scss-module__DxwZ-W__body {
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  display: flex;
+}
+
+/* [project]/src/pages/SignIn/ui/Page.module.scss.module.css [app-client] (css) */
+.Page-module-scss-module__j6eFaW__sign-in-page {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/*# sourceMappingURL=src_46525f38._.css.map*/

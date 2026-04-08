@@ -1,0 +1,44 @@
+/* [project]/src/app/style/model/tipography.scss.css [app-client] (css) */
+body, h5, h6, p, a {
+  font-family: var(--font-inter);
+  color: var(--head-font-color);
+  font-style: normal;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-craftwork);
+  color: var(--paragrapf-font-color);
+  font-style: normal;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: max(1.875rem, min(1.6rem + 1.375vw, 3.25rem));
+}
+
+h2 {
+  font-size: max(1.625rem, min(1.5rem + .625vw, 2.25rem));
+}
+
+h3 {
+  font-size: max(1.5rem, min(1.4rem + .5vw, 2rem));
+}
+
+h4 {
+  font-size: max(1.375rem, min(1.3rem + .375vw, 1.75rem));
+}
+
+h5 {
+  font-size: max(1.25rem, min(1.2rem + .25vw, 1.5rem));
+}
+
+h6 {
+  font-size: max(1.125rem, min(1.1rem + .125vw, 1.25rem));
+}
+
+p, a {
+  font-size: max(.875rem, min(.85rem + .125vw, 1rem));
+}
+
+/*# sourceMappingURL=src_app_style_model_tipography_scss_css_bad6b30c._.single.css.map*/

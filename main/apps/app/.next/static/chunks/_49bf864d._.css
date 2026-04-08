@@ -1,0 +1,242 @@
+/* [project]/app/interfont_82f5e103.module.css [app-client] (css) */
+@font-face {
+  font-family: interFont;
+  src: url("../media/InterVariable_latin-s.p.7511f8d7.woff2") format("woff2");
+  font-display: optional;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: interFont;
+  src: url("../media/InterVariable_cyrillic-s.p.53d7b668.woff2") format("woff2");
+  font-display: optional;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: interFont Fallback;
+  src: local(Arial);
+  ascent-override: 89.79%;
+  descent-override: 22.36%;
+  line-gap-override: 0.0%;
+  size-adjust: 107.89%;
+}
+
+.interfont_82f5e103-module__tSimoG__className {
+  font-family: interFont, interFont Fallback;
+}
+
+.interfont_82f5e103-module__tSimoG__variable {
+  --font-inter: "interFont", "interFont Fallback";
+}
+
+/* [project]/app/craftworkfont_bd6d7ba1.module.css [app-client] (css) */
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_Regular-s.p.92405f9c.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_Medium-s.p.e5e7c30c.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_SemiBold-s.p.0c2ff174.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_Bold-s.p.ee1a23f1.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont;
+  src: url("../media/CraftworkGrotesk_ExtraBold-s.p.dfb7eeec.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: craftworkFont Fallback;
+  src: local(Arial);
+  ascent-override: 95.1%;
+  descent-override: 19.02%;
+  line-gap-override: 0.0%;
+  size-adjust: 105.15%;
+}
+
+.craftworkfont_bd6d7ba1-module__VOkRQG__className {
+  font-family: craftworkFont, craftworkFont Fallback;
+}
+
+.craftworkfont_bd6d7ba1-module__VOkRQG__variable {
+  --font-craftwork: "craftworkFont", "craftworkFont Fallback";
+}
+
+/* [project]/src/app/style/model/global.scss.css [app-client] (css) */
+:root {
+  --scroll-track-color: none;
+  --scroll-thumb-color: none;
+  --app-sel-bg-color: none;
+  --app-sel-font-color: none;
+}
+
+:root#light {
+  --scroll-track-color: #a7a9be;
+  --scroll-thumb-color: #2e2f3e;
+  --app-sel-bg-color: #e53170;
+  --app-sel-font-color: #fffffe;
+  --app-bg-color: #0f0e17;
+  --card-bg-color: #0f0e17;
+  --head-font-color: #fffffe;
+  --paragrapf-font-color: #a7a9be;
+  --btn-bg-color: #ff8906;
+  --btn-font-color: #fffffe;
+  --stroke-color: #000;
+  --icon-highlight: #ff8906;
+  --icon-secondary: #f25f4c;
+  --icon-tertiary: #e53170;
+}
+
+:root#dark {
+  --scroll-track-color: #a7a9be;
+  --scroll-thumb-color: #2e2f3e;
+  --app-sel-bg-color: #e53170;
+  --app-sel-font-color: #fffffe;
+  --app-bg-color: #1b1927;
+  --card-bg-color: #0f0e17;
+  --head-font-color: #fffffe;
+  --paragrapf-font-color: #a7a9be;
+  --btn-bg-color: #ff8906;
+  --btn-font-color: #fffffe;
+  --input-bg-color: #1b1927;
+  --stroke-color: #000;
+  --icon-highlight: #ff8906;
+  --icon-secondary: #f25f4c;
+  --icon-tertiary: #e53170;
+}
+
+::selection {
+  background: var(--app-sel-bg-color);
+  color: var(--app-sel-font-color);
+}
+
+* {
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb-color) var(--scroll-track-color);
+  margin: 0;
+  padding: 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scroll-track-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb-color);
+  border-radius: 8px;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* [project]/src/app/style/model/tipography.scss.css [app-client] (css) */
+body, h5, h6, p, a {
+  font-family: var(--font-inter);
+  color: var(--head-font-color);
+  font-style: normal;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-craftwork);
+  color: var(--paragrapf-font-color);
+  font-style: normal;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: max(1.875rem, min(1.6rem + 1.375vw, 3.25rem));
+}
+
+h2 {
+  font-size: max(1.625rem, min(1.5rem + .625vw, 2.25rem));
+}
+
+h3 {
+  font-size: max(1.5rem, min(1.4rem + .5vw, 2rem));
+}
+
+h4 {
+  font-size: max(1.375rem, min(1.3rem + .375vw, 1.75rem));
+}
+
+h5 {
+  font-size: max(1.25rem, min(1.2rem + .25vw, 1.5rem));
+}
+
+h6 {
+  font-size: max(1.125rem, min(1.1rem + .125vw, 1.25rem));
+}
+
+p, a {
+  font-size: max(.875rem, min(.85rem + .125vw, 1rem));
+}
+
+/* [project]/src/app/style/ui/button.scss.css [app-client] (css) */
+:root .MuiButtonBase-root {
+  background: var(--btn-bg-color);
+  color: var(--btn-font-color);
+  font-weight: 600;
+  font-family: var(--font-craftwork);
+}
+
+/* [project]/src/app/style/ui/text-field.scss.css [app-client] (css) */
+:root .MuiFormControl-root.MuiTextField-root {
+  background: none;
+}
+
+:root .MuiFormControl-root.MuiTextField-root .MuiFormLabel-root {
+  color: var(--head-font-color);
+  font-family: var(--font-craftwork);
+}
+
+:root .MuiFormControl-root.MuiTextField-root .MuiInputBase-root {
+  color: var(--paragrapf-font-color);
+  background: var(--input-bg-color);
+  font-family: var(--font-inter);
+}
+
+:root .MuiFormControl-root.MuiTextField-root .MuiOutlinedInput-notchedOutline {
+  border-color: var(--paragrapf-font-color);
+  outline: none;
+}
+
+/* [project]/src/app/style/index.scss.css [app-client] (css) */
+
+
+/*# sourceMappingURL=_49bf864d._.css.map*/

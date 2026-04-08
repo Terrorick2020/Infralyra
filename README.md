@@ -1,20 +1,47 @@
 # Infralyra (Инфраструктурная лирика):
-Программный комплекс сканирования и сниффинга сети для идентификации устройств, их типов и параметров
+Программный комплекс сканирования и сниффинга сети для идентификации устройств, их типов и параметров.
 ![Hello](./docs/architecture/favicon.png)
 
-## Возможности:
- - Сканирование сетевого трафика устройства;
- - Анализ входящего трафика;
+## Обозначения:
+ - ПК - программный комплекс;
 
-## Этапы развёртывания:
+## Возможности:
+ 1) По работе ПК:
+  - Сканирование сети, в которой развёрнут програмный комплекс;
+  - Анализ входящего трафика;
+  - Разграничение доступа администрирования системы;
+ 2) По администрированию ПК:
+  - Возможность проанализировать документацию по пути ./main/docs;
+  - Возможность управления работы ПК через make;
+  - Возможность удобной доработки ПК;
+
+## Режимы работы:
+ - Режим разработки (dev): система запускается в режиме разработки и поднимаются только необходимые для работы сервисы: PostgresDb, RedisDb, PgAdmin;
+ - Режим тестировки (test): система запускает локальную сеть через docker compose и разворачивает тестовую среду;
+ - Режим реальной работы (prod): система разворачивается на устройстве и начинает свлою работу;
+
+## Этапы развертывания:
  1) Клонировние репозитория на устройство (сервер): `git clone https://github.com/Terrorick2020/Infralyra.git`;
  2) Перейти в диррескторию проетка: `cd ./Infralyra`;
  3) Установка файлов переменных сред .env в дирректориях [./]; [./apps/api]; [./apps/app] по примерам из .env.example, которые находятся в этих же дирректориях:
-    - Windows: `New-Item -Path ".env", "./apps/app/.env", "./apps/api/.env" -ItemType File`;
-    - Linux (Debian/Ubuntu, bash): `touch .env ./apps/app/.env ./apps/api/.env`;
-    - MacOS: `touch .env ./apps/app/.env ./apps/api/.env`;
- 4) Установить утилиту [make]:
-    - Windows: `choco install make; make --version`;
-    - Linux (Debian/Ubuntu, bash): `sudo apt update && sudo apt install build-essential && make --version`;
-    - MacOS: `brew install make && make --version`;
- 5) Запустить систему: `make setup`;
+  - Windows: `New-Item -Path ".env", "./apps/app/.env", "./apps/api/.env" -ItemType File`;
+  - Linux (bash): `touch .env ./apps/app/.env ./apps/api/.env`;
+  - MacOS: `touch .env ./apps/app/.env ./apps/api/.env`;
+ 4) Установка утилиту [make]:
+  - Windows: `choco install make; make --version`;
+  - Linux (Debian/Ubuntu, bash): `sudo apt update && sudo apt install build-essential && make --version`;
+  - Linux (Arch, bash): `sudo pacman -S base-devel && make --version`;
+  - MacOS: `brew install make && make --version`;
+ 5) Запуск системы:
+  - Режим разработки (dev - по умолчанию): `make start` | `make start MODE=dev`;
+  - Режим тестировки (test): `make start MODE=test`;
+  - Режим реальной работы (prod): `make start MODE=prod`;
+
+## Дополнительно:
+ 1) Настройка среды выполнения ПК без запуска: `make preparation_for_work (флаги)`;
+ 2) Запуск ПК без настройки среды выполнения: `make launching_software_services (флаги)`;
+ 3) Остановка сервисов ПК: `make stopping_software_services (флаги)`;
+ 4) Очистка ресурсов, связанных с ПК (ВНИМАНИЕ! Очищается всё, что используется, могут быть удалены уже имеющиеся ресурсы!): `make clear_software (флаги)`;
+ 5) Флаги:
+  - MODE=(`dev` - по умолчанию, режим разработки; `test` - режим тестировая ПК, `prod` - режим реальной работы);
+  - OUT_MODE=(`all` - по умолчанию, все вариации отключения; `dev` | `test` | `prod` - отключение выбранной вариации);

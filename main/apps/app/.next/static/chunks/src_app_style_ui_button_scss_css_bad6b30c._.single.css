@@ -1,0 +1,9 @@
+/* [project]/src/app/style/ui/button.scss.css [app-client] (css) */
+:root .MuiButtonBase-root {
+  background: var(--btn-bg-color);
+  color: var(--btn-font-color);
+  font-weight: 600;
+  font-family: var(--font-craftwork);
+}
+
+/*# sourceMappingURL=src_app_style_ui_button_scss_css_bad6b30c._.single.css.map*/

@@ -1,0 +1,26 @@
+.signIn-form {
+    width: 100%;
+    max-width: 650px;
+    border: 2px solid var(--stroke-color);
+    background: var(--card-bg-color);
+    border-radius: 5px;
+    padding: 25px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+
+    .title {
+        width: 100%;
+        text-align: center;
+        color: var(--head-font-color);
+    }
+
+    .body {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}

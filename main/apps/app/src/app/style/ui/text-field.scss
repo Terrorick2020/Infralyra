@@ -1,0 +1,19 @@
+:root .MuiFormControl-root.MuiTextField-root {
+    background: transparent;
+
+    .MuiFormLabel-root {
+        color: var(--head-font-color);
+        font-family: var(--font-craftwork);
+    }
+
+    .MuiInputBase-root {
+        color: var(--paragrapf-font-color);
+        background: var(--input-bg-color);
+        font-family: var(--font-inter);
+    }
+
+    .MuiOutlinedInput-notchedOutline {
+        outline: none;
+        border-color: var(--paragrapf-font-color);;
+    }
+}

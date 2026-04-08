@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
+    {"offset": {"line": 23, "column": 0}, "map": {"version":3,"sources":["file:///home/anonymous/VsCode/Projects/Infralyra/apps/app/src/pages/Devices/ui/Page.tsx"],"sourcesContent":["export function DevicesPage() {\n    return (\n        <main>\n            \n        </main>\n    )\n}\n"],"names":[],"mappings":";;;;;;AAAO,SAAS;IACZ,qBACI,8OAAC;;;;;AAIT","debugId":null}},
+    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///home/anonymous/VsCode/Projects/Infralyra/apps/app/src/pages/Devices/index.ts"],"sourcesContent":["export { DevicesPage } from './ui/Page';\n"],"names":[],"mappings":";AAAA","debugId":null}},
+    {"offset": {"line": 47, "column": 0}, "map": {"version":3,"sources":["file:///home/anonymous/VsCode/Projects/Infralyra/apps/app/app/%28main%29/devices/page.tsx"],"sourcesContent":["import { DevicesPage } from '@/src/pages/Devices';\nexport default DevicesPage;\n"],"names":[],"mappings":";;;;AAAA;AAAA;;uCACe,qJAAW","debugId":null}}]
+}

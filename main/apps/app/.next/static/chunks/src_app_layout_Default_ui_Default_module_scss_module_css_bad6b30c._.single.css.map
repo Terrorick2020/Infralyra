@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///turbopack:///[project]/src/app/layout/Default/ui/home/anonymous/VsCode/Projects/Infralyra/apps/app/src/app/layout/Default/ui/Default.module.scss"],"sourcesContent":[".default {\n    width: 100%;\n    height: 100vh;\n    background: var(--app-bg-color);\n\n    .box {\n        width: 100%;\n        height: 100%;\n    }\n}\n"],"names":[],"mappings":"AAAA;;;;;;AAKI"}}]
+}

@@ -23,16 +23,12 @@
 ## Этапы развертывания:
  1) Клонировние репозитория на устройство (сервер): `git clone https://github.com/Terrorick2020/Infralyra.git`;
  2) Перейти в диррескторию проетка: `cd ./Infralyra`;
- 3) Установка файлов переменных сред .env в дирректориях [./]; [./apps/api]; [./apps/app] по примерам из .env.example, которые находятся в этих же дирректориях:
-  - Windows: `New-Item -Path ".env", "./apps/app/.env", "./apps/api/.env" -ItemType File`;
-  - Linux (bash): `touch .env ./apps/app/.env ./apps/api/.env`;
-  - MacOS: `touch .env ./apps/app/.env ./apps/api/.env`;
- 4) Установка утилиту [make]:
+ 3) Установка утилиту [make]:
   - Windows: `choco install make; make --version`;
   - Linux (Debian/Ubuntu, bash): `sudo apt update && sudo apt install build-essential && make --version`;
   - Linux (Arch, bash): `sudo pacman -S base-devel && make --version`;
   - MacOS: `brew install make && make --version`;
- 5) Запуск системы:
+ 4) Запуск системы:
   - Режим разработки (dev - по умолчанию): `make start` | `make start MODE=dev`;
   - Режим тестировки (test): `make start MODE=test`;
   - Режим реальной работы (prod): `make start MODE=prod`;
@@ -45,3 +41,6 @@
  5) Флаги:
   - MODE=(`dev` - по умолчанию, режим разработки; `test` - режим тестировая ПК, `prod` - режим реальной работы);
   - OUT_MODE=(`all` - по умолчанию, все вариации отключения; `dev` | `test` | `prod` - отключение выбранной вариации);
+
+## Устраннение неполадок:
+ 1) При ошибках проверьте, чтобы файлы  переменных сред `.env` в дирректориях [./]; [./apps/api]; [./apps/app] по примерам из `.env.example`, которые находятся в этих же дирректориях;

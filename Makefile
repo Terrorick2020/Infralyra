@@ -94,7 +94,7 @@ endef
 
 # Проверка корректности значения MODE
 check_mode:
-ifeq ($(filter $(MODE),$(VALID_MODES)),)
+ifeq ($(filter $(MODE),dev test prod),)
 	$(error Недопустимое значение MODE: $(MODE). Допустимые: dev | test | prod)
 endif
 
@@ -103,17 +103,17 @@ define docker_cmps_start
 $(call check_mode)
 $(info Запуск сервисов Docker Compose...)
 ifeq ($(MODE),dev)
-	@docker-compose -f $(DCKR_CMPS_DEV_PATH) up
+	@docker-compose -f $(DCKR_CMPS_DEV_PATH) up --build
 else ifeq ($(MODE),test)
-	@docker-compose -f $(DCKR_CMPS_TEST_PATH) up
+	@docker-compose -f $(DCKR_CMPS_TEST_PATH) up --build
 else ifeq ($(MODE),prod)
-	@docker-compose -f $(DCKR_CMPS_PROD_PATH) up -d
+	@docker-compose -f $(DCKR_CMPS_PROD_PATH) up --build -d
 endif
 endef
 
 # Остановка сервисов по OUT_MODE
 define docker_cmps_stop
-ifeq ($(MODE),all)
+ifeq ($(OUT_MODE),all)
 	$(info Остановка сервисов Docker Compose...)
 	@docker-compose -f $(DCKR_CMPS_DEV_PATH) down -v
 	@docker-compose -f $(DCKR_CMPS_TEST_PATH) down -v
@@ -121,11 +121,11 @@ ifeq ($(MODE),all)
 else
 	$(call check_mode)
 	$(info Остановка сервисов Docker Compose...)
-	ifeq ($(MODE),dev)
+	ifeq ($(OUT_MODE),dev)
 		@docker-compose -f $(DCKR_CMPS_DEV_PATH) down -v
-	else ifeq ($(MODE),test)
+	else ifeq ($(OUT_MODE),test)
 		@docker-compose -f $(DCKR_CMPS_TEST_PATH) down -v
-	else ifeq ($(MODE),prod)
+	else ifeq ($(OUT_MODE),prod)
 		@docker-compose -f $(DCKR_CMPS_PROD_PATH) down -v
 	endif
 endif
@@ -135,33 +135,28 @@ endef
 define docker_cmps_clear
 ifeq ($(MODE),all)
 	$(info Очистка сервисов Docker Compose...)
-	@docker-compose -f $(DCKR_CMPS_DEV_PATH) --rmi all --volumes --remove-orphans
-	@docker-compose -f $(DCKR_CMPS_TEST_PATH) --rmi all --volumes --remove-orphans
-	@docker-compose -f $(DCKR_CMPS_PROD_PATH) --rmi all --volumes --remove-orphans
+	@docker-compose -f $(DCKR_CMPS_DEV_PATH) down --rmi all --volumes --remove-orphans
+	@docker-compose -f $(DCKR_CMPS_TEST_PATH) down --rmi all --volumes --remove-orphans
+	@docker-compose -f $(DCKR_CMPS_PROD_PATH) down --rmi all --volumes --remove-orphans
 else
 	$(call check_mode)
 	$(info Очистка сервисов Docker Compose...)
 	ifeq ($(MODE),dev)
-		@docker-compose -f $(DCKR_CMPS_DEV_PATH) --rmi all --volumes --remove-orphans
+		@docker-compose -f $(DCKR_CMPS_DEV_PATH) down --rmi all --volumes --remove-orphans
 	else ifeq ($(MODE),test)
-		@docker-compose -f $(DCKR_CMPS_TEST_PATH) --rmi all --volumes --remove-orphans
+		@docker-compose -f $(DCKR_CMPS_TEST_PATH) down --rmi all --volumes --remove-orphans
 	else ifeq ($(MODE),prod)
-		@docker-compose -f $(DCKR_CMPS_PROD_PATH) --rmi all --volumes --remove-orphans
+		@docker-compose -f $(DCKR_CMPS_PROD_PATH) down --rmi all --volumes --remove-orphans
 	endif
 endif
 endef
 
 # Очистка переменных среды
 define env_clear
-$(if $(wildcard $(ENV_MAIN_PATH)), \
-    $(info Удаляем $(ENV_MAIN_PATH)) \
-    $(shell rm -f $(ENV_MAIN_PATH)))
-$(if $(wildcard $(ENV_API_PATH)), \
-    $(info Удаляем $(ENV_API_PATH)) \
-    $(shell rm -f $(ENV_API_PATH)))
-$(if $(wildcard $(ENV_APP_PATH)), \
-    $(info Удаляем $(ENV_APP_PATH)) \
-    $(shell rm -f $(ENV_APP_PATH)))
+	@echo "Удаление .env файлов"
+	@rm -f $(ENV_MAIN_PATH)/.env \
+	       $(ENV_API_PATH)/.env \
+	       $(ENV_APP_PATH)/.env
 endef
 
 # Mодуль подготовки среды
@@ -202,7 +197,6 @@ stopping_software_services:
 .PHONY: clear_software
 clear_software:
 	@echo "Начало очистки ресурсов ПК. Режим остановки: $(OUT_MODE)"
-	$(call docker_cmps_stop)
 	$(call docker_cmps_clear)
 	$(call env_clear)
 	@echo "Очистка ресурсов ПК успешно завершёна"

@@ -1,0 +1,96 @@
+services:
+  personal_computer:
+    build:
+      context: ./test/user-defined-devices/personal-computer
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - planner_network
+  
+  laptop:
+    build:
+      context: ./test/user-defined-devices/laptop
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - planner_network
+
+  mobile_phone:
+    build:
+      context: ./test/user-defined-devices/mobile-phone
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - planner_network
+
+  iot_device:
+    build:
+      context: ./test/user-defined-devices/iot-device
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - planner_network
+
+  printer:
+    build:
+      context: ./test/peripheral-devices/printer
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - planner_network
+
+  scanner:
+    build:
+      context: ./test/peripheral-devices/scanner
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - planner_network
+
+  file_server:
+    build:
+      context: ./test/service-devices/file-server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - planner_network
+
+  remote_access_server:
+    build:
+      context: ./test/service-devices/remote-access-server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - planner_network
+
+  web_server:
+    build:
+      context: ./test/service-devices/web-server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - planner_network
+
+  main:
+    build:
+      context: ./main
+      dockerfile: Dockerfile.test
+    restart: unless-stopped
+    networks:
+      - planner_network
+    ports:
+      - "6666:6666"
+    depends_on:
+     - personal_computer
+     - laptop
+     - mobile_phone
+     - iot_device
+     - printer
+     - scanner
+     - file_server
+     - remote_access_server
+     - web_server
+
+networks:
+  planner_network:
+    driver: bridge

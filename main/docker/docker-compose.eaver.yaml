@@ -1,0 +1,17 @@
+services:
+  db_eaver:
+    image: dbeaver/cloudbeaver:latest
+    restart: unless-stopped
+    networks:
+      - planner_network
+    ports:
+      - "8978:8978"
+    depends_on:
+      - psql_db
+      - redis_db
+    env_file:
+      - ../.env
+
+networks:
+  planner_network:
+    driver: bridge

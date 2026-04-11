@@ -77,6 +77,37 @@ $(if $(shell command -v openssl 2>NUL),\
 )
 endef
 
+# Генерация SSL сертификатов
+define generate_ssl
+$(if $(shell command -v openssl 2>NUL),,\
+    $(error OpenSSL не найден, невозможно создать SSL сертификаты))
+
+ifeq ($(OS_NAME),windows)
+	@if not exist $1\ssl mkdir $1\ssl
+	@echo Генерация SSL ключа и сертификата в $1\ssl
+
+	@openssl genrsa -out $1\ssl\key.pem 2048
+	@openssl req -new -x509 \
+		-key $1\ssl\key.pem \
+		-out $1\ssl\cert.pem \
+		-days 365 \
+		-subj "/C=US/ST=Dev/L=Local/O=Dev/CN=localhost"
+
+else
+	@mkdir -p $1/ssl
+	@echo Генерация SSL ключа и сертификата в $1/ssl
+
+	@openssl genrsa -out $1/ssl/key.pem 2048
+	@openssl req -new -x509 \
+		-key $1/ssl/key.pem \
+		-out $1/ssl/cert.pem \
+		-days 365 \
+		-subj "/C=US/ST=Dev/L=Local/O=Dev/CN=localhost"
+endif
+
+@echo SSL сертификаты успешно созданы
+endef
+
 # Запись переменных в .env файлы
 define write_env
 ifeq ($(OS_NAME),windows)
@@ -171,6 +202,7 @@ preparation_for_work:
 	$(eval POSTGRES_PASSWORD := $(call generate_secret))
 	$(eval REDIS_PASSWORD := $(call generate_secret))
 	$(eval AUTH_SECRET := $(call generate_secret))
+	$(call generate_ssl,./main/apps/nginx)
 	@echo "Установка переменных окружения"
 	$(call write_env,$(ENV_MAIN_PATH),"MODE=$(MODE) POSTGRES_DB=$(POSTGRES_DB) POSTGRES_USER=$(POSTGRES_USER) POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) POSTGRES_DEFAULT_USER=$(POSTGRES_DEFAULT_USER) POSTGRES_DEFAULT_LOGIN=$(POSTGRES_DEFAULT_LOGIN) POSTGRES_DEFAULT_ROLE=$(POSTGRES_DEFAULT_ROLE) POSTGRES_DEFAULT_PASS=$(POSTGRES_DEFAULT_PASS) REDIS_PASSWORD=$(REDIS_PASSWORD)")
 	$(call write_env,$(ENV_API_PATH),"POSTGRES_USER=$(POSTGRES_USER) POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) REDIS_PASSWORD=$(REDIS_PASSWORD) AUTH_SECRET=$(AUTH_SECRET)")

@@ -36,6 +36,7 @@ services:
       context: ./test/peripheral-devices/printer
       dockerfile: Dockerfile
     restart: unless-stopped
+    network_mode: host
     networks:
       - planner_network
 
@@ -94,3 +95,6 @@ services:
 networks:
   planner_network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.10.0/24

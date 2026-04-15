@@ -24,9 +24,9 @@ interface IScannerChunk {
 }
 
 function loadEnv(): IEnv {
-  const host = process.env.SCANNER_HOST;
+  const host = process.env.HOST;
   const target = process.env.TARGET;
-  const port = Number(process.env.SCANNER_PORT);
+  const port = Number(process.env.PORT);
   const interval = Number(process.env.INTERVAL_MS);
 
   if (!host || !target || Number.isNaN(port) || Number.isNaN(interval)) {
@@ -100,23 +100,43 @@ function socketData<T = any>(socket: Socket<T>, data: Buffer): void {
 }
 
 function socketOpen<T = any>(socket: Socket<T>, target: string): void {
-  console.info("🔌 Подключение к серверу сканнера установлено");
-
+  console.log("🔌 Подключение к серверу сканнера установлено");
   socket.write(createStatus("CONNECTED", target, "SCANNER_INIT"));
   socket.write(createStatus("READY", target));
 }
 
-function socketClose<T = any>(_: Socket<T>, target: string): void {
-  console.info("❌ Соединение сервера сканнера закрыто");
-  console.log(createStatus("DISCONNECTED", target));
+function socketClose<T = any>(socket: Socket<T>, target: string): void {
+  console.log("❌ Соединение сервера сканнера закрыто");
+  socket.write(createStatus("DISCONNECTED", target, "SCANNER_STATUS"));
+  socket.end();
 }
 
-function socketError<T = any>(_socket: Socket<T>, error: Error): void {
+function socketError<T = any>(socket: Socket<T>, error: Error): void {
   console.error("💥 Ошибка сокета сканнера:", error);
+  socket.end();
 }
 
 async function serverRun(): Promise<void> {
   const env = loadEnv();
+
+  Bun.listen({
+    hostname: env.host,
+    port: env.port,
+    socket: {
+      data(socket, data) {
+        socketData(socket, data);
+      },
+      open(socket) {
+        socketOpen(socket, env.target);
+      },
+      close(socket) {
+        socketClose(socket, env.target);
+      },
+      error(socket, error) {
+        socketError(socket, error);
+      },
+    },
+  });
 
   const server = await Bun.connect({
     hostname: env.host,

@@ -15,9 +15,9 @@ interface IPrinterData {
 }
 
 function loadEnv(): IEnv {
-  const host = process.env.PRINTER_HOST;
+  const host = process.env.HOST;
   const target = process.env.TARGET;
-  const port = Number(process.env.PRINTER_PORT);
+  const port = Number(process.env.PORT);
   const interval = Number(process.env.INTERVAL_MS);
 
   if (!host || !target || Number.isNaN(port) || Number.isNaN(interval)) {
@@ -59,7 +59,7 @@ function socketData<T = any>(socket: Socket<T>, data: Buffer): void {
 }
 
 function socketOpen<T = any>(socket: Socket<T>, target: IEnv["target"]): void {
-  console.info("🔌 Подключение к серверу принтера установлено");
+  console.log("🔌 Подключение к серверу принтера установлено");
   socket.write(
     generateData({
       type: "PRINTER_STATUS",
@@ -70,7 +70,7 @@ function socketOpen<T = any>(socket: Socket<T>, target: IEnv["target"]): void {
 }
 
 function socketClose<T = any>(socket: Socket<T>, target: IEnv["target"]): void {
-  console.info("❌ Соединение сервера принтера закрыто");
+  console.log("❌ Соединение сервера принтера закрыто");
   socket.write(
     generateData({
       type: "PRINTER_STATUS",
@@ -78,27 +78,48 @@ function socketClose<T = any>(socket: Socket<T>, target: IEnv["target"]): void {
       target,
     }),
   );
+  socket.end();
 }
 
-function socketError<T = any>(_socket: Socket<T>, error: Error): void {
-  console.error("💥 Ошибка сокета принтера:", error);
+function socketError<T = any>(socket: Socket<T>, error: Error): void {
+  console.log("💥 Ошибка сокета принтера:", error);
+  socket.end();
 }
 
 async function serverRun(): Promise<void> {
-  const loadedEnv = loadEnv();
+  const env = loadEnv();
 
-  const server: Bun.TCPSocket = await Bun.connect({
-    hostname: loadedEnv.host,
-    port: loadedEnv.port,
+  Bun.listen({
+    hostname: env.host,
+    port: env.port,
     socket: {
       data(socket, data) {
         socketData(socket, data);
       },
       open(socket) {
-        socketOpen(socket, loadedEnv.target);
+        socketOpen(socket, env.target);
       },
       close(socket) {
-        socketClose(socket, loadedEnv.target);
+        socketClose(socket, env.target);
+      },
+      error(socket, error) {
+        socketError(socket, error);
+      },
+    },
+  });
+
+  const server: Bun.TCPSocket = await Bun.connect({
+    hostname: env.host,
+    port: env.port,
+    socket: {
+      data(socket, data) {
+        socketData(socket, data);
+      },
+      open(socket) {
+        socketOpen(socket, env.target);
+      },
+      close(socket) {
+        socketClose(socket, env.target);
       },
       error(socket, error) {
         socketError(socket, error);
@@ -110,7 +131,7 @@ async function serverRun(): Promise<void> {
     generateData({
       type: "PRINTER_INIT",
       status: "READY",
-      target: loadedEnv.target,
+      target: env.target,
     }),
   );
 
@@ -119,10 +140,10 @@ async function serverRun(): Promise<void> {
       generateData({
         type: "PRINTER_STATUS",
         status: "IDLE",
-        target: loadedEnv.target,
+        target: env.target,
       }),
     );
-  }, loadedEnv.interval);
+  }, env.interval);
 }
 
 serverRun()

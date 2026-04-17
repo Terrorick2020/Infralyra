@@ -1,0 +1,73 @@
+device:
+  device_id: "laptop-01"
+  device_type: "laptop"
+  hostname: "LAPTOP-01"
+  mac_address: "02:42:ac:31:01:14"
+  serial_number: "UNKNOWN"
+  model: "unknown"
+  vendor: "unknown"
+
+network:
+  gateway: "192.168.1.1"
+  dns:
+    - "8.8.8.8"
+    - "1.1.1.1"
+  interface_type: "wifi"
+  ssid: "HomeWiFi"
+  signal_strength: -55
+  connection_state: "up"
+  latency_ms: 48
+  packet_loss: 0.01
+  bandwidth_mbps: null
+  server: "Microsoft-IIS/10.0"
+  powered: "ASP.NET"
+
+os:
+  name: "Windows"
+  version: "11"
+  kernel_version: "10.0.22621"
+  architecture: "x86_64"
+  uptime_seconds: 53200
+  timezone: "Europe/Vilnius"
+
+hardware:
+  cpu_model: "Intel Core i7-1260P"
+  cpu_cores: 12
+  ram_total_mb: 16384
+  disk_total_gb: 512
+  gpu_model: "Intel Iris Xe"
+
+performance:
+  cpu_usage_percent: 34
+  ram_usage_percent: 61
+  disk_usage_percent: 42
+  temperature_cpu_c: 62
+  temperature_gpu_c: 58
+
+power:
+  battery_level_percent: 74
+  charging_status: true
+  power_source: "ac"
+  battery_health_percent: 91
+  cycle_count: 214
+  estimated_time_remaining_min: 120
+
+security:
+  secure_boot_enabled: true
+  disk_encryption_enabled: true
+  firewall_enabled: true
+  antivirus_status: "active"
+  failed_login_count: 0
+
+agent:
+  agent_version: "1.2.9"
+  last_seen: "2026-04-15T12:00:00Z"
+  heartbeat_interval_ms: 3500
+  jitter_ms: 2100
+  error_rate: 0.035
+  reconnect_count: 0
+
+behavior:
+  jitter_ms: 2100
+  interval_ms: 3500
+  error_chance: 0.035

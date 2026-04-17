@@ -1,62 +1,91 @@
-import { serve, type Server, type Socket } from "bun";
+import { readFileSync } from "fs";
+import type { IEnv, ICfg } from "./types";
+import type { Socket, Server } from "bun";
+import YAML from "js-yaml";
 
-interface IEnv {
-  host: string;
-  target: string;
-  sshPort: number;
-  httpPort: number;
-  rpcPort: number;
-  netBiosPort: number;
-  httpsPort: number;
-  smbPort: number;
-  rdpPort: number;
-  interval: number;
-}
-
-type THyperRes = undefined;
+let PER_ENV: IEnv | undefined = undefined;
+let PER_CFG: ICfg | undefined = undefined;
 
 function loadEnv(): IEnv {
-  const host = process.env.HOST;
-  const target = process.env.TARGET;
-  const sshPort = Number(process.env.SSH_PORT);
-  const httpPort = Number(process.env.HTTP_PORT);
-  const rpcPort = Number(process.env.RPC_PORT);
-  const netBiosPort = Number(process.env.NETBIOS_PORT);
-  const httpsPort = Number(process.env.HTTPS_PORT);
-  const smbPort = Number(process.env.SMB_PORT);
-  const rdpPort = Number(process.env.RDP_PORT);
-  const interval = Number(process.env.INTERVAL_MS);
+  if (!PER_ENV) {
+    const hostname = process.env.HOSTNAME;
+    const target_hostname = process.env.TARGET_HOSTNAME;
+    const sshPort = Number(process.env.SSH_PORT);
+    const httpPort = Number(process.env.HTTP_PORT);
+    const rpcPort = Number(process.env.RPC_PORT);
+    const netBiosPort = Number(process.env.NETBIOS_PORT);
+    const httpsPort = Number(process.env.HTTPS_PORT);
+    const smbPort = Number(process.env.SMB_PORT);
+    const rdpPort = Number(process.env.RDP_PORT);
+    const target_port = Number(process.env.TARGET_PORT);
 
-  if (
-    !host ||
-    !target ||
-    Number.isNaN(sshPort) ||
-    Number.isNaN(httpPort) ||
-    Number.isNaN(rpcPort) ||
-    Number.isNaN(netBiosPort) ||
-    Number.isNaN(httpsPort) ||
-    Number.isNaN(smbPort) ||
-    Number.isNaN(rdpPort) ||
-    Number.isNaN(interval)
-  ) {
-    throw new Error("🛑 Нет каких-то переменных среды для ноутбука (windows)!");
+    if (
+      !hostname ||
+      !target_hostname ||
+      Number.isNaN(sshPort) ||
+      Number.isNaN(httpPort) ||
+      Number.isNaN(rpcPort) ||
+      Number.isNaN(netBiosPort) ||
+      Number.isNaN(httpsPort) ||
+      Number.isNaN(smbPort) ||
+      Number.isNaN(rdpPort) ||
+      Number.isNaN(target_port)
+    ) {
+      throw new Error(
+        "🛑 Нет каких-то переменных среды для ноутбука (windows)!",
+      );
+    }
+
+    PER_ENV = {
+      hostname,
+      sshPort,
+      httpPort,
+      rpcPort,
+      netBiosPort,
+      httpsPort,
+      smbPort,
+      rdpPort,
+      target_hostname,
+      target_port,
+    };
   }
 
-  return {
-    host,
-    target,
-    sshPort,
-    httpPort,
-    rpcPort,
-    netBiosPort,
-    httpsPort,
-    smbPort,
-    rdpPort,
-    interval,
-  };
+  return PER_ENV;
 }
 
-async function socketOpen<T = any>(
+function loadCfg(): ICfg {
+  if (!PER_CFG) {
+    const raw = readFileSync("config.yaml", "utf-8");
+    PER_CFG = YAML.load(raw) as ICfg;
+  }
+
+  return PER_CFG;
+}
+
+async function loadTLSFiles() {
+  const cert = Bun.file("./ssl/cert.pem");
+  const key = Bun.file("./ssl/key.pem");
+
+  if (!(await cert.exists())) {
+    throw new Error("Файл cert.pem не найден");
+  }
+
+  if (!(await key.exists())) {
+    throw new Error("Файл key.pem не найден");
+  }
+
+  if (cert.size === 0) {
+    throw new Error("Файл cert.pem пустой");
+  }
+
+  if (key.size === 0) {
+    throw new Error("Файл key.pem пустой");
+  }
+
+  return { cert, key };
+}
+
+async function sockOpen<T = any>(
   socket: Socket,
   service: string,
   text: T,
@@ -67,24 +96,24 @@ async function socketOpen<T = any>(
   socket.write(text);
 }
 
-async function socketData<T = any>(
+async function sockData<T = any>(
   socket: Socket,
-  data: Buffer,
+  buffer: Buffer,
   service: string,
   text: T,
 ): Promise<void> {
   const timestamp: string = new Date().toISOString();
 
-  console.log(`📩 [Ноутбук (windows) получил сообщение по ${service}]`);
+  console.log(`💻 Ноутбук (windows) получил сообщение по ${service}]`);
   console.log("⏱", timestamp);
-  console.log("HEX:", data.toString("hex"));
-  console.log("TEXT:", data.toString("utf-8"));
-  console.log("RAW:", data);
+  console.log("HEX:", buffer.toString("hex"));
+  console.log("TEXT:", buffer.toString("utf-8"));
+  console.log("RAW:", buffer);
 
   socket.write(`TIME: ${timestamp}, MSG: ${text}`);
 }
 
-async function socketClose(
+async function sockClose(
   socket: Socket,
   service: string,
   text: string,
@@ -94,7 +123,7 @@ async function socketClose(
   socket.end();
 }
 
-async function socketError(
+async function sockError(
   socket: Socket,
   service: string,
   error: Error,
@@ -106,32 +135,55 @@ async function socketError(
   socket.end();
 }
 
-async function hyperRes<T = THyperRes>(
-  _req: Request,
-  _server: Server<T>,
+async function hyperRes<T = undefined>(
+  req: Request,
+  server: Server<T>,
   headline: string,
   subHeadline: string,
   paragraph: string,
 ): Promise<Response> {
+  const url = new URL(req.url);
+  const cfg = loadCfg();
+
+  console.log(
+    `💻 [Ноутбук (windows) получил сообщение HTTP от: ${server.requestIP}`,
+  );
+  console.log(`Cообщение: ${req}`);
+
+  const headers = {
+    "Content-Type": "text/html",
+    Server: cfg.network.server,
+    "X-Powered-By": cfg.network.powered,
+    "X-Hostname": cfg.device.hostname,
+  };
+
+  if (url.pathname.includes("/sys")) {
+    return new Response(
+      {
+        hostname: cfg.device.hostname,
+        os: cfg.os,
+        hardware: cfg.hardware,
+        performance: cfg.performance,
+        power: cfg.power,
+        security: cfg.security,
+      },
+      { headers },
+    );
+  }
   const headLbl = "{{HEADLINE}}";
   const subHeadLbl = "{{SUBHEADLINE}}";
   const paraLbl = "{{PARAGRAPH}}";
   const htmlTmpl = await Bun.file("./index.html").text();
-
   const html = htmlTmpl
     .replace(headLbl, headline)
     .replace(subHeadLbl, subHeadline)
     .replace(paraLbl, paragraph);
 
-  return new Response(html, {
-    headers: {
-      "Content-Type": "text/html",
-    },
-  });
+  return new Response(html, { headers });
 }
 
 async function startOutboundTraffic(
-  protocol: "http" | "https",
+  protocol: "HTTP" | "HTTPS",
   target: string,
   interval: number,
 ): Promise<void> {
@@ -143,43 +195,61 @@ async function startOutboundTraffic(
         },
       });
 
-      console.info(`📡 ${protocol.toUpperCase()} outbound -> ${target}`);
+      console.info(`📡 ${protocol} отправилось сообщение -> ${target}`);
     } catch {
-      console.info(`⚠️ ${protocol.toUpperCase()} outbound failed -> ${target}`);
+      console.info(`⚠️ ${protocol} сообщение не отправлено -> ${target}`);
     }
   }, interval);
 }
 
-async function sshService(
-  hostname: IEnv["host"],
-  port: IEnv["sshPort"],
-): Promise<void> {
+async function simulateDnsTraffic() {
+  const domains = [
+    "time.windows.com",
+    "dns.msftncsi.com",
+    "www.microsoft.com",
+    "windowsupdate.com",
+  ];
+
+  setInterval(async () => {
+    const domain = domains[Math.floor(Math.random() * domains.length)];
+
+    try {
+      await fetch(`http://${domain}`);
+      console.log("DNS трафик отправлен");
+    } catch {
+      console.warn("DNS трафик не отправлен");
+    }
+  }, 8000);
+}
+
+async function sshService(): Promise<void> {
   const serviceName = "SSH";
+  const env = loadEnv();
 
   Bun.listen({
-    hostname,
-    port,
+    hostname: env.hostname,
+    port: env.sshPort,
     socket: {
-      open: (socket) =>
-        socketOpen<string>(
-          socket,
+      open: (sock) =>
+        sockOpen<string>(
+          sock,
           serviceName,
           "SSH-2.0-OpenSSH_for_Windows_8.9\r\n",
         ),
-      data: (socket, data) =>
-        socketData<string>(
+      data: (socket, buffer) =>
+        sockData<string>(
           socket,
-          data,
+          buffer,
           serviceName,
           `Ноутбук (windows) по ${serviceName} получил сообщение`,
         ),
       close: (socket) =>
-        socketClose(
+        sockClose(
           socket,
           serviceName,
           `Соединение ${serviceName} с ноутбуком (windows) закрыто`,
         ),
-      error: (socket, error) => socketError(socket, serviceName, error),
+      error: (socket, error) => sockError(socket, serviceName, error),
     },
   });
 
@@ -188,60 +258,63 @@ async function sshService(
   );
 }
 
-async function httpService(
-  hostname: IEnv["host"],
-  port: IEnv["httpPort"],
-  target: IEnv["target"],
-  interval: IEnv["interval"],
-): Promise<void> {
-  serve({
-    hostname,
-    port,
-    fetch: (req: Request, server: Server<THyperRes>) =>
+async function httpService(): Promise<void> {
+  const serviceName = "HTTP";
+  const env = loadEnv();
+  const cfg = loadCfg();
+
+  Bun.serve({
+    hostname: env.hostname,
+    port: env.httpPort,
+    fetch: (req: Request, server: Server<undefined>) =>
       hyperRes(
         req,
         server,
         "Microsoft IIS Windows",
-        "Protoсol: HTTP",
+        `Protoсol: ${serviceName}`,
         "Windows 10/11 Service Endpoint",
       ),
   });
 
-  startOutboundTraffic("http", target, interval);
+  startOutboundTraffic(
+    serviceName,
+    `${env.target_hostname}:${env.target_port}`,
+    cfg.behavior.interval_ms,
+  );
 
-  console.info("🟢 HTTP сервис имитации ноутбука (windows) запущен...");
+  console.info(
+    `🟢 ${serviceName} сервис имитации ноутбука (windows) запущен...`,
+  );
 }
 
-async function rpcService(
-  hostname: IEnv["host"],
-  port: IEnv["rpcPort"],
-): Promise<void> {
+async function rpcService(): Promise<void> {
   const serviceName = "RPC";
+  const env = loadEnv();
 
   Bun.listen({
-    hostname,
-    port,
+    hostname: env.hostname,
+    port: env.rpcPort,
     socket: {
       open: (socket) =>
-        socketOpen<string>(
+        sockOpen<string>(
           socket,
           serviceName,
           "Microsoft RPC Endpoint Mapper 6.0\r\n",
         ),
-      data: (socket, data) =>
-        socketData<string>(
+      data: (socket, buffer) =>
+        sockData<string>(
           socket,
-          data,
+          buffer,
           serviceName,
           `Ноутбук (windows) по ${serviceName} получил сообщение`,
         ),
       close: (socket) =>
-        socketClose(
+        sockClose(
           socket,
           serviceName,
           `Соединение ${serviceName} с ноутбуком (windows) закрыто`,
         ),
-      error: (socket, error) => socketError(socket, serviceName, error),
+      error: (socket, error) => sockError(socket, serviceName, error),
     },
   });
 
@@ -250,36 +323,38 @@ async function rpcService(
   );
 }
 
-async function netBiosService(
-  hostname: IEnv["host"],
-  port: IEnv["netBiosPort"],
-): Promise<void> {
+async function netBiosService(): Promise<void> {
   const serviceName = "NetBIOS";
+  const env = loadEnv();
+  const cfg = loadCfg();
 
   Bun.listen({
-    hostname,
-    port,
+    hostname: env.hostname,
+    port: env.netBiosPort,
     socket: {
       open: (socket) =>
-        socketOpen<Buffer>(
+        sockOpen<Buffer>(
           socket,
           serviceName,
-          Buffer.from([0x82, 0x28, 0x00, 0x00]),
+          Buffer.concat([
+            Buffer.from([0x82, 0x28, 0x00, 0x00]),
+            Buffer.from(cfg.device.hostname),
+          ]),
         ),
-      data: (socket, data) =>
-        socketData<string>(
+      data: (socket, buffer) =>
+        sockData<string>(
           socket,
-          data,
+          buffer,
           serviceName,
           `Ноутбук (windows) по ${serviceName} получил сообщение`,
         ),
       close: (socket) =>
-        socketClose(
+        sockClose(
           socket,
           serviceName,
           `Соединение ${serviceName} с ноутбуком (windows) закрыто`,
         ),
-      error: (socket, error) => socketError(socket, serviceName, error),
+      error: (socket, error) => sockError(socket, serviceName, error),
     },
   });
 
@@ -288,56 +363,68 @@ async function netBiosService(
   );
 }
 
-async function httpsService(
-  hostname: IEnv["host"],
-  port: IEnv["httpsPort"],
-  target: IEnv["target"],
-  interval: IEnv["interval"],
-): Promise<void> {
-  serve({
-    hostname,
-    port,
-    fetch: (req: Request, server: Server<THyperRes>) =>
-      hyperRes<THyperRes>(
+async function httpsService(): Promise<void> {
+  const serviceName = "HTTPS";
+  const env = loadEnv();
+  const cfg = loadCfg();
+
+  const tlsFiles = await loadTLSFiles();
+  Bun.serve({
+    hostname: env.hostname,
+    port: env.httpsPort,
+    tls: tlsFiles,
+    fetch: (req: Request, server: Server<undefined>) =>
+      hyperRes(
         req,
         server,
-        "Microsoft IIS Windows",
-        "Protoсol: HTTPS",
+        cfg.network.server,
+        `Protoсol: ${serviceName}`,
         "Windows 10/11 Service Endpoint",
       ),
   });
 
-  startOutboundTraffic("https", target, interval);
+  startOutboundTraffic(
+    serviceName,
+    `${env.target_hostname}:${env.target_port}`,
+    cfg.behavior.interval_ms,
+  );
 
   console.info("🟢 HTTPS сервис имитации ноутбука (windows) запущен...");
 }
 
-async function smbService(
-  hostname: IEnv["host"],
-  port: IEnv["smbPort"],
-): Promise<void> {
+async function smbService(): Promise<void> {
   const serviceName = "SMB";
+  const env = loadEnv();
+  const cfg = loadCfg();
 
   Bun.listen({
-    hostname,
-    port,
+    hostname: env.hostname,
+    port: env.smbPort,
     socket: {
       open: (socket) =>
-        socketOpen<Buffer>(socket, serviceName, Buffer.from("FF534D42", "hex")),
-      data: (socket, data) =>
-        socketData<string>(
+        sockOpen<Buffer>(
           socket,
-          data,
+          serviceName,
+          Buffer.concat([
+            Buffer.from("FF534D42", "hex"),
+            Buffer.from(cfg.device.hostname),
+            Buffer.from(cfg.os.name),
+          ]),
+        ),
+      data: (socket, buffer) =>
+        sockData<string>(
+          socket,
+          buffer,
           serviceName,
           `Ноутбук (windows) по ${serviceName} получил сообщение`,
         ),
       close: (socket) =>
-        socketClose(
+        sockClose(
           socket,
           serviceName,
           `Соединение ${serviceName} с ноутбуком (windows) закрыто`,
         ),
-      error: (socket, error) => socketError(socket, serviceName, error),
+      error: (socket, error) => sockError(socket, serviceName, error),
     },
   });
 
@@ -346,38 +433,36 @@ async function smbService(
   );
 }
 
-async function rdpService(
-  hostname: IEnv["host"],
-  port: IEnv["rdpPort"],
-): Promise<void> {
+async function rdpService(): Promise<void> {
   const serviceName = "RDP";
+  const env = loadEnv();
 
   Bun.listen({
-    hostname,
-    port,
+    hostname: env.hostname,
+    port: env.rdpPort,
     socket: {
       open: (socket) =>
-        socketOpen<Buffer>(
+        sockOpen<Buffer>(
           socket,
           serviceName,
           Buffer.from([
             0x03, 0x00, 0x00, 0x0b, 0x06, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00,
           ]),
         ),
-      data: (socket, data) =>
-        socketData<string>(
+      data: (socket, buffer) =>
+        sockData<string>(
           socket,
-          data,
+          buffer,
           serviceName,
           `Ноутбук (windows) по ${serviceName} получил сообщение`,
         ),
       close: (socket) =>
-        socketClose(
+        sockClose(
           socket,
           serviceName,
           `Соединение ${serviceName} с ноутбуком (windows) закрыто`,
         ),
-      error: (socket, error) => socketError(socket, serviceName, error),
+      error: (socket, error) => sockError(socket, serviceName, error),
     },
   });
 
@@ -387,15 +472,14 @@ async function rdpService(
 }
 
 async function serverRun(): Promise<void> {
-  const env = loadEnv();
-
-  sshService(env.host, env.sshPort);
-  rpcService(env.host, env.rpcPort);
-  netBiosService(env.host, env.netBiosPort);
-  smbService(env.host, env.smbPort);
-  rdpService(env.host, env.rdpPort);
-  httpService(env.host, env.httpPort, env.target, env.interval);
-  httpsService(env.host, env.httpPort, env.target, env.interval);
+  sshService();
+  rpcService();
+  netBiosService();
+  smbService();
+  rdpService();
+  httpService();
+  httpsService();
+  simulateDnsTraffic();
 }
 
 serverRun()

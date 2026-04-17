@@ -1,0 +1,10 @@
+device:
+  device_id: "scanner-01"
+  device_type: "printer"
+  mac: "02:42:ac:12:00:11"
+  firmware: "1.1.5"
+
+behavior:
+  jitter_ms: 1700
+  interval_ms: 2500
+  error_chance: 0.04

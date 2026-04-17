@@ -1,81 +1,98 @@
+import type {
+  IEnv,
+  ICfg,
+  TPerDStatus,
+  IPerData,
+  TPerDType,
+  IPerChunk,
+} from "./types";
+
+import { readFileSync } from "fs";
 import type { Socket } from "bun";
+import YAML from "js-yaml";
 
-interface IEnv {
-  host: string;
-  target: string;
-  port: number;
-  interval: number;
-}
-
-interface IScannerStatus {
-  type: "SCANNER_INIT" | "SCANNER_STATUS";
-  status: "OK" | "CONNECTED" | "DISCONNECTED" | "READY" | "SCANNING" | "IDLE";
-  target: string;
-  time: string;
-}
-
-interface IScannerChunk {
-  type: "SCANNER_DATA";
-  sessionId: string;
-  chunkIndex: number;
-  lastChunk: boolean;
-  data: Buffer;
-  time: string;
-}
+let PER_ENV: IEnv | undefined = undefined;
+let PER_CFG: ICfg | undefined = undefined;
 
 function loadEnv(): IEnv {
-  const host = process.env.HOST;
-  const target = process.env.TARGET;
-  const port = Number(process.env.PORT);
-  const interval = Number(process.env.INTERVAL_MS);
+  if (!PER_ENV) {
+    const hostname = process.env.HOSTNAME;
+    const port = Number(process.env.PORT);
+    const target_hostname = process.env.TARGET_HOSTNAME;
+    const target_port = Number(process.env.TARGET_PORT);
 
-  if (!host || !target || Number.isNaN(port) || Number.isNaN(interval)) {
-    throw new Error("🛑 Нет каких-то переменных среды для сканнера!");
+    if (
+      !hostname ||
+      !target_hostname ||
+      Number.isNaN(port) ||
+      Number.isNaN(target_port)
+    ) {
+      throw new Error("🛑 Нет каких-то переменных среды для принтера!");
+    }
+
+    PER_ENV = { hostname, port, target_hostname, target_port };
   }
 
-  return { host, target, port, interval };
+  return PER_ENV;
 }
 
-function timestamp(): string {
-  return new Date().toISOString();
+function loadCfg(): ICfg {
+  if (!PER_CFG) {
+    const raw = readFileSync("config.yaml", "utf-8");
+    PER_CFG = YAML.load(raw) as ICfg;
+  }
+
+  return PER_CFG;
 }
 
-function createStatus(
-  status: IScannerStatus["status"],
-  target: string,
-  type: IScannerStatus["type"] = "SCANNER_STATUS",
-): IScannerStatus {
-  return {
-    type,
-    status,
-    target,
-    time: timestamp(),
+function generateData(options: Pick<IPerData, "type" | "status">): IPerData {
+  const timestamp: string = new Date().toISOString();
+  const env = loadEnv();
+  const cfg = loadCfg();
+
+  const data: IPerData = {
+    type: options.type,
+    status: options.status,
+    target: `${env.target_hostname}:${env.target_port}`,
+    device_type: cfg.device.device_type,
+    time: timestamp,
   };
+
+  return data;
 }
 
-function createChunk(
+function generateChunk(
   sessionId: string,
   chunkIndex: number,
   lastChunk: boolean,
-  data: Buffer,
-): IScannerChunk {
-  return {
-    type: "SCANNER_DATA",
-    sessionId,
-    chunkIndex,
-    lastChunk,
-    data,
-    time: timestamp(),
-  };
+  buffer: Buffer,
+): IPerChunk {
+  const type: TPerDType = "DATA";
+  const timestamp = new Date().toISOString();
+  const data = generateData({
+    type,
+    status: "OK",
+  });
+
+  return { sessionId, chunkIndex, lastChunk, buffer, timestamp, data };
 }
 
-function socketData<T = any>(socket: Socket<T>, data: Buffer): void {
+function sockOpen<T = any>(socket: Socket<T>): void {
+  console.log("🔌 Подключение к серверу сканнера установлено");
+  socket.write(generateData({type: "STATUS", status: "CONNECTED"}));
+  socket.write(generateData({type: "DATA", status: "READY"}));
+}
+
+
+function sockData<T = any>(socket: Socket<T>, data: Buffer): void {
+  const timestamp = new Date().toISOString();
+
   console.log("📥 [Сканнер получил сообщение]");
-  console.log("⏱", timestamp());
+  console.log("⏱", timestamp);
   console.log("HEX:", data.toString("hex"));
   console.log("TEXT:", data.toString("utf-8"));
 
-  socket.write(createStatus("SCANNING", "scanner-device"));
+  socket.write(generateData({type: "DATA", status: "OK"}))
 
   const sessionId = crypto.randomUUID();
   const fakeImage = Buffer.from("FAKE_IMAGE_BINARY_DATA____SCANNED_PAGE");
@@ -87,7 +104,7 @@ function socketData<T = any>(socket: Socket<T>, data: Buffer): void {
     const chunk = fakeImage.subarray(offset, offset + chunkSize);
 
     socket.write(
-      createChunk(
+      generateChunk(
         sessionId,
         index++,
         offset + chunkSize >= fakeImage.length,
@@ -96,72 +113,91 @@ function socketData<T = any>(socket: Socket<T>, data: Buffer): void {
     );
   }
 
-  socket.write(createStatus("IDLE", "scanner-device"));
+  socket.write(generateData({type: "STATUS", status: "IDLE"}))
 }
 
-function socketOpen<T = any>(socket: Socket<T>, target: string): void {
-  console.log("🔌 Подключение к серверу сканнера установлено");
-  socket.write(createStatus("CONNECTED", target, "SCANNER_INIT"));
-  socket.write(createStatus("READY", target));
-}
-
-function socketClose<T = any>(socket: Socket<T>, target: string): void {
+function sockClose<T = any>(socket: Socket<T>): void {
   console.log("❌ Соединение сервера сканнера закрыто");
-  socket.write(createStatus("DISCONNECTED", target, "SCANNER_STATUS"));
+  socket.write(generateData({type: "STATUS", status: "DISCONNECTED"}));
   socket.end();
 }
 
-function socketError<T = any>(socket: Socket<T>, error: Error): void {
+function sockError<T = any>(socket: Socket<T>, error: Error): void {
   console.error("💥 Ошибка сокета сканнера:", error);
   socket.end();
 }
 
+async function socketRun(sockIntrvl: NodeJS.Timeout): Promise<void> {
+  const env = loadEnv();
+  const cfg = loadCfg();
+
+  try {
+    const socket = await Bun.connect({
+      hostname: env.target_hostname,
+      port: env.target_port,
+      socket: {
+        open: (sock) => sockOpen(sock),
+        data: (sock, data) => sockData(sock, data),
+        close: (sock) => sockClose(sock),
+        error: (sock, err) => sockError(sock, err),
+      },
+    });
+
+    socket.write(
+      generateData({
+        type: "INIT",
+        status: "READY",
+      }),
+    );
+
+    const sendPackets = async (): Promise<void> => {
+      const type: TPerDType = "STATUS";
+      const status: TPerDStatus =
+        Math.random() < cfg.behavior.error_chance ? "ERROR" : "IDLE";
+
+      const data = generateData({ type, status });
+
+      const packet = {
+        device_id: cfg.device.device_id,
+        device_type: cfg.device.device_type,
+        mac: cfg.device.mac,
+        firmware: cfg.device.firmware,
+        data,
+      };
+
+      socket.write(JSON.stringify(packet));
+    };
+
+    sockIntrvl.close();
+    setInterval(() => sendPackets(), cfg.behavior.interval_ms);
+    console.info(
+      "✅  Подключение сканнера к центральному серверу прошло успешно",
+    );
+  } catch (err) {
+    sockIntrvl.refresh();
+    console.warn("⚠️  Не удалось подключиться сканнеру к центральному серверу");
+  }
+}
+
 async function serverRun(): Promise<void> {
   const env = loadEnv();
+  const cfg = loadCfg();
 
   Bun.listen({
-    hostname: env.host,
+    hostname: env.hostname,
     port: env.port,
     socket: {
-      data(socket, data) {
-        socketData(socket, data);
-      },
-      open(socket) {
-        socketOpen(socket, env.target);
-      },
-      close(socket) {
-        socketClose(socket, env.target);
-      },
-      error(socket, error) {
-        socketError(socket, error);
-      },
+      open: (sock) => sockOpen(sock),
+      data: (sock, data) => sockData(sock, data),
+      close: (sock) => sockClose(sock),
+      error: (sock, err) => sockError(sock, err),
     },
   });
 
-  const server = await Bun.connect({
-    hostname: env.host,
-    port: env.port,
-    socket: {
-      data(socket, data) {
-        socketData(socket, data);
-      },
-      open(socket) {
-        socketOpen(socket, env.target);
-      },
-      close(socket) {
-        socketClose(socket, env.target);
-      },
-      error(socket, error) {
-        socketError(socket, error);
-      },
-    },
-  });
-
-  server.write(createStatus("READY", env.target, "SCANNER_INIT"));
-
-  setInterval(() => {
-    server.write(createStatus("IDLE", env.target));
-  }, env.interval);
+  const sockIntrvl: NodeJS.Timeout = setInterval(
+    () => socketRun(sockIntrvl),
+    cfg.behavior.jitter_ms,
+  );
 }
 
 serverRun()

@@ -1,46 +1,69 @@
+import { readFileSync } from "fs";
+import type { IEnv, ICfg, TPerDStatus, IPerData, TPerDType } from "./types";
 import type { Socket } from "bun";
+import YAML from "js-yaml";
 
-interface IEnv {
-  host: string;
-  target: string;
-  port: number;
-  interval: number;
-}
-
-interface IPrinterData {
-  type: "PRINTER_INIT" | "PRINTER_STATUS";
-  status: "OK" | "CONNECTED" | "DISCONNECTED" | "READY" | "IDLE";
-  target: IEnv["target"];
-  time: string;
-}
+let PER_ENV: IEnv | undefined = undefined;
+let PER_CFG: ICfg | undefined = undefined;
 
 function loadEnv(): IEnv {
-  const host = process.env.HOST;
-  const target = process.env.TARGET;
-  const port = Number(process.env.PORT);
-  const interval = Number(process.env.INTERVAL_MS);
+  if (!PER_ENV) {
+    const hostname = process.env.HOSTNAME;
+    const port = Number(process.env.PORT);
+    const target_hostname = process.env.TARGET_HOSTNAME;
+    const target_port = Number(process.env.TARGET_PORT);
 
-  if (!host || !target || Number.isNaN(port) || Number.isNaN(interval)) {
-    throw new Error("🛑 Нет каких-то переменных среды для принтера!");
+    if (
+      !hostname ||
+      !target_hostname ||
+      Number.isNaN(port) ||
+      Number.isNaN(target_port)
+    ) {
+      throw new Error("🛑 Нет каких-то переменных среды для принтера!");
+    }
+
+    PER_ENV = { hostname, port, target_hostname, target_port };
   }
 
-  return { host, target, port, interval };
+  return PER_ENV;
 }
 
-function generateData(options: Omit<IPrinterData, "time">): IPrinterData {
-  const timestamp: string = new Date().toISOString();
+function loadCfg(): ICfg {
+  if (!PER_CFG) {
+    const raw = readFileSync("config.yaml", "utf-8");
+    PER_CFG = YAML.load(raw) as ICfg;
+  }
 
-  const data: IPrinterData = {
+  return PER_CFG;
+}
+
+function generateData(options: Pick<IPerData, "type" | "status">): IPerData {
+  const timestamp: string = new Date().toISOString();
+  const env = loadEnv();
+  const cfg = loadCfg();
+
+  const data: IPerData = {
     type: options.type,
     status: options.status,
-    target: options.target,
+    target: `${env.target_hostname}:${env.target_port}`,
+    device_type: cfg.device.device_type,
     time: timestamp,
   };
 
   return data;
 }
 
-function socketData<T = any>(socket: Socket<T>, data: Buffer): void {
+function sockOpen<T = any>(socket: Socket<T>): void {
+  console.log("🔌 Подключение к серверу принтера установлено");
+  socket.write(
+    generateData({
+      type: "STATUS",
+      status: "CONNECTED",
+    }),
+  );
+}
+
+function sockData<T = any>(socket: Socket<T>, data: Buffer): void {
   const timestamp = new Date().toISOString();
 
   console.log("📩 [Принтер получил сообщение]");
@@ -51,99 +74,99 @@ function socketData<T = any>(socket: Socket<T>, data: Buffer): void {
 
   socket.write(
     generateData({
-      type: "PRINTER_STATUS",
+      type: "STATUS",
       status: "OK",
-      target: "to you",
     }),
   );
 }
 
-function socketOpen<T = any>(socket: Socket<T>, target: IEnv["target"]): void {
-  console.log("🔌 Подключение к серверу принтера установлено");
-  socket.write(
-    generateData({
-      type: "PRINTER_STATUS",
-      status: "CONNECTED",
-      target,
-    }),
-  );
-}
-
-function socketClose<T = any>(socket: Socket<T>, target: IEnv["target"]): void {
+function sockClose<T = any>(socket: Socket<T>): void {
   console.log("❌ Соединение сервера принтера закрыто");
   socket.write(
     generateData({
-      type: "PRINTER_STATUS",
+      type: "STATUS",
       status: "DISCONNECTED",
-      target,
     }),
   );
   socket.end();
 }
 
-function socketError<T = any>(socket: Socket<T>, error: Error): void {
+function sockError<T = any>(socket: Socket<T>, error: Error): void {
   console.log("💥 Ошибка сокета принтера:", error);
   socket.end();
 }
 
+async function socketRun(sockIntrvl: NodeJS.Timeout): Promise<void> {
+  const env = loadEnv();
+  const cfg = loadCfg();
+
+  try {
+    const socket = await Bun.connect({
+      hostname: env.target_hostname,
+      port: env.target_port,
+      socket: {
+        open: (sock) => sockOpen(sock),
+        data: (sock, data) => sockData(sock, data),
+        close: (sock) => sockClose(sock),
+        error: (sock, err) => sockError(sock, err),
+      },
+    });
+
+    socket.write(generateData({
+      type: "INIT",
+      status: "READY"
+    }));
+
+    const sendPackets = async (): Promise<void> => {
+      const status: TPerDStatus =
+        Math.random() < cfg.behavior.error_chance ? "ERROR" : "IDLE";
+      const type: TPerDType = status === "ERROR"
+        ? "STATUS"
+        : "DATA";
+      
+      const data = generateData({type, status});
+
+      const packet = {
+        device_id: cfg.device.device_id,
+        device_type: cfg.device.device_type,
+        mac: cfg.device.mac,
+        firmware: cfg.device.firmware,
+        data,
+      };
+
+      socket.write(JSON.stringify(packet));
+    };
+
+    sockIntrvl.close();
+    setInterval(() => sendPackets(), cfg.behavior.interval_ms);
+    console.info(
+      "✅  Подключение принтера к центральному серверу прошло успешно",
+    );
+  } catch (err) {
+    sockIntrvl.refresh();
+    console.warn("⚠️  Не удалось подключиться принтером к центральному серверу");
+  }
+}
+
 async function serverRun(): Promise<void> {
   const env = loadEnv();
+  const cfg = loadCfg();
 
-  Bun.listen({
-    hostname: env.host,
+  await Bun.listen({
+    hostname: env.hostname,
     port: env.port,
     socket: {
-      data(socket, data) {
-        socketData(socket, data);
-      },
-      open(socket) {
-        socketOpen(socket, env.target);
-      },
-      close(socket) {
-        socketClose(socket, env.target);
-      },
-      error(socket, error) {
-        socketError(socket, error);
-      },
+      open: (sock) => sockOpen(sock),
+      data: (sock, data) => sockData(sock, data),
+      close: (sock) => sockClose(sock),
+      error: (sock, err) => sockError(sock, err),
     },
   });
 
-  const server: Bun.TCPSocket = await Bun.connect({
-    hostname: env.host,
-    port: env.port,
-    socket: {
-      data(socket, data) {
-        socketData(socket, data);
-      },
-      open(socket) {
-        socketOpen(socket, env.target);
-      },
-      close(socket) {
-        socketClose(socket, env.target);
-      },
-      error(socket, error) {
-        socketError(socket, error);
-      },
-    },
-  });
-
-  server.write(
-    generateData({
-      type: "PRINTER_INIT",
-      status: "READY",
-      target: env.target,
-    }),
+  const sockIntrvl: NodeJS.Timeout = setInterval(
+    () => socketRun(sockIntrvl),
+    cfg.behavior.jitter_ms,
   );
-
-  setInterval((): void => {
-    server.write(
-      generateData({
-        type: "PRINTER_STATUS",
-        status: "IDLE",
-        target: env.target,
-      }),
-    );
-  }, env.interval);
 }
 
 serverRun()

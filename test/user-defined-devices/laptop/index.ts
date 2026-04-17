@@ -146,7 +146,7 @@ async function hyperRes<T = undefined>(
   const cfg = loadCfg();
 
   console.log(
-    `💻 [Ноутбук (windows) получил сообщение HTTP от: ${server.requestIP}`,
+    `💻 Ноутбук (windows) получил сообщение HTTP от: ${server.requestIP}`,
   );
   console.log(`Cообщение: ${req}`);
 
@@ -187,17 +187,21 @@ async function startOutboundTraffic(
   target: string,
   interval: number,
 ): Promise<void> {
+  const cfg = loadCfg();
+
   setInterval(async () => {
     try {
       await fetch(`${protocol}://${target}`, {
         headers: {
           "User-Agent": "Microsoft-CryptoAPI/10.0/11.0",
+          "X-Powered-By": cfg.network.powered,
+          "X-Hostname": cfg.device.hostname,
         },
       });
 
-      console.info(`📡 ${protocol} отправилось сообщение -> ${target}`);
+      console.log(`📡 ${protocol} отправилось сообщение -> ${target}`);
     } catch {
-      console.info(`⚠️ ${protocol} сообщение не отправлено -> ${target}`);
+      console.log(`⚠️ ${protocol} сообщение не отправлено -> ${target}`);
     }
   }, interval);
 }
@@ -472,14 +476,16 @@ async function rdpService(): Promise<void> {
 }
 
 async function serverRun(): Promise<void> {
-  sshService();
-  rpcService();
-  netBiosService();
-  smbService();
-  rdpService();
-  httpService();
-  httpsService();
-  simulateDnsTraffic();
+  await Promise.all([
+    sshService(),
+    rpcService(),
+    netBiosService(),
+    smbService(),
+    rdpService(),
+    httpService(),
+    httpsService(),
+    simulateDnsTraffic(),
+  ]);
 }
 
 serverRun()

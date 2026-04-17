@@ -68,6 +68,6 @@ agent:
   reconnect_count: 0
 
 behavior:
-  jitter_ms: 2100
-  interval_ms: 3500
-  error_chance: 0.035
+  jitter_ms: 2400
+  interval_ms: 4300
+  error_chance: 0.037

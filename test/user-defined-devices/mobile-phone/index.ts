@@ -1,310 +1,373 @@
-import { serve, type Server, type Socket } from "bun";
+import { readFileSync } from "fs";
+import type { IEnv, ICfg } from "./types";
+import type { Socket, Server } from "bun";
+import YAML from "js-yaml";
 
-interface IEnv {
-  host: string;
-  target: string;
-
-  adbPort: number;
-  httpPort: number;
-  httpsPort: number;
-
-  binderPort: number;
-  telephonyPort: number;
-  wifiPort: number;
-
-  pushPort: number;
-  sensorPort: number;
-
-  interval: number;
-}
+let PER_ENV: IEnv | undefined = undefined;
+let PER_CFG: ICfg | undefined = undefined;
 
 function loadEnv(): IEnv {
-  const host = process.env.HOST;
-  const target = process.env.TARGET;
+  if (!PER_ENV) {
+    const hostname = process.env.HOSTNAME;
+    const target_hostname = process.env.TARGET_HOSTNAME;
+    const adpPort = Number(process.env.ADB_PORT);
+    const httpPort = Number(process.env.HTTP_PORT);
+    const binderPort = Number(process.env.BINDER_PORT);
+    const httpsPort = Number(process.env.HTTPS_PORT);
+    const telephonyPort = Number(process.env.TELEPHONY_PORT);
+    const target_port = Number(process.env.TARGET_PORT);
 
-  const adbPort = Number(process.env.ADB_PORT);
-  const httpPort = Number(process.env.HTTP_PORT);
-  const httpsPort = Number(process.env.HTTPS_PORT);
+    if (
+      !hostname ||
+      !target_hostname ||
+      Number.isNaN(adpPort) ||
+      Number.isNaN(httpPort) ||
+      Number.isNaN(binderPort) ||
+      Number.isNaN(telephonyPort) ||
+      Number.isNaN(httpsPort) ||
+      Number.isNaN(target_port)
+    ) {
+      throw new Error(
+        "🛑 Нет каких-то переменных среды для смартфона (android)!",
+      );
+    }
 
-  const binderPort = Number(process.env.BINDER_PORT);
-  const telephonyPort = Number(process.env.TELEPHONY_PORT);
-  const wifiPort = Number(process.env.WIFI_PORT);
-
-  const pushPort = Number(process.env.PUSH_PORT);
-  const sensorPort = Number(process.env.SENSOR_PORT);
-
-  const interval = Number(process.env.INTERVAL_MS);
-
-  if (
-    !host ||
-    !target ||
-    Number.isNaN(adbPort) ||
-    Number.isNaN(httpPort) ||
-    Number.isNaN(httpsPort) ||
-    Number.isNaN(binderPort) ||
-    Number.isNaN(telephonyPort) ||
-    Number.isNaN(wifiPort) ||
-    Number.isNaN(pushPort) ||
-    Number.isNaN(sensorPort) ||
-    Number.isNaN(interval)
-  ) {
-    throw new Error("Missing Android environment variables");
+    PER_ENV = {
+      hostname,
+      adpPort,
+      httpPort,
+      binderPort,
+      httpsPort,
+      telephonyPort,
+      target_hostname,
+      target_port,
+    };
   }
 
-  return {
-    host,
-    target,
-    adbPort,
-    httpPort,
-    httpsPort,
-    binderPort,
-    telephonyPort,
-    wifiPort,
-    pushPort,
-    sensorPort,
-    interval,
-  };
+  return PER_ENV;
 }
 
-/* ---------------- Common socket utils ---------------- */
+function loadCfg(): ICfg {
+  if (!PER_CFG) {
+    const raw = readFileSync("config.yaml", "utf-8");
+    PER_CFG = YAML.load(raw) as ICfg;
+  }
 
-async function open(socket: Socket, svc: string, banner: any) {
-  console.log(`📲 Android ${svc} connection opened`);
+  return PER_CFG;
+}
+
+async function loadTLSFiles() {
+  const cert = Bun.file("./ssl/cert.pem");
+  const key = Bun.file("./ssl/key.pem");
+
+  if (!(await cert.exists())) {
+    throw new Error("Файл cert.pem не найден");
+  }
+
+  if (!(await key.exists())) {
+    throw new Error("Файл key.pem не найден");
+  }
+
+  if (cert.size === 0) {
+    throw new Error("Файл cert.pem пустой");
+  }
+
+  if (key.size === 0) {
+    throw new Error("Файл key.pem пустой");
+  }
+
+  return { cert, key };
+}
+
+async function sockOpen<T>(
+  socket: Socket,
+  service: string,
+  banner: T,
+): Promise<void> {
+  console.log(
+    `🔌 Подключение к серверу смартфона (android) по ${service}  установлено`,
+  );
   socket.write(banner);
 }
 
-async function data(socket: Socket, dataBuf: Buffer, svc: string, msg: string) {
-  const ts = new Date().toISOString();
+async function sockData<T>(
+  socket: Socket,
+  buffer: Buffer,
+  service: string,
+  text: T,
+): Promise<void> {
+  const timestamp = new Date().toISOString();
 
-  console.log(`📩 [Android ${svc}] packet`);
-  console.log("⏱", ts);
-  console.log("HEX:", dataBuf.toString("hex"));
-  console.log("TEXT:", dataBuf.toString("utf-8"));
+  console.log(`📲 Смартфон (android) получил сообщение по ${service}]`);
+  console.log("⏱", timestamp);
+  console.log("HEX:", buffer.toString("hex"));
+  console.log("TEXT:", buffer.toString("utf-8"));
+  console.log("RAW:", buffer);
 
-  socket.write(`[${ts}] ${msg}`);
+  socket.write(`TIME:${timestamp} MSG:${text}`);
 }
 
-async function close(socket: Socket, svc: string, msg: string) {
-  console.log(`❌ Android ${svc} closed`);
-  socket.write(msg);
+async function sockClose(
+  socket: Socket,
+  service: string,
+  text: string,
+): Promise<void> {
+  console.log(`❌ Соединение со смартфоном (android) по ${service} закрыто`);
+  socket.write(text);
   socket.end();
 }
 
-async function error(socket: Socket, svc: string, err: Error) {
-  console.log(`💥 Android ${svc} error`, err);
-  socket.end();
-}
-
-/* ---------------- HTTP UI (Android WebView) ---------------- */
-
-async function androidHtml<T = any>(
-  _req: Request,
-  _server: Server<T>,
-  title: string,
-  subtitle: string,
-  body: string,
-) {
-  const tpl = await Bun.file("./index.html").text();
-
-  return new Response(
-    tpl
-      .replace("{{HEADLINE}}", title)
-      .replace("{{SUBHEADLINE}}", subtitle)
-      .replace("{{PARAGRAPH}}", body),
-    { headers: { "Content-Type": "text/html" } },
+async function sockError(
+  socket: Socket,
+  service: string,
+  error: Error,
+): Promise<void> {
+  console.log(
+    `💥 Произошла ошибка соединения сокета смартфона (android) по ${service}`,
+    error,
   );
+  socket.end();
 }
 
-/* ---------------- Outbound traffic (Google sync simulation) ---------------- */
+async function hyperRes<T = undefined>(
+  req: Request,
+  server: Server<T>,
+  headline: string,
+  subHeadline: string,
+  paragraph: string,
+): Promise<Response> {
+  const url = new URL(req.url);
+  const cfg = loadCfg();
 
-function syncTraffic(target: string, interval: number) {
+  console.log(
+    `📲 Смартфон (android) получил сообщение HTTP от: ${server.requestIP}`,
+  );
+  console.log(`Cообщение: ${req}`);
+
+  const headers = {
+    "Content-Type": "text/html",
+    Server: cfg.network.server,
+    "X-Powered-By": cfg.network.powered,
+    "X-Hostname": cfg.device.hostname,
+  };
+
+  if (url.pathname.includes("/sys")) {
+    return new Response(
+      {
+        hostname: cfg.device.hostname,
+        os: cfg.os,
+        hardware: cfg.hardware,
+        performance: cfg.performance,
+        power: cfg.power,
+        security: cfg.security,
+      },
+      { headers },
+    );
+  }
+
+  const headLbl = "{{HEADLINE}}";
+  const subHeadLbl = "{{SUBHEADLINE}}";
+  const paraLbl = "{{PARAGRAPH}}";
+  const htmlTmpl = await Bun.file("./index.html").text();
+  const html = htmlTmpl
+    .replace(headLbl, headline)
+    .replace(subHeadLbl, subHeadline)
+    .replace(paraLbl, paragraph);
+
+  return new Response(html, { headers });
+}
+
+async function startOutboundTraffic(
+  protocol: "HTTP" | "HTTPS",
+  target: string,
+  interval: number,
+) {
+  const cfg = loadCfg();
+
   setInterval(async () => {
     try {
-      await fetch(`https://${target}`, {
+      await fetch(`${protocol}://${target}`, {
         headers: {
-          "User-Agent": "Android/14 Dalvik/2.1.0",
+          "User-Agent": "Ubuntu/22.04-systemd",
+          Server: cfg.network.server,
+          "X-Powered-By": cfg.network.powered,
+          "X-Hostname": cfg.device.hostname,
         },
       });
 
-      console.info(`📡 Android sync -> ${target}`);
+      console.log(`📡 ${protocol} отправилось сообщение -> ${target}`);
     } catch {
-      console.info(`⚠️ Android sync failed -> ${target}`);
+      console.log(`⚠️ ${protocol} сообщение не отправлено -> ${target}`);
     }
   }, interval);
 }
 
-/* ---------------- ADB ---------------- */
+async function adbService() {
+  const serviceName = "ADP";
+  const env = loadEnv();
 
-function adbService(host: string, port: number) {
   Bun.listen({
-    hostname: host,
-    port,
+    hostname: env.hostname,
+    port: env.adpPort,
     socket: {
-      open: (s) => open(s, "ADB", "Android Debug Bridge v1.0\r\n"),
-      data: (s, d) => data(s, d, "ADB", "ADB command executed"),
-      close: (s) => close(s, "ADB", "ADB session closed"),
-      error: (s, e) => error(s, "ADB", e),
+      open: (sock) =>
+        sockOpen(sock, serviceName, "Android Debug Bridge v1.0\r\n"),
+      data: (sock, buffer) =>
+        sockData(
+          sock,
+          buffer,
+          serviceName,
+          `Android ${serviceName} request processed`,
+        ),
+      close: (sock) =>
+        sockClose(sock, serviceName, `${serviceName} session closed`),
+      error: (sock, error) => sockError(sock, serviceName, error),
     },
   });
 
-  console.info("🟢 ADB service started");
+  console.info(
+    `🟢 ${serviceName} сервис имитации смартфона (android) запущен...`,
+  );
 }
 
-/* ---------------- Binder (Android IPC core) ---------------- */
+async function binderService() {
+  const serviceName = "Binder";
+  const env = loadEnv();
 
-function binderService(host: string, port: number) {
   Bun.listen({
-    hostname: host,
-    port,
+    hostname: env.hostname,
+    port: env.binderPort,
     socket: {
-      open: (s) => open(s, "Binder", "binder driver v4.0\r\n"),
-      data: (s, d) => data(s, d, "Binder", "IPC transaction processed"),
-      close: (s) => close(s, "Binder", "Binder session closed"),
-      error: (s, e) => error(s, "Binder", e),
+      open: (sock) =>
+        sockOpen(sock, serviceName, `${serviceName} driver v4.0\r\n`),
+      data: (sock, buffer) =>
+        sockData(
+          sock,
+          buffer,
+          serviceName,
+          `Android ${serviceName} request processed`,
+        ),
+      close: (sock) =>
+        sockClose(sock, serviceName, `${serviceName} session closed`),
+      error: (sock, error) => sockError(sock, serviceName, error),
     },
   });
 
-  console.info("🟢 Binder IPC started");
+  console.info(
+    `🟢 ${serviceName} сервис имитации смартфона (android) запущен...`,
+  );
 }
 
-/* ---------------- Telephony ---------------- */
+async function telephonyService() {
+  const serviceName = "Telephony";
+  const env = loadEnv();
 
-function telephonyService(host: string, port: number) {
   Bun.listen({
-    hostname: host,
-    port,
+    hostname: env.hostname,
+    port: env.telephonyPort,
     socket: {
-      open: (s) =>
-        open(s, "Telephony", "RIL Android Radio Interface Layer\r\n"),
-      data: (s, d) =>
-        data(s, d, "Telephony", "Call/SMS event processed"),
-      close: (s) => close(s, "Telephony", "Radio session closed"),
-      error: (s, e) => error(s, "Telephony", e),
+      open: (sock) =>
+        sockOpen(
+          sock,
+          serviceName,
+          `${serviceName} (RIL) Android Radio Interface Layer\r\n`,
+        ),
+      data: (sock, buffer) =>
+        sockData(
+          sock,
+          buffer,
+          serviceName,
+          `Android ${serviceName} request processed`,
+        ),
+      close: (sock) =>
+        sockClose(sock, serviceName, `${serviceName} session closed`),
+      error: (sock, error) => sockError(sock, serviceName, error),
     },
   });
 
-  console.info("🟢 Telephony started");
+  console.info(
+    `🟢 ${serviceName} сервис имитации смартфона (android) запущен...`,
+  );
 }
 
-/* ---------------- Wi-Fi subsystem ---------------- */
+async function httpService() {
+  const serviceName = "HTTP";
+  const env = loadEnv();
+  const cfg = loadCfg();
 
-function wifiService(host: string, port: number) {
-  Bun.listen({
-    hostname: host,
-    port,
-    socket: {
-      open: (s) =>
-        open(s, "WiFi", "wpa_supplicant Android v3.2\r\n"),
-      data: (s, d) =>
-        data(s, d, "WiFi", "Wi-Fi frame processed"),
-      close: (s) => close(s, "WiFi", "Wi-Fi disconnected"),
-      error: (s, e) => error(s, "WiFi", e),
-    },
-  });
-
-  console.info("🟢 Wi-Fi started");
-}
-
-/* ---------------- Push notifications ---------------- */
-
-function pushService(host: string, port: number) {
-  Bun.listen({
-    hostname: host,
-    port,
-    socket: {
-      open: (s) =>
-        open(s, "Push", "FCM connection established\r\n"),
-      data: (s, d) =>
-        data(s, d, "Push", "Push notification delivered"),
-      close: (s) => close(s, "Push", "FCM disconnected"),
-      error: (s, e) => error(s, "Push", e),
-    },
-  });
-
-  console.info("🟢 Push service started");
-}
-
-/* ---------------- Sensors ---------------- */
-
-function sensorService(host: string, port: number) {
-  Bun.listen({
-    hostname: host,
-    port,
-    socket: {
-      open: (s) =>
-        open(s, "Sensors", "Sensor HAL v2.1\r\n"),
-      data: (s, d) =>
-        data(s, d, "Sensors", "Sensor data streamed"),
-      close: (s) => close(s, "Sensors", "Sensors offline"),
-      error: (s, e) => error(s, "Sensors", e),
-    },
-  });
-
-  console.info("🟢 Sensors started");
-}
-
-/* ---------------- HTTP ---------------- */
-
-function httpService(host: string, port: number, target: string, interval: number) {
-  serve({
-    hostname: host,
-    port,
+  Bun.serve({
+    hostname: env.hostname,
+    port: env.httpPort,
     fetch: (req, server) =>
-      androidHtml(
+      hyperRes(
         req,
         server,
         "Android System WebView",
-        "Chrome/WebKit runtime",
+        `${serviceName} protocol`,
         "Android application container",
       ),
   });
 
-  syncTraffic(target, interval);
+  startOutboundTraffic(
+    serviceName,
+    `${env.target_hostname}:${env.target_port}`,
+    cfg.behavior.interval_ms,
+  );
 
-  console.info("🟢 HTTP WebView started");
+  console.info(
+    `🟢 ${serviceName} сервис имитации смартфона (android) запущен...`,
+  );
 }
 
-/* ---------------- HTTPS (Google stack simulation) ---------------- */
+async function httpsService() {
+  const serviceName = "HTTPS";
+  const env = loadEnv();
+  const cfg = loadCfg();
+  const tlsFiles = await loadTLSFiles();
 
-function httpsService(host: string, port: number, target: string, interval: number) {
-  serve({
-    hostname: host,
-    port,
+  Bun.serve({
+    hostname: env.hostname,
+    port: env.httpsPort,
+    tls: tlsFiles,
     fetch: (req, server) =>
-      androidHtml(
+      hyperRes(
         req,
         server,
-        "Google Play Services",
-        "Secure Android endpoint",
-        "Account + sync service",
+        "Android System WebView",
+        `${serviceName} protocol`,
+        "Android application container",
       ),
   });
 
-  syncTraffic(target, interval);
+  startOutboundTraffic(
+    serviceName,
+    `${env.target_hostname}:${env.target_port}`,
+    cfg.behavior.interval_ms,
+  );
 
-  console.info("🟢 HTTPS Google stack started");
+  console.info(
+    `🟢 ${serviceName} сервис имитации смартфона (android) запущен...`,
+  );
 }
 
-/* ---------------- Boot ---------------- */
-
-async function run() {
-  const env = loadEnv();
-
-  adbService(env.host, env.adbPort);
-  binderService(env.host, env.binderPort);
-  telephonyService(env.host, env.telephonyPort);
-
-  wifiService(env.host, env.wifiPort);
-  pushService(env.host, env.pushPort);
-  sensorService(env.host, env.sensorPort);
-
-  httpService(env.host, env.httpPort, env.target, env.interval);
-  httpsService(env.host, env.httpsPort, env.target, env.interval);
+async function serverRun(): Promise<void> {
+  await Promise.all([
+    adbService(),
+    binderService(),
+    telephonyService(),
+    httpService(),
+    httpsService(),
+  ]);
 }
 
-run()
-  .then(() => console.log("🚀 Android simulator running"))
-  .catch((e) => {
-    console.error("💥 Crash:", e);
+serverRun()
+  .then((): void => {
+    console.info("🚀 Сервер имитации смартфона (android) запущен!");
+  })
+  .catch((error: unknown): void => {
+    console.error(
+      "💥 Сервер имитации смартфона (android) завершился с ошибкой:",
+      error,
+    );
     process.exit(1);
   });

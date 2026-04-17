@@ -1,0 +1,73 @@
+device:
+  device_id: "personal-computer-01"
+  device_type: "personal-computer"
+  hostname: "PERSONAL_COMPUTER-UBUNTU-01"
+  mac_address: "08:00:27:ab:cd:ef"
+  serial_number: "UNKNOWN"
+  model: "unknown"
+  vendor: "unknown"
+
+network:
+  gateway: "192.168.1.1"
+  dns:
+    - "1.1.1.1"
+    - "8.8.8.8"
+  interface_type: "ethernet"
+  ssid: null
+  signal_strength: null
+  connection_state: "up"
+  latency_ms: 22
+  packet_loss: 0.0
+  bandwidth_mbps: 1000
+  server: "nginx/1.24.0"
+  powered: "Linux/Ubuntu"
+
+os:
+  name: "Ubuntu"
+  version: "22.04 LTS"
+  kernel_version: "6.5.0-26-generic"
+  architecture: "x86_64"
+  uptime_seconds: 86400
+  timezone: "Europe/Vilnius"
+
+hardware:
+  cpu_model: "AMD Ryzen 7 5800X"
+  cpu_cores: 8
+  ram_total_mb: 32768
+  disk_total_gb: 1024
+  gpu_model: "NVIDIA GeForce RTX 3060"
+
+performance:
+  cpu_usage_percent: 28
+  ram_usage_percent: 54
+  disk_usage_percent: 37
+  temperature_cpu_c: 55
+  temperature_gpu_c: 60
+
+power:
+  battery_level_percent: null
+  charging_status: null
+  power_source: "ac"
+  battery_health_percent: null
+  cycle_count: null
+  estimated_time_remaining_min: null
+
+security:
+  secure_boot_enabled: true
+  disk_encryption_enabled: true
+  firewall_enabled: true
+  antivirus_status: "active"
+  failed_login_count: 0
+
+agent:
+  agent_version: "1.2.9"
+  last_seen: "2026-04-16T18:30:00Z"
+  heartbeat_interval_ms: 3500
+  jitter_ms: 1800
+  error_rate: 0.021
+  reconnect_count: 0
+
+behavior:
+  jitter_ms: 2300
+  interval_ms: 3500
+  error_chance: 0.035

@@ -1,0 +1,30 @@
+device:
+  device_id: "iot-signal-sensor-01"
+  device_type: "iot_sensor"
+  hostname: "IOT-SENSOR-01"
+  mac_address: "00:1A:7D:DA:71:13"
+  serial_number: "SN-IS-784512"
+  model: "Smart Signal Transmission Sensor X1"
+  vendor: "SensTech"
+  firmware_version: "1.3.7"
+  uptime_seconds: 48291
+
+network:
+  gateway: "192.168.0.1"
+  dns:
+    - "1.1.1.1"
+    - "8.8.4.4"
+  interface_type: "wifi"
+  ssid: "IoT_Network_2.4G"
+  signal_strength: -60
+  connection_state: "up"
+  latency_ms: 32
+  packet_loss: 0.1
+  bandwidth_mbps: 54
+  protocol: "MQTT"
+  broker: "mqtt.local"
+
+behavior:
+  jitter_ms: 2500
+  interval_ms: 3500
+  error_chance: 0.035

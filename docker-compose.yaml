@@ -83,11 +83,12 @@ services:
     build:
       context: ./test/service-devices/web-server
       dockerfile: Dockerfile
-    env_file:
-      - ./test/service-devices/remote-access-server
     restart: unless-stopped
     networks:
       - planner_network
+    ports:
+      - "80:80"
+      - "443:443"
 
   main:
     build:

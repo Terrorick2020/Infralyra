@@ -16,7 +16,7 @@ RUN mkdir -p /app/ssl \
   -out /app/ssl/cert.pem \
   -days 365 \
   -nodes \
-  -subj "/CN=LAPTOP-01/O=Microsoft Windows/C=US"
+  -subj "/CN=LAPTOP-01/O=Microsoft Windows/C=RU"
 
 EXPOSE ${PORT}
 

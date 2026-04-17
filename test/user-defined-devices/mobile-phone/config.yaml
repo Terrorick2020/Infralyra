@@ -1,0 +1,73 @@
+device:
+  device_id: "mobile-device-01"
+  device_type: "smartphone"
+  hostname: "ANDROID-DEVICE-01"
+  mac_address: "02:11:22:33:44:55"
+  serial_number: "UNKNOWN"
+  model: "Samsung Galaxy S23"
+  vendor: "Samsung"
+
+network:
+  gateway: "192.168.1.1"
+  dns:
+    - "1.1.1.1"
+    - "8.8.8.8"
+  interface_type: "wifi"
+  ssid: "Home_WiFi_5G"
+  signal_strength: -52
+  connection_state: "up"
+  latency_ms: 18
+  packet_loss: 0.0
+  bandwidth_mbps: 300
+  server: "nginx/1.24.0"
+  powered: "Android"
+
+os:
+  name: "Android"
+  version: "14"
+  kernel_version: "5.15.123-android"
+  architecture: "arm64"
+  uptime_seconds: 43200
+  timezone: "Europe/Vilnius"
+
+hardware:
+  cpu_model: "Qualcomm Snapdragon 8 Gen 2"
+  cpu_cores: 8
+  ram_total_mb: 8192
+  disk_total_gb: 256
+  gpu_model: "Adreno 740"
+
+performance:
+  cpu_usage_percent: 35
+  ram_usage_percent: 62
+  disk_usage_percent: 48
+  temperature_cpu_c: 42
+  temperature_gpu_c: 45
+
+power:
+  battery_level_percent: 78
+  charging_status: "not_charging"
+  power_source: "battery"
+  battery_health_percent: 92
+  cycle_count: 340
+  estimated_time_remaining_min: 540
+
+security:
+  secure_boot_enabled: true
+  disk_encryption_enabled: true
+  firewall_enabled: true
+  antivirus_status: "active"
+  failed_login_count: 1
+
+agent:
+  agent_version: "1.2.9"
+  last_seen: "2026-04-17T09:10:00Z"
+  heartbeat_interval_ms: 3500
+  jitter_ms: 1500
+  error_rate: 0.018
+  reconnect_count: 1
+
+behavior:
+  jitter_ms: 2500
+  interval_ms: 3500
+  error_chance: 0.035

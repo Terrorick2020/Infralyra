@@ -1,13 +1,25 @@
-FROM oven/bun:latest
+FROM debian:12-slim
 
-WORKDIR /app
+ENV DEBIAN_FRONTEND=noninteractive
 
-COPY package.json .
+RUN apt-get update && apt-get install -y \
+    curl \
+    iputils-ping \
+    dnsutils \
+    netcat-openbsd \
+    bash \
+    cron \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN bun install --frozen-lockfile
+RUN useradd -m -s /bin/bash device \
+    && echo "device:device123" | chpasswd
 
-COPY . .
+WORKDIR /home/device
 
-EXPOSE ${PORT}
+COPY traffic.sh /home/device/traffic.sh
+RUN chmod +x /home/device/traffic.sh
 
-CMD ["bun", "run", "start"]
+RUN echo "* * * * * /home/device/traffic.sh" > /etc/cron.d/traffic
+RUN chmod 0644 /etc/cron.d/traffic
+
+CMD cron && tail -f /dev/null

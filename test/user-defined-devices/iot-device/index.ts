@@ -1,176 +1,243 @@
-import { serve } from "bun";
+import { readFileSync } from "fs";
+import type { IEnv, ICfg } from "./types";
+import YAML from "js-yaml";
 
-interface IEnv {
-  host: string;
-  mqttPort: number;
-  httpPort: number;
-  udpPort: number;
-  target: string;
-  interval: number;
-  deviceId: string;
-}
+let PER_ENV: IEnv | undefined = undefined;
+let PER_CFG: ICfg | undefined = undefined;
 
 function loadEnv(): IEnv {
-  const host = process.env.HOST;
-  const target = process.env.TARGET;
+  if (!PER_ENV) {
+    const hostname = process.env.HOSTNAME;
+    const target_hostname = process.env.TARGET_HOSTNAME;
+    const mqttPort = Number(process.env.MQTT_PORT);
+    const httpPort = Number(process.env.HTTP_PORT);
+    const udpPort = Number(process.env.UDP_PORT);
+    const telemetryPort = Number(process.env.TELEMETRY_PORT);
+    const target_port = Number(process.env.TARGET_PORT);
 
-  const mqttPort = Number(process.env.MQTT_PORT);
-  const httpPort = Number(process.env.HTTP_PORT);
-  const udpPort = Number(process.env.UDP_PORT);
+    if (
+      !hostname ||
+      !target_hostname ||
+      Number.isNaN(mqttPort) ||
+      Number.isNaN(httpPort) ||
+      Number.isNaN(udpPort) ||
+      Number.isNaN(target_port)
+    ) {
+      throw new Error(
+        "🛑 Нет каких-то переменных среды для iot (интеллектуальный датчик передачи сигнала)",
+      );
+    }
 
-  const interval = Number(process.env.INTERVAL_MS);
-  const deviceId = process.env.DEVICE_ID;
-
-  if (
-    !host ||
-    !target ||
-    !deviceId ||
-    Number.isNaN(mqttPort) ||
-    Number.isNaN(httpPort) ||
-    Number.isNaN(udpPort) ||
-    Number.isNaN(interval)
-  ) {
-    throw new Error("🛑 Нет каких-то переменных среды для IoT устройства!");
+    PER_ENV = {
+      hostname,
+      mqttPort,
+      httpPort,
+      udpPort,
+      telemetryPort,
+      target_hostname,
+      target_port,
+    };
   }
 
-  return {
-    host,
-    mqttPort,
-    httpPort,
-    udpPort,
-    target,
-    interval,
-    deviceId,
-  };
+  return PER_ENV;
 }
 
-function generateTelemetry(deviceId: string) {
+function loadCfg(): ICfg {
+  if (!PER_CFG) {
+    const raw = readFileSync("config.yaml", "utf-8");
+    PER_CFG = YAML.load(raw) as ICfg;
+  }
+
+  return PER_CFG;
+}
+
+async function loadTLSFiles() {
+  const cert = Bun.file("./ssl/cert.pem");
+  const key = Bun.file("./ssl/key.pem");
+
+  if (!(await cert.exists())) {
+    throw new Error("Файл cert.pem не найден");
+  }
+
+  if (!(await key.exists())) {
+    throw new Error("Файл key.pem не найден");
+  }
+
+  if (cert.size === 0) {
+    throw new Error("Файл cert.pem пустой");
+  }
+
+  if (key.size === 0) {
+    throw new Error("Файл key.pem пустой");
+  }
+
+  return { cert, key };
+}
+
+function generateTelemetry() {
+  const cfg = loadCfg();
+
+  const getRandomInt = (min: number, max: number): number => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  const getRandomFloat = (min: number, max: number): number => {
+    return parseFloat((Math.random() * (max - min) + min).toFixed(2));
+  }
+
   return JSON.stringify({
-    deviceId,
-    firmware: "iot-sensor-fw-1.4.2",
-    rssi: Math.floor(-30 - Math.random() * 60),
-    battery: Math.floor(50 + Math.random() * 50),
-    signalStrength: Math.random(),
+    device_id: cfg.device.device_id,
     timestamp: new Date().toISOString(),
+    telemetry: {
+      signal_strength_dbm: getRandomInt(-75, -45),
+      noise_level_dbm: getRandomInt(-100, -85),
+      snr_db: getRandomInt(20, 40),
+      latency_ms: getRandomInt(10, 50),
+      packet_loss_percent: getRandomFloat(0, 0.5),
+      bandwidth_usage_mbps: getRandomInt(1, 20),
+      cpu_usage_percent: getRandomInt(5, 35),
+      memory_usage_percent: getRandomInt(20, 60),
+      temperature_celsius: getRandomFloat(30, 55),
+      battery_level_percent: getRandomInt(40, 100),
+      voltage_v: getRandomFloat(3.6, 4.2),
+      status: "active",
+      error_count: getRandomInt(0, 3),
+    },
   });
 }
 
-async function mqttService(hostname: string, port: number, deviceId: string) {
+async function mqttService() {
   const serviceName = "MQTT";
+  const env = loadEnv();
 
   Bun.listen({
-    hostname,
-    port,
-
+    hostname: env.hostname,
+    port: env.mqttPort,
     socket: {
       open: (socket) => {
-        console.log("📡 MQTT connection opened");
-
-        socket.write(
-          Buffer.from([
-            0x20,
-            0x02,
-            0x00,
-            0x00, // CONNACK
-          ]),
+        console.log(
+          `🔌 Подключение к серверу iot (интеллектуальный датчик передачи сигнала) по ${serviceName}  установлено`,
         );
+        socket.write(Buffer.from([0x20, 0x02, 0x00, 0x00]));
       },
+      data: (socket, buffer) => {
+        const timestamp = new Date().toISOString();
 
-      data: (socket, data) => {
-        console.log("MQTT DATA:", data.toString("hex"));
+        console.log(
+          `📲 Iot (интеллектуальный датчик передачи сигнала) получил сообщение по ${serviceName}]`,
+        );
+        console.log("⏱", timestamp);
+        console.log("HEX:", buffer.toString("hex"));
+        console.log("TEXT:", buffer.toString("utf-8"));
+        console.log("RAW:", buffer);
 
-        const telemetry = generateTelemetry(deviceId);
-
-        socket.write(Buffer.from(telemetry));
+        socket.write(Buffer.from(generateTelemetry()));
       },
-
-      close: () => {
-        console.log("MQTT closed");
+      close: (socket) => {
+        console.log(
+          `❌ Соединение со смартфоном (android) по ${serviceName} закрыто`,
+        );
+        socket.write("Session closed!");
+        socket.end();
+      },
+      error: (socket, error) => {
+        console.log(
+          `💥 Произошла ошибка соединения сокета iot (интеллектуальный датчик передачи сигнала) по ${serviceName}`,
+          error,
+        );
+        socket.end();
       },
     },
   });
 
-  console.info("🟢 MQTT IoT сервис запущен...");
+  console.info(
+    `🟢 ${serviceName} сервис имитации iot (интеллектуальный датчик передачи сигнала) запущен...`,
+  );
 }
 
-async function httpService(hostname: string, port: number, deviceId: string) {
-  serve({
-    hostname,
-    port,
+async function httpService() {
+  const serviceName = "HTTP";
+  const env = loadEnv();
+  const cfg = loadCfg();
 
+  Bun.serve({
+    hostname: env.hostname,
+    port: env.httpPort,
     fetch: async (req: Request) => {
       const url = new URL(req.url);
 
-      if (url.pathname === "/status") {
+      if(url.pathname.includes("sys")) {
         return Response.json({
-          deviceId,
+          device: cfg.device,
+          network: cfg.network,
           status: "online",
           firmware: "1.4.2",
           uptime: process.uptime(),
         });
       }
 
-      if (url.pathname === "/metrics") {
-        return Response.json(JSON.parse(generateTelemetry(deviceId)));
-      }
-
       return new Response("IoT Sensor Endpoint");
     },
   });
 
-  console.info("🟢 HTTP IoT сервис запущен...");
+  console.info(
+    `🟢 ${serviceName} сервис имитации iot (интеллектуальный датчик передачи сигнала) запущен...`,
+  );
 }
 
-async function udpHeartbeat(hostname: string, port: number, deviceId: string) {
-  const socket = Bun.udpSocket({
-    hostname,
-    port,
+async function udpHeartbeat() {
+  const serviceName = "UDP";
+  const env = loadEnv();
+  const cfg = loadCfg();
 
-    socket: {
-    },
+  const socket = await Bun.udpSocket({
+    hostname: env.hostname,
+    port: env.udpPort,
   });
 
   setInterval(() => {
-    const payload = Buffer.from(generateTelemetry(deviceId));
-  }, 5000);
+    try {
+      const payload = Buffer.from(JSON.stringify(cfg.network));
+      socket.send(payload, env.target_port, env.target_hostname);
+      console.log(`!!!! ${serviceName} сообщение отправлено`);
+    } catch {
+      console.warn(`⚠️ Сообщение ${serviceName} не отправлено`)
+    }
+  }, cfg.behavior.jitter_ms);
 
-  console.info("🟢 UDP heartbeat активирован...");
+  console.info(
+    `🟢 ${serviceName} сервис имитации iot (интеллектуальный датчик передачи сигнала) запущен...`,
+  );
 }
 
-async function startTelemetryPush(
-  target: string,
-  interval: number,
-  deviceId: string,
-) {
+async function startTelemetryPush() {
+  const cfg = loadCfg();
+  const env = loadEnv();
+
   setInterval(async () => {
     try {
-      await fetch(`http://${target}/iot/data`, {
+      await fetch(`http://${env.target_hostname}:${env.target_port}`, {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
         },
-
-        body: generateTelemetry(deviceId),
+        body: generateTelemetry(),
       });
 
-      console.log("📡 Telemetry pushed");
+      console.log("📡 Телеметрия отправлена");
     } catch {
-      console.log("⚠️ Telemetry push failed");
+      console.warn("⚠️ Ошибка отправки телеметрии");
     }
-  }, interval);
+  }, cfg.behavior.interval_ms);
 }
 
 async function serverRun() {
-  const env = loadEnv();
-
-  mqttService(env.host, env.mqttPort, env.deviceId);
-
-  httpService(env.host, env.httpPort, env.deviceId);
-
-  udpHeartbeat(env.host, env.udpPort, env.deviceId);
-
-  startTelemetryPush(env.target, env.interval, env.deviceId);
+  Promise.all([
+    mqttService(),
+    httpService(),
+    udpHeartbeat(),
+    startTelemetryPush(),
+  ]);
 }
 
 serverRun()

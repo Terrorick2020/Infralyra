@@ -1,13 +1,9 @@
-FROM oven/bun:latest
+FROM nginx:latest
 
-WORKDIR /app
+RUN rm /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/conf.d
+COPY ./ssl/ /etc/nginx/certs/
 
-COPY package.json .
+EXPOSE 80 443
 
-RUN bun install --frozen-lockfile
-
-COPY . .
-
-EXPOSE ${PORT}
-
-CMD ["bun", "run", "start"]
+CMD ["nginx", "-g", "daemon off;"]

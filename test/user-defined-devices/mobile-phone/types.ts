@@ -1,12 +1,10 @@
 export interface IEnv {
   hostname: string;
-  sshPort: number;
+  adpPort: number;
   httpPort: number;
-  rpcPort: number;
-  netBiosPort: number;
+  binderPort: number;
   httpsPort: number;
-  smbPort: number;
-  rdpPort: number;
+  telephonyPort: number;
   target_hostname: string;
   target_port: number;
 }

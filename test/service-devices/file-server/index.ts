@@ -1,345 +1,209 @@
-import { serve, type Socket } from "bun";
+import { readFileSync } from "fs";
+import type { IEnv, ICfg } from "./types";
+import type { Socket, Server } from "bun";
+import YAML from "js-yaml";
 
-interface IEnv {
-  host: string;
-  target: string;
-  httpPort: number;
-  sshPort: number;
-  interval: number;
-}
+let PER_ENV: IEnv | undefined = undefined;
+let PER_CFG: ICfg | undefined = undefined;
 
 function loadEnv(): IEnv {
-  const host = process.env.HOST;
-  const target = process.env.TARGET;
+  if (!PER_ENV) {
+    const hostname = process.env.HOSTNAME;
+    const target_hostname = process.env.TARGET_HOSTNAME;
+    const sshPort = Number(process.env.SSH_PORT);
+    const nfsPort = Number(process.env.NFS_PORT);
+    const ftpPort = Number(process.env.FTP_PORT);
+    const smbPort = Number(process.env.SMB_PORT);
+    const target_port = Number(process.env.TARGET_PORT);
 
-  const httpPort = Number(process.env.HTTP_PORT);
-  const sshPort = Number(process.env.SSH_PORT);
-  const interval = Number(process.env.INTERVAL_MS);
+    if (
+      !hostname ||
+      !target_hostname ||
+      Number.isNaN(sshPort) ||
+      Number.isNaN(nfsPort) ||
+      Number.isNaN(ftpPort) ||
+      Number.isNaN(smbPort) ||
+      Number.isNaN(target_port)
+    ) {
+      throw new Error(
+        "🛑 Нет каких-то переменных среды для файлового сервера!",
+      );
+    }
 
-  if (
-    !host ||
-    !target ||
-    Number.isNaN(httpPort) ||
-    Number.isNaN(sshPort) ||
-    Number.isNaN(interval)
-  ) {
-    throw new Error("🛑 Нет переменных среды для file-processing сервера!");
+    PER_ENV = {
+      hostname,
+      sshPort,
+      nfsPort,
+      ftpPort,
+      smbPort,
+      target_hostname,
+      target_port,
+    };
   }
 
-  return {
-    host,
-    target,
-    httpPort,
-    sshPort,
-    interval,
-  };
+  return PER_ENV;
 }
 
-/* ================================
-   Outbound Traffic (storage-like)
-================================ */
+function loadCfg(): ICfg {
+  if (!PER_CFG) {
+    const raw = readFileSync("config.yaml", "utf-8");
+    PER_CFG = YAML.load(raw) as ICfg;
+  }
 
-async function startOutboundTraffic(
-  target: string,
-  interval: number,
-): Promise<void> {
-  setInterval(async () => {
-    try {
-      await fetch(`http://${target}`, {
-        headers: {
-          "User-Agent": "Debian FileProcessor/1.0",
-        },
-      });
-
-      console.info(`📡 Storage outbound -> ${target}`);
-    } catch {
-      console.info(`⚠️ Storage outbound failed -> ${target}`);
-    }
-  }, interval);
+  return PER_CFG;
 }
 
-/* ================================
-   File Processing Simulation
-================================ */
-
-async function simulateProcessing(): Promise<void> {
-
-  const delay =
-    Math.floor(Math.random() * 3000) + 1000;
-
-  await new Promise((r) =>
-    setTimeout(r, delay),
-  );
-
+async function sockOpen(socket: Socket, service: string, text: any) {
+  console.log(`🔌 Подключение к файловому серверу по ${service} установлено`);
+  socket.write(text);
 }
 
-/* ================================
-   HTTP API
-================================ */
+async function sockData(
+  socket: Socket,
+  buffer: Buffer,
+  service: string,
+  text: string,
+) {
+  const timestamp = new Date().toISOString();
 
-async function fileService(
-  hostname: string,
-  port: number,
-  target: string,
-  interval: number,
-): Promise<void> {
+  console.log(`💾 Файловый сервер получил сообщение по ${service}`);
+  console.log("⏱", timestamp);
+  console.log("HEX:", buffer.toString("hex"));
+  console.log("TEXT:", buffer.toString("utf-8"));
 
-  serve({
-    hostname,
-    port,
-
-    fetch: async (req: Request) => {
-
-      const url = new URL(req.url);
-      const path = url.pathname;
-
-      console.log(
-        `📂 ${req.method} ${path}`,
-      );
-
-      /* health */
-
-      if (path === "/health") {
-
-        return new Response(
-          JSON.stringify({
-            status: "ok",
-            service: "file-processor",
-            timestamp: new Date().toISOString(),
-          }),
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Server": "nginx/1.22.1",
-            },
-          },
-        );
-
-      }
-
-      /* upload */
-
-      if (
-        path === "/upload" &&
-        req.method === "POST"
-      ) {
-
-        console.log(
-          "📥 Получен файл",
-        );
-
-        await simulateProcessing();
-
-        return new Response(
-          JSON.stringify({
-            status: "uploaded",
-            id: crypto.randomUUID(),
-          }),
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          },
-        );
-
-      }
-
-      /* process */
-
-      if (
-        path === "/process" &&
-        req.method === "POST"
-      ) {
-
-        console.log(
-          "⚙️ Обработка файла",
-        );
-
-        await simulateProcessing();
-
-        return new Response(
-          JSON.stringify({
-            status: "processed",
-          }),
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          },
-        );
-
-      }
-
-      /* download */
-
-      if (
-        path.startsWith("/download")
-      ) {
-
-        console.log(
-          "📤 Выдача файла",
-        );
-
-        return new Response(
-          "FAKE_FILE_CONTENT",
-          {
-            headers: {
-              "Content-Type":
-                "application/octet-stream",
-            },
-          },
-        );
-
-      }
-
-      /* default */
-
-      return new Response(
-        `
-<html>
-<head>
-<title>File Processing Service</title>
-</head>
-
-<body>
-<h1>Debian File Processing Server</h1>
-<p>Service endpoint operational</p>
-</body>
-</html>
-        `,
-        {
-          headers: {
-            "Content-Type": "text/html",
-            "Server": "nginx/1.22.1",
-          },
-        },
-      );
-
-    },
-
-  });
-
-  startOutboundTraffic(
-    target,
-    interval,
-  );
-
-  console.info(
-    "🟢 File processing HTTP сервис запущен",
-  );
-
+  socket.write(`TIME: ${timestamp}, MSG: ${text}`);
 }
 
-/* ================================
-   SSH
-================================ */
-
-async function sshService(
-  hostname: string,
-  port: number,
-): Promise<void> {
-
-  Bun.listen({
-    hostname,
-    port,
-
-    socket: {
-
-      open: (socket: Socket) => {
-
-        console.log(
-          "🔌 SSH соединение",
-        );
-
-        socket.write(
-          "SSH-2.0-OpenSSH_9.2p1 Debian-2\r\n",
-        );
-
-      },
-
-      data: (socket: Socket, data: Buffer) => {
-
-        console.log(
-          "📩 SSH DATA",
-          data.toString("hex"),
-        );
-
-        socket.write(
-          "Permission denied\r\n",
-        );
-
-      },
-
-      close: () => {
-
-        console.log(
-          "❌ SSH закрыт",
-        );
-
-      },
-
-      error: (socket: Socket, error: Error) => {
-
-        console.log(
-          "💥 SSH ошибка",
-          error,
-        );
-
-        socket.end();
-
-      },
-
-    },
-
-  });
-
-  console.info(
-    "🟢 SSH сервис запущен",
-  );
-
+async function sockClose(socket: Socket, service: string, text: string) {
+  console.log(`❌ Соединение по ${service} закрыто`);
+  socket.write(text);
+  socket.end();
 }
 
-/* ================================
-   MAIN
-================================ */
+async function sockError(socket: Socket, service: string, error: Error) {
+  console.log(`💥 Ошибка на файловом сервере (${service})`, error);
+  socket.end();
+}
 
-async function serverRun(): Promise<void> {
 
+async function sshService() {
   const env = loadEnv();
 
+  Bun.listen({
+    hostname: env.hostname,
+    port: env.sshPort,
+    socket: {
+      open: (sock) =>
+        sockOpen(sock, "SSH", "SSH-2.0-OpenSSH_9.6p1 ArchLinux\r\n"),
+      data: (sock, buf) =>
+        sockData(sock, buf, "SSH", "Файловый сервер получил SSH запрос"),
+      close: (sock) =>
+        sockClose(sock, "SSH", "SSH соединение закрыто"),
+      error: (sock, err) => sockError(sock, "SSH", err),
+    },
+  });
+
+  console.info("🟢 SSH файлового сервера запущен");
+}
+
+async function smbService() {
+  const env = loadEnv();
+  const cfg = loadCfg();
+
+  Bun.listen({
+    hostname: env.hostname,
+    port: env.smbPort,
+    socket: {
+      open: (sock) =>
+        sockOpen(
+          sock,
+          "SMB",
+          Buffer.concat([
+            Buffer.from("FF534D42", "hex"),
+            Buffer.from(cfg.device.hostname),
+            Buffer.from("Samba"),
+          ]),
+        ),
+      data: (sock, buf) =>
+        sockData(sock, buf, "SMB", "Доступ к файловой шаре"),
+      close: (sock) =>
+        sockClose(sock, "SMB", "SMB соединение закрыто"),
+      error: (sock, err) => sockError(sock, "SMB", err),
+    },
+  });
+
+  console.info("🟢 SMB файловый сервис запущен");
+}
+
+async function nfsService() {
+  const env = loadEnv();
+
+  Bun.listen({
+    hostname: env.hostname,
+    port: env.nfsPort,
+    socket: {
+      open: (sock) =>
+        sockOpen(sock, "NFS", "NFSv4 File Server Ready\n"),
+      data: (sock, buf) =>
+        sockData(sock, buf, "NFS", "Операция с NFS хранилищем"),
+      close: (sock) =>
+        sockClose(sock, "NFS", "NFS соединение закрыто"),
+      error: (sock, err) => sockError(sock, "NFS", err),
+    },
+  });
+
+  console.info("🟢 NFS сервис запущен");
+}
+
+async function ftpService() {
+  const env = loadEnv();
+
+  Bun.listen({
+    hostname: env.hostname,
+    port: env.ftpPort,
+    socket: {
+      open: (sock) =>
+        sockOpen(sock, "FTP", "220 File Server FTP Ready\r\n"),
+      data: (sock, buf) =>
+        sockData(sock, buf, "FTP", "FTP команда получена"),
+      close: (sock) =>
+        sockClose(sock, "FTP", "FTP соединение закрыто"),
+      error: (sock, err) => sockError(sock, "FTP", err),
+    },
+  });
+
+  console.info("🟢 FTP сервис запущен");
+}
+
+async function startOutboundTraffic() {
+  const env = loadEnv();
+  const cfg = loadCfg();
+
+  setInterval(async () => {
+    try {
+      await fetch(`http://${env.target_hostname}:${env.target_port}`);
+      console.log("📡 Файловый сервер отправил heartbeat");
+    } catch {
+      console.log("⚠️ Не удалось отправить heartbeat");
+    }
+  }, cfg.behavior.interval_ms);
+}
+
+async function serverRun() {
   await Promise.all([
-
-    fileService(
-      env.host,
-      env.httpPort,
-      env.target,
-      env.interval,
-    ),
-
-    sshService(
-      env.host,
-      env.sshPort,
-    ),
-
+    sshService(),
+    smbService(),
+    nfsService(),
+    ftpService(),
+    startOutboundTraffic(),
   ]);
-
 }
 
 serverRun()
   .then(() => {
-
-    console.info(
-      "🚀 File processing сервер запущен!",
-    );
-
+    console.info("🚀 Файловый сервер запущен!");
   })
-  .catch((error: unknown) => {
-
-    console.error(
-      "💥 File processing сервер завершился:",
-      error,
-    );
-
+  .catch((err) => {
+    console.error("💥 Ошибка запуска файлового сервера:", err);
     process.exit(1);
-
   });

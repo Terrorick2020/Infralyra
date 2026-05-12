@@ -1,0 +1,77 @@
+.profile-page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  align-items: center;
+
+  .btn {
+    height: 60px;
+    transition: transform 0.2s ease;
+
+    &:active {
+        transform: scale(0.98);
+    }
+  }
+
+  .top {
+    width: 100%;
+    height: 70%;
+    display: flex;
+    justify-content: space-between;
+    align-items: safe center;
+
+    &__img {
+      width: 30%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: safe center;
+
+      .ico {
+        width: 75%;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        background: #f3b56d;
+        padding: 35px;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    &__ctx {
+      width: 70%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: safe center;
+      align-items: flex-start;
+      gap: 1rem;
+
+    }
+  }
+
+  .bottom {
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: safe center;
+
+    .btn {
+        width: 30%;
+
+        &:first-of-type {
+            background: #e53170;
+        }
+
+        &:last-of-type {
+            background: rgb(50, 170, 112);
+        }
+    }
+  }
+}

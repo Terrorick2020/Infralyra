@@ -28,6 +28,8 @@ func GetPacketsInfo(iface string, payloadLimit int) (<-chan PacketInfo, error) {
 		for pkt := range packetSource.Packets() {
 			var pi PacketInfo
 
+			pi.Timestamp = pkt.Metadata().Timestamp.UnixMilli()
+
 			if eth := pkt.Layer(layers.LayerTypeEthernet); eth != nil {
 				e := eth.(*layers.Ethernet)
 				pi.Ethernet.SrcMAC = e.SrcMAC.String()

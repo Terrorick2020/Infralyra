@@ -1,6 +1,22 @@
 /* [project]/src/widgets/MainNav/ui/MainNav.module.scss.module.css [app-client] (css) */
 .MainNav-module-scss-module__taZiCq__nav {
   background: #0f0e17;
+  justify-content: space-between;
+  align-items: safe center;
+  width: 100%;
+  height: 100%;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  display: flex;
+}
+
+.MainNav-module-scss-module__taZiCq__nav .MainNav-module-scss-module__taZiCq__logo {
+  cursor: pointer;
+  width: auto;
+  height: 100%;
+}
+
+.MainNav-module-scss-module__taZiCq__nav .MainNav-module-scss-module__taZiCq__logo img {
   width: 100%;
   height: 100%;
 }
@@ -13,6 +29,36 @@
   height: 100%;
   list-style: none;
   display: flex;
+}
+
+.MainNav-module-scss-module__taZiCq__nav .MainNav-module-scss-module__taZiCq__list .MainNav-module-scss-module__taZiCq__item a {
+  font-size: max(1.125rem, min(1.075rem + .25vw, 1.375rem));
+  text-decoration: none;
+}
+
+.MainNav-module-scss-module__taZiCq__nav .MainNav-module-scss-module__taZiCq__list .MainNav-module-scss-module__taZiCq__item a.MainNav-module-scss-module__taZiCq__active {
+  color: #f25f4c;
+}
+
+.MainNav-module-scss-module__taZiCq__nav .MainNav-module-scss-module__taZiCq__profile {
+  justify-content: center;
+  align-items: safe center;
+  width: 50px;
+  height: 50px;
+  display: flex;
+}
+
+.MainNav-module-scss-module__taZiCq__nav .MainNav-module-scss-module__taZiCq__profile a {
+  background: var(--app-bg-color);
+  border-radius: 25%;
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+}
+
+.MainNav-module-scss-module__taZiCq__nav .MainNav-module-scss-module__taZiCq__profile a img {
+  width: 100%;
+  height: 100%;
 }
 
 /*# sourceMappingURL=src_widgets_MainNav_ui_MainNav_module_scss_module_css_bad6b30c._.single.css.map*/

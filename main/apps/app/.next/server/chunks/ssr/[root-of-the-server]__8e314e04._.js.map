@@ -3,7 +3,7 @@
   "sources": [],
   "sections": [
     {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
-    {"offset": {"line": 23, "column": 0}, "map": {"version":3,"sources":["file:///home/anonymous/VsCode/Projects/Infralyra/apps/app/src/pages/Trafic/ui/Page.tsx"],"sourcesContent":["export function TraficPage() {\n    return (\n        <div></div>\n    )\n}\n"],"names":[],"mappings":";;;;;;AAAO,SAAS;IACZ,qBACI,8OAAC;;;;;AAET","debugId":null}},
-    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///home/anonymous/VsCode/Projects/Infralyra/apps/app/src/pages/Trafic/index.ts"],"sourcesContent":["export { TraficPage } from './ui/Page';\n"],"names":[],"mappings":";AAAA","debugId":null}},
-    {"offset": {"line": 47, "column": 0}, "map": {"version":3,"sources":["file:///home/anonymous/VsCode/Projects/Infralyra/apps/app/app/%28main%29/trafic/page.tsx"],"sourcesContent":["import { TraficPage } from '@/src/pages/Trafic';\nexport default TraficPage;\n"],"names":[],"mappings":";;;;AAAA;AAAA;;uCACe,mJAAU","debugId":null}}]
+    {"offset": {"line": 23, "column": 0}, "map": {"version":3,"sources":["file:///home/anonymous/VsCode/Projects/Infralyra/main/apps/app/src/pages/Trafic/ui/Page.tsx"],"sourcesContent":["import styles from \"./Page.module.scss\";\n\nexport function TraficPage() {\n    return (\n        <div>\n\n        </div>\n    )\n}\n"],"names":[],"mappings":";;;;;;AAEO,SAAS;IACZ,qBACI,8OAAC;;;;;AAIT","debugId":null}},
+    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///home/anonymous/VsCode/Projects/Infralyra/main/apps/app/src/pages/Trafic/index.ts"],"sourcesContent":["export { TraficPage } from './ui/Page';\n"],"names":[],"mappings":";AAAA","debugId":null}},
+    {"offset": {"line": 47, "column": 0}, "map": {"version":3,"sources":["file:///home/anonymous/VsCode/Projects/Infralyra/main/apps/app/app/%28main%29/trafic/page.tsx"],"sourcesContent":["import { TraficPage } from '@/src/pages/Trafic';\nexport default TraficPage;\n"],"names":[],"mappings":";;;;AAAA;AAAA;;uCACe,mJAAU","debugId":null}}]
 }

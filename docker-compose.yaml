@@ -100,7 +100,7 @@ services:
     networks:
       - planner_network
     ports:
-      - "6666:6666"
+      - "3000:3000"
     depends_on:
      - personal_computer
      - laptop

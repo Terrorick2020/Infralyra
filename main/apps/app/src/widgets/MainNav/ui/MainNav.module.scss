@@ -1,19 +1,62 @@
+@use "../../../shared/assets/scss/index.scss" as mixins;
+
 .nav {
+  width: 100%;
+  height: 100%;
+  background: #0f0e17;
+  display: flex;
+  justify-content: space-between;
+  align-items: safe center;
+  padding-inline: 1.5rem;
+
+  .logo {
+    height: 100%;
+    width: auto;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .list {
     width: 100%;
     height: 100%;
-    background: #0f0e17;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    list-style: none;
 
-    .list {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-evenly;
-        list-style: none;
+    .item a {
+        text-decoration: none;
+        @include mixins.fluidText(22, 18);
 
-        .item {
-
+        &.active {
+            color: #f25f4c;
         }
     }
+  }
+
+  .profile {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: safe center;
+
+    a {
+      width: 100%;
+      height: 100%;
+      border-radius: 25%;
+      background: var(--app-bg-color);
+      padding: 5px;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
 }

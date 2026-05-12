@@ -2,6 +2,7 @@ package scan
 
 import (
 	"net"
+	"strings"
 
 	"github.com/google/gopacket/pcap"
 )
@@ -42,9 +43,16 @@ func GetInterfacesList() ([]InterfaceInfo, error) {
 				ipAddr := IPAddress{
 					IP: addr.IP.String(),
 				}
+
 				if addr.Netmask != nil {
-					ipAddr.Netmask = addr.Netmask.String()
+					if addr.IP.To4() != nil {
+						ipAddr.Netmask = addr.Netmask.String()
+					} else {
+						ones, _ := addr.Netmask.Size()
+						ipAddr.Netmask = string(rune(ones + '0'))
+					}
 				}
+
 				if addr.Broadaddr != nil {
 					ipAddr.Broad = addr.Broadaddr.String()
 				}
@@ -105,14 +113,87 @@ func ParseFlags(f net.Flags) []string {
 }
 
 func DetectType(name string, f net.Flags) string {
-	if f&net.FlagLoopback != 0 {
+	n := strings.ToLower(name)
+
+	if f&net.FlagLoopback != 0 || n == "lo" || n == "loopback" || strings.HasPrefix(n, "lo:") {
 		return "loopback"
 	}
-	if name == "Ethernet" || name == "eth0" || name[:3] == "en" {
+
+	if strings.HasPrefix(n, "veth") || strings.HasPrefix(n, "lxcbr") {
+		return "veth"
+	}
+
+	if strings.Contains(strings.ToLower(n), "wireless") {
+		return "wireless"
+	}
+
+	if strings.HasPrefix(n, "docker") || strings.HasPrefix(n, "br-") ||
+		strings.HasPrefix(n, "virbr") || strings.HasPrefix(n, "br") ||
+		strings.Contains(n, "bridge") {
+		return "bridge"
+	}
+
+	if strings.HasPrefix(n, "tun") || strings.HasPrefix(n, "tap") ||
+		strings.HasPrefix(n, "utun") || strings.HasPrefix(n, "tap") {
+		return "tunnel"
+	}
+
+	if strings.HasPrefix(n, "wg") {
+		return "wireguard"
+	}
+
+	if strings.HasPrefix(n, "ipsec") || strings.HasPrefix(n, "vti") {
+		return "ipsec"
+	}
+
+	if strings.HasPrefix(n, "ppp") || strings.HasPrefix(n, "pptp") || strings.HasPrefix(n, "pppoe") {
+		return "ppp"
+	}
+
+	if strings.Contains(n, ".") || strings.HasPrefix(n, "vlan") {
+		if strings.Contains(n, ".") || (strings.HasPrefix(n, "vlan") && len(n) > 4) {
+			return "vlan"
+		}
+	}
+
+	if strings.HasPrefix(n, "bond") || strings.HasPrefix(n, "team") {
+		return "bond"
+	}
+
+	if strings.HasPrefix(n, "macvlan") || strings.HasPrefix(n, "macvtap") {
+		return "macvlan"
+	}
+
+	if strings.HasPrefix(n, "wlan") || strings.HasPrefix(n, "wlp") || strings.HasPrefix(n, "wlx") ||
+		strings.HasPrefix(n, "wi-fi") || strings.HasPrefix(n, "wireless") ||
+		strings.Contains(n, "802.11") {
+		return "wireless"
+	}
+
+	if strings.HasPrefix(n, "wwan") || strings.HasPrefix(n, "cdc-wdm") ||
+		strings.HasPrefix(n, "rmnet") || strings.HasPrefix(n, "ccmni") {
+		return "cellular"
+	}
+
+	if strings.HasPrefix(n, "bnep") || strings.HasPrefix(n, "bt-pan") {
+		return "bluetooth"
+	}
+
+	if strings.HasPrefix(n, "can") {
+		return "can"
+	}
+
+	if strings.HasPrefix(n, "dummy") {
+		return "dummy"
+	}
+
+	if strings.HasPrefix(n, "eth") || strings.HasPrefix(n, "enp") ||
+		strings.HasPrefix(n, "ens") || strings.HasPrefix(n, "eno") ||
+		strings.HasPrefix(n, "enx") || strings.HasPrefix(n, "ethernet") ||
+		strings.Contains(n, "local area connection") ||
+		(strings.HasPrefix(n, "en") && len(n) <= 4) {
 		return "ethernet"
 	}
-	if name == "Wi-Fi" || name[:2] == "wl" {
-		return "wifi"
-	}
+
 	return "unknown"
 }

@@ -1,0 +1,45 @@
+/* [project]/src/pages/Interfaces/ui/Page.module.scss.module.css [app-client] (css) */
+.Page-module-scss-module__0_GzWG__interfaces-page {
+  justify-content: center;
+  align-items: safe center;
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+  display: flex;
+  overflow: auto;
+}
+
+.Page-module-scss-module__0_GzWG__interfaces-page .Page-module-scss-module__0_GzWG__box {
+  border: 2px solid #fffffe;
+  border-radius: 15px;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 1rem;
+  width: auto;
+  height: auto;
+  padding: 1.5rem;
+  display: flex;
+}
+
+.Page-module-scss-module__0_GzWG__interfaces-page .Page-module-scss-module__0_GzWG__box .Page-module-scss-module__0_GzWG__box__item {
+  cursor: pointer;
+  color: #fffffe;
+  border: 1px solid #fffffe;
+  border-radius: 10px;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  transition: transform .2s;
+  display: flex;
+}
+
+.Page-module-scss-module__0_GzWG__interfaces-page .Page-module-scss-module__0_GzWG__box .Page-module-scss-module__0_GzWG__box__item:active {
+  transform: scale(.95);
+}
+
+.Page-module-scss-module__0_GzWG__interfaces-page .Page-module-scss-module__0_GzWG__box .Page-module-scss-module__0_GzWG__box__item mark {
+  color: #f25f4c;
+  background: none;
+}
+
+/*# sourceMappingURL=src_pages_Interfaces_ui_Page_module_scss_module_2bf6abfc.css.map*/

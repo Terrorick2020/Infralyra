@@ -1,0 +1,42 @@
+.interfaces-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: safe center;
+    padding: 3rem;
+    overflow: auto;
+
+    .box {
+        width: auto;
+        height: auto;
+        border: 2px solid #fffffe;
+        padding: 1.5rem;
+        border-radius: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: space-evenly;
+
+        .box__item {
+            border: 1px solid #fffffe;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 10px;
+            transition: transform 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            color: #fffffe;
+
+            &:active {
+                transform: scale(0.95);
+            }
+
+            mark {
+                color: #f25f4c;
+                background: transparent;
+            }
+        }
+    }
+}

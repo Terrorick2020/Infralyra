@@ -1,7 +1,7 @@
 device:
-  device_id: "mobile-device-01"
+  device_id: "mobile-phone-01"
   device_type: "smartphone"
-  hostname: "ANDROID-DEVICE-01"
+  hostname: "mobile-phone-01"
   mac_address: "02:11:22:33:44:55"
   serial_number: "UNKNOWN"
   model: "Samsung Galaxy S23"

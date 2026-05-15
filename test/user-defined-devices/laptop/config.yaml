@@ -1,7 +1,7 @@
 device:
   device_id: "laptop-01"
   device_type: "laptop"
-  hostname: "LAPTOP-01"
+  hostname: "laptop-01"
   mac_address: "02:42:ac:31:01:14"
   serial_number: "UNKNOWN"
   model: "unknown"

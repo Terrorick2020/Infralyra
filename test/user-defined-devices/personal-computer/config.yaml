@@ -1,7 +1,7 @@
 device:
   device_id: "personal-computer-01"
   device_type: "personal-computer"
-  hostname: "PERSONAL_COMPUTER-UBUNTU-01"
+  hostname: "personal-computer-01"
   mac_address: "08:00:27:ab:cd:ef"
   serial_number: "UNKNOWN"
   model: "unknown"

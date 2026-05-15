@@ -15,6 +15,7 @@ export interface ICfgDevice {
   device_type: string;
   mac: string;
   firmware: string;
+  hostname: string;
 }
 
 export interface ICfgBehavior {

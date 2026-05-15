@@ -1,6 +1,7 @@
 device:
   device_id: "printer-01"
   device_type: "printer"
+  hostname: "printer-01"
   mac: "02:42:ac:11:00:10"
   firmware: "1.0.3"
 

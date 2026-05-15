@@ -1,7 +1,7 @@
 device:
   device_id: "iot-signal-sensor-01"
-  device_type: "iot_sensor"
-  hostname: "IOT-SENSOR-01"
+  device_type: "iot-sensor"
+  hostname: "iot-signal-sensor-01"
   mac_address: "00:1A:7D:DA:71:13"
   serial_number: "SN-IS-784512"
   model: "Smart Signal Transmission Sensor X1"

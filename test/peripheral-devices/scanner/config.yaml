@@ -1,6 +1,7 @@
 device:
   device_id: "scanner-01"
-  device_type: "printer"
+  device_type: "scanner"
+  hostname: "scanner-01"
   mac: "02:42:ac:12:00:11"
   firmware: "1.1.5"
 

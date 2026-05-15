@@ -28,7 +28,7 @@ const MOCK_DEVICES = [
             ip: "192.168.1.10",
             mac: "00:1A:2B:3C:4D:10",
             alive: true,
-            hostname: "ubuntu-pc",
+            hostname: "personal-computer-01",
             os: "Ubuntu 22.04",
             osTtl: 64,
             osMethod: "TCP SYN",
@@ -96,8 +96,8 @@ const MOCK_DEVICES = [
             ip: "192.168.1.11",
             mac: "00:1A:2B:3C:4D:11",
             alive: true,
-            hostname: "win-laptop",
-            os: "Windows 11",
+            hostname: "laptop-01",
+            os: "Windows 11/10",
             osTtl: 128,
             osMethod: "ICMP Echo",
             services: [
@@ -157,7 +157,7 @@ const MOCK_DEVICES = [
             ip: "192.168.1.20",
             mac: "AA:BB:CC:DD:EE:01",
             alive: true,
-            hostname: "android-phone",
+            hostname: "mobile-phone-01",
             os: "Android 14",
             osTtl: 64,
             osMethod: "ICMP",
@@ -204,13 +204,12 @@ const MOCK_DEVICES = [
             ])
         }
     },
-    // 4. IoT sensor
     {
         device: {
             ip: "192.168.1.30",
             mac: "AA:BB:CC:DD:EE:02",
             alive: true,
-            hostname: "iot-sensor-01",
+            hostname: "iot-signal-sensor-01",
             os: "RTOS",
             osTtl: 255,
             osMethod: "ARP",
@@ -271,7 +270,7 @@ const MOCK_DEVICES = [
             ip: "192.168.1.40",
             mac: "DE:AD:BE:EF:00:01",
             alive: true,
-            hostname: "printer-office",
+            hostname: "printer-01",
             os: "Embedded Linux",
             osTtl: 255,
             osMethod: "SNMP",
@@ -333,13 +332,12 @@ const MOCK_DEVICES = [
             ])
         }
     },
-    // 6. Network scanner
     {
         device: {
             ip: "192.168.1.41",
             mac: "DE:AD:BE:EF:00:02",
             alive: true,
-            hostname: "scanner-office",
+            hostname: "scanner-01",
             os: "Embedded Linux",
             osTtl: 255,
             osMethod: "SNMP",
@@ -400,7 +398,7 @@ const MOCK_DEVICES = [
             ip: "192.168.1.50",
             mac: "00:AA:BB:CC:DD:50",
             alive: true,
-            hostname: "file-server",
+            hostname: "file-server-01",
             os: "Ubuntu Server 22.04",
             osTtl: 64,
             osMethod: "TCP SYN",
@@ -475,7 +473,7 @@ const MOCK_DEVICES = [
             ip: "192.168.1.60",
             mac: "00:AA:BB:CC:DD:60",
             alive: true,
-            hostname: "web-server",
+            hostname: "web-server-01",
             os: "Debian 12",
             osTtl: 64,
             osMethod: "TCP SYN",
@@ -543,7 +541,7 @@ const MOCK_DEVICES = [
             ip: "192.168.1.70",
             mac: "00:AA:BB:CC:DD:70",
             alive: true,
-            hostname: "vpn-server",
+            hostname: "remote-access-server-01",
             os: "Debian 12",
             osTtl: 64,
             osMethod: "TCP SYN",

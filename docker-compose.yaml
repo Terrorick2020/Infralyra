@@ -100,7 +100,7 @@ services:
     networks:
       - planner_network
     ports:
-      - "3000:3000"
+      - "${TARGET_PORT}:${TARGET_PORT}"
     depends_on:
      - personal_computer
      - laptop

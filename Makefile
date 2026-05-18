@@ -23,7 +23,8 @@ generate: utils
 	$(call create_env,$(MODE),$(OS_NAME))
 	$(call generate_env,$(MODE),$(OS_NAME))
 	@echo "🛠️  Создание и генерация сертификатов секретности..."
-	$(call create_generate_ssl,$(MODE),$(OS_NAME))
+	$(call create_ssl,$(MODE),$(OS_NAME))
+	$(call generate_ssl,$(MODE),$(OS_NAME))
 
 run: generate
 	@echo "✨ Запуск системы"

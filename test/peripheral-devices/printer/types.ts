@@ -1,6 +1,6 @@
 export interface IEnv {
   hostname: string;
-  port: number;
+  periph_port: number;
   target_hostname: string;
   target_port: number;
 }

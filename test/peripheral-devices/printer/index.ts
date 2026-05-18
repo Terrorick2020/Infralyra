@@ -9,20 +9,20 @@ let PER_CFG: ICfg | undefined = undefined;
 function loadEnv(): IEnv {
   if (!PER_ENV) {
     const hostname = process.env.HOSTNAME;
-    const port = Number(process.env.PORT);
+    const periph_port = Number(process.env.PORT);
     const target_hostname = process.env.TARGET_HOSTNAME;
     const target_port = Number(process.env.TARGET_PORT);
 
     if (
       !hostname ||
       !target_hostname ||
-      Number.isNaN(port) ||
+      Number.isNaN(periph_port) ||
       Number.isNaN(target_port)
     ) {
       throw new Error("🛑 Нет каких-то переменных среды для принтера!");
     }
 
-    PER_ENV = { hostname, port, target_hostname, target_port };
+    PER_ENV = { hostname, periph_port, target_hostname, target_port };
   }
 
   return PER_ENV;
@@ -154,7 +154,7 @@ async function serverRun(): Promise<void> {
 
   await Bun.listen({
     hostname: env.hostname,
-    port: env.port,
+    port: env.periph_port,
     socket: {
       open: (sock) => sockOpen(sock),
       data: (sock, data) => sockData(sock, data),

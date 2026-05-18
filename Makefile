@@ -8,31 +8,31 @@ OS_NAME ?= unknown
 utils:
 	@echo "✨ Подготовка системы"
 	@echo "🛠️  Проверка валидности параметров..."
-	$(eval $(call validate_mode,$(MODE)))
-	$(eval $(call validate_os,$(OS_NAME)))
+	$(call validate_mode,$(MODE))
+	$(call validate_os,$(OS_NAME))
 	@echo "🛠️  Определение опрерационной системы..."
-	$(eval $(call detect_os, $(OS_NAME)))
+	$(call detect_os, $(OS_NAME))
 	@echo "🛠️  Проверка и установка необходимых зависимотей..."
-	$(eval $(call check_docker, $(OS_NAME)))
-	$(eval $(call check_docker_compose, $(OS_NAME)))
-	$(eval $(call check_openssl, $(OS_NAME)))
+	$(call check_docker, $(OS_NAME))
+	$(call check_docker_compose, $(OS_NAME))
+	$(call check_openssl, $(OS_NAME))
 
 generate: utils
 	@echo "✨ Подготовка среды системы"
 	@echo "🛠️  Создание и генерация переменных сред..."
-	$(eval $(call create_env,$(MODE),$(OS_NAME)))
-	$(eval $(call generate_env,$(MODE),$(OS_NAME)))
+	$(call create_env,$(MODE),$(OS_NAME))
+	$(call generate_env,$(MODE),$(OS_NAME))
 	@echo "🛠️  Создание и генерация сертификатов секретности..."
-	$(eval $(call create_generate_ssl,$(MODE),$(OS_NAME)))
+	$(call create_generate_ssl,$(MODE),$(OS_NAME))
 
 run: generate
 	@echo "✨ Запуск системы"
-	$(eval $(call run_compose,$(MODE)))
+	$(call run_compose,$(MODE))
 
 stop:
 	@echo "✨ Остановка системы"
-	$(eval $(call sys_stop,$(MODE)))
+	$(call sys_stop,$(MODE))
 
 clean:
 	@echo "✨ Очистка устройства от зависимостей системы"
-	$(eval $(call sys_clean,$(MODE)))
+	$(call sys_clean,$(MODE))

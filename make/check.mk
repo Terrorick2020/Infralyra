@@ -1,6 +1,15 @@
 VALID_MODES := dev test prod
 VALID_OSES := windows macos debian arch linux unknown
 
+ERR_DOCKER_DOWNLOAD := ⚠️  Внимание: не удалось скачать установщик Docker\, остановка программы
+ERR_DOCKER_INSTALL := ⚠️  Внимание: не удалось установить Docker\, остановка программы
+ERR_DOCKER_START := ⚠️  Внимание: не удалось запустить Docker service\, остановка программы
+ERR_CURL_MISSING := ⚠️  Внимание: curl не установлен. Установка невозможна\, остановка программы
+ERR_BREW_MISSING := Homebrew не установлен. Установка невозможна\, остановка программы
+ERR_APT_MISSING := ⚠️  Внимание: не удалось установить пакет через apt. Проверьте интернет и sudo\, остановка программы
+ERR_PACMAN_MISSING := ⚠️  Внимание: не удалось установить пакет через pacman\, остановка программы
+ERR_OS_UNKNOWN := ⚠️  Внимание: неизвестная ОС: $(_CURRENT_OS). Автоматическая установка не поддерживается\, остановка программы
+
 define validate_mode
 	$(eval _MODE_CHECK := $(strip $1))
 	$(if $(filter $(_MODE_CHECK),$(VALID_MODES)),\
@@ -37,7 +46,7 @@ define detect_os
 		)\
 		$(if $(filter MINGW% MSYS% CYGWIN% Windows_NT,$(_UNAME)),\
 			$(eval OS_NAME := windows),\
-			$(warning ⚠️ Внимание: Не удалось определить операционную систему или она недопустима, остановка системы.)\
+			$(warning ⚠️ Внимание: ⚠️  Внимание: не удалось определить операционную систему или она недопустима, остановка системы.)\
 			$(eval OS_NAME := unknown)\
 			$(error Определение ОС завершилось ошибкой)\
 		)\
@@ -49,190 +58,103 @@ endef
 define check_docker
 	$(eval _CURRENT_OS := $(strip $1))
 	$(if $(filter $(_CURRENT_OS),windows),\
-		$(if $(shell command -v docker >/dev/null 2>&1; echo $$?),\
-			$(if $(shell command -v curl >/dev/null 2>&1; echo $$?),\
-				@curl -L -o DockerDesktopInstaller.exe "https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe" || \
-				{ \
-					$(warning ⚠️  Внимание: Не удалось скачать установщик Docker, остановка программы) \
-					exit 1; \
-				} \
-				@./DockerDesktopInstaller.exe || \
-				{ \
-					$(warning ⚠️  Внимание: Установка Docker Desktop не удалась, остановка программы) \
-					rm -f DockerDesktopInstaller.exe; \
-					exit 1; \
-				} \
-				@rm -f DockerDesktopInstaller.exe;\
-				$(warning ⚠️  Внимание: curl не установлен. Для установки Docker Desktop потребуется ручное подтверждение в графическом интерфейсе, остановка программы) \
-				exit 1\
-			),\
-		),\
-		$(if $(filter $(_CURRENT_OS),macos),\
-			$(if $(shell command -v docker >/dev/null 2>&1; echo $$?),\
-				$(if $(shell command -v brew >/dev/null 2>&1; echo $$?),\
-					@brew install --cask docker || \
-					{ \
-						$(warning ⚠️  Внимание: Не удалось установить Docker через Homebrew, остановка программы) \
-						exit 1; \
-					},\
-					$(warning ⚠️  Внимание: Homebrew не установлен. Установка Docker Desktop невозможна, остановка программы) \
-					exit 1\
-				),\
-			),\
-			$(if $(filter $(_CURRENT_OS),debian),\
-				$(if $(shell command -v docker >/dev/null 2>&1; echo $$?),\
-					@sudo apt-get update && \
-					sudo apt-get install -y docker.io || \
-					{ \
-						$(warning ⚠️  Внимание: Не удалось установить Docker. Проверьте подключение к интернету и права sudo, остановка программы) \
-						exit 1; \
-					},\
-				),\
-				$(if $(filter $(_CURRENT_OS),arch),\
-					$(if $(filter 1,$(shell command -v docker >/dev/null 2>&1; echo $$?)),\
-						@sudo pacman -Sy --needed docker || \
-						{ \
-							$(warning ⚠️  Внимание: Не удалось установить Docker, остановка программы); \
-							exit 1; \
-						} ; \
-						@sudo systemctl enable docker.service && \
-						sudo systemctl start docker.service || \
-						{ \
-							$(warning ⚠️  Внимание: Не удалось запустить Docker service, остановка программы); \
-							exit 1; \
-						}\
-					),\
-					$(if $(filter $(_CURRENT_OS),linux),\
-						$(warning ⚠️  Внимание: Для Linux рекомендуется указать конкретный дистрибутив (debian, arch и т. д.). Автоматическая установка не выполняется, остановка программы); \
-						exit 1,\
-						$(warning ⚠️  Внимание: Неизвестная ОС: $(_CURRENT_OS). Автоматическая установка Docker не поддерживается, остановка программы); \
-						exit 1;\
-					)\
-				)\
+		$(if $(shell command -v docker.exe >/dev/null 2>&1),,\
+			$(if $(shell command -v curl >/dev/null 2>&1),,\
+				@curl -L -o DockerDesktopInstaller.exe "https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe" && \
+				./DockerDesktopInstaller.exe && \
+				rm -f DockerDesktopInstaller.exe || \
+				{ echo "$(ERR_DOCKER_INSTALL)" >&2; exit 1; }\
 			)\
-		)\
-	)
+		),\
+	$(if $(filter $(_CURRENT_OS),macos),\
+		$(if $(shell command -v docker >/dev/null 2>&1),,\
+			$(if $(shell command -v brew >/dev/null 2>&1),,\
+				@brew install --cask docker || { echo "$(ERR_DOCKER_INSTALL)" >&2; exit 1; }\
+			)\
+		),\
+	$(if $(filter $(_CURRENT_OS),debian),\
+		$(if $(shell command -v docker >/dev/null 2>&1),,\
+			@sudo apt-get update && \
+			sudo apt-get install -y docker.io || \
+			{ echo "$(ERR_APT_MISSING)" >&2; exit 1; }\
+		),\
+	$(if $(filter $(_CURRENT_OS),arch),\
+		$(if $(shell command -v docker >/dev/null 2>&1),,\
+			@sudo pacman -Sy --needed docker || \
+			{ echo "$(ERR_PACMAN_MISSING)" >&2; exit 1; } ; \
+			sudo systemctl enable docker.service && \
+			sudo systemctl start docker.service || \
+			{ echo "$(ERR_DOCKER_START)" >&2; exit 1; }\
+		),\
+	$(if $(filter $(_CURRENT_OS),linux),\
+		@echo "$(ERR_OS_UNKNOWN)" >&2; exit 1,\
+		@echo "⚠️  Внимание: неизвестная ОС: $(_CURRENT_OS)" >&2; exit 1\
+	)))))
 endef
 
 define check_docker_compose
 	$(eval _CURRENT_OS := $(strip $1))
 	$(if $(filter $(_CURRENT_OS),windows),\
-		$(if $(shell command -v docker-compose >/dev/null 2>&1; echo $$?),\
-			$(if $(shell command -v curl >/dev/null 2>&1; echo $$?),\
-				@echo "Скачивание docker-compose для Windows..." >&2\
-				@curl -L -o docker-compose.exe "https://github.com/docker/compose/releases/latest/download/docker-compose-Windows-x86_64.exe" || \
-				{ \
-					$(warning ⚠️ Внимание: Не удалось скачать docker-compose, остановка программы) \
-					exit 1; \
-				} \
-				@chmod +x docker-compose.exe || \
-				{ \
-					$(warning ⚠️ Внимание: Не удалось установить права выполнения для docker-compose, остановка программы) \
-					exit 1; \
-				},\
-				$(warning ⚠️ Внимание: curl не установлен. Автоматическая установка docker-compose невозможна, остановка программы) \
-				exit 1 \
-			),\
-		),\
-		$(if $(filter $(_CURRENT_OS),macos),\
-			$(if $(shell command -v docker-compose >/dev/null 2>&1; echo $$?),\
-				$(if $(shell command -v brew >/dev/null 2>&1; echo $$?),\
-					@brew install docker-compose || \
-					{ \
-						$(warning ⚠️ Внимание: Не удалось установить docker-compose через Homebrew, остановка программы) \
-						exit 1; \
-					},\
-					$(warning ⚠️ Внимание: Homebrew не установлен. Установка docker-compose невозможна, остановка программы) \
-					exit 1\
-				),\
-			),\
-			$(if $(filter $(_CURRENT_OS),debian),\
-				$(if $(shell command -v docker-compose >/dev/null 2>&1; echo $$?),\
-					@sudo apt-get update && \
-					sudo apt-get install -y docker-compose || \
-					{ \
-						$(warning ⚠️ Внимание: Не удалось установить docker-compose. Проверьте подключение к интернету и права sudo, остановка программы) \
-						exit 1; \
-					},\
-				),\
-				$(if $(filter $(_CURRENT_OS),arch),\
-					$(if $(shell command -v docker-compose >/dev/null 2>&1; echo $$?),\
-						@sudo pacman -Sy --needed docker-compose || \
-						{ \
-							$(warning ⚠️ Внимание: Не удалось установить docker-compose, остановка программы) \
-							exit 1; \
-						},\
-					),\
-					$(if $(filter $(_CURRENT_OS),linux),\
-						$(warning ⚠️ Внимание: Для Linux рекомендуется указать конкретный дистрибутив (debian, arch и т. д.). Автоматическая установка не выполняется, остановка программы) \
-						exit 1, \
-						$(warning ⚠️ Внимание: Неизвестная ОС: $(_CURRENT_OS). Автоматическая установка docker-compose не поддерживается, остановка программы) \
-						exit 1; \
-					)\
-				)\
+		$(if $(shell command -v docker-compose.exe >/dev/null 2>&1),,\
+			$(if $(shell command -v curl >/dev/null 2>&1),,\
+				@curl -L -o docker-compose.exe "https://github.com/docker/compose/releases/latest/download/docker-compose-Windows-x86_64.exe" && \
+				chmod +x docker-compose.exe || \
+				{ echo "⚠️  Внимание: не удалось установить docker compose\, остановка программы" >&2; exit 1; }\
 			)\
-		)\
-	)
+		),\
+	$(if $(filter $(_CURRENT_OS),macos),\
+		$(if $(shell command -v docker compose >/dev/null 2>&1),,\
+			$(if $(shell command -v brew >/dev/null 2>&1),,\
+				@brew install docker-compose || { echo "$(ERR_BREW_MISSING)" >&2; exit 1; }\
+			)\
+		),\
+	$(if $(filter $(_CURRENT_OS),debian),\
+		$(if $(shell command -v docker compose >/dev/null 2>&1),,\
+			@sudo apt-get update && \
+			sudo apt-get install -y docker-compose || \
+			{ echo "$(ERR_APT_MISSING)" >&2; exit 1; }\
+		),\
+	$(if $(filter $(_CURRENT_OS),arch),\
+		$(if $(shell command -v docker compose >/dev/null 2>&1),,\
+			@sudo pacman -Sy --needed docker-compose || \
+			{ echo "$(ERR_PACMAN_MISSING)" >&2; exit 1; }\
+		),\
+	$(if $(filter $(_CURRENT_OS),linux),\
+		@echo "Для укажите дистрибутив (debian/arch)" >&2; exit 1,\
+		@echo "⚠️  Внимание: неизвестная ОС: $(_CURRENT_OS)" >&2; exit 1\
+	)))))
 endef
 
 define check_openssl
 	$(eval _CURRENT_OS := $(strip $1))
 	$(if $(filter $(_CURRENT_OS),windows),\
-		$(if $(shell command -v openssl >/dev/null 2>&1; echo $$?),\
-			$(if $(shell command -v choco >/dev/null 2>&1; echo $$?),\
-				@choco install openssl || \
-				{ \
-					$(warning ⚠️ Внимание: Не удалось установить OpenSSL через Chocolatey, остановка программы) \
-					exit 1; \
-				},\
-				$(if $(shell command -v scoop >/dev/null 2>&1; echo $$?),\
-					@scoop install openssl || \
-					{ \
-						$(warning ⚠️ Внимание: Не удалось установить OpenSSL через Scoop, остановка программы) \
-						exit 1; \
-					},\
-					$(warning ⚠️ Внимание: OpenSSL не установлен. Для установки используйте Chocolatey (choco install openssl) или Scoop (scoop install openssl), остановка программы) \
-					exit 1\
-				)\
-			),\
+		$(if $(shell command -v openssl.exe >/dev/null 2>&1),,\
+			$(if $(shell command -v choco >/dev/null 2>&1),,\
+				@choco install -y openssl || { echo "⚠️  Внимание: не удалось установить OpenSSL через choco" >&2; exit 1; },\
+			$(if $(shell command -v scoop >/dev/null 2>&1),,\
+				@scoop install openssl || { echo "⚠️  Внимание: не удалось установить OpenSSL через scoop" >&2; exit 1; },\
+				@echo "Установите OpenSSL вручную (choco/scoop)" >&2; exit 1\
+			))\
 		),\
-		$(if $(filter $(_CURRENT_OS),macos),\
-			$(if $(shell command -v openssl >/dev/null 2>&1; echo $$?),\
-				$(if $(shell command -v brew >/dev/null 2>&1; echo $$?),\
-					@brew install openssl || \
-					{ \
-						$(warning ⚠️ Внимание: Не удалось установить OpenSSL через Homebrew, остановка программы) \
-						exit 1; \
-					},\
-					$(warning ⚠️ Внимание: Homebrew не установлен. Установка OpenSSL невозможна, остановка программы) \
-					exit 1\
-				),\
-			),\
-			$(if $(filter $(_CURRENT_OS),debian),\
-				$(if $(shell command -v openssl >/dev/null 2>&1; echo $$?),\
-					@sudo apt-get update && \
-					sudo apt-get install -y openssl || \
-					{ \
-						$(warning ⚠️ Внимание: Не удалось установить OpenSSL. Проверьте подключение к интернету и права sudo, остановка программы) \
-						exit 1; \
-					},\
-				),\
-				$(if $(filter $(_CURRENT_OS),arch),\
-					$(if $(shell command -v openssl >/dev/null 2>&1; echo $$?),\
-						@sudo pacman -Sy --needed openssl || \
-						{ \
-							$(warning ⚠️ Внимание: Не удалось установить OpenSSL, остановка программы) \
-							exit 1; \
-						},\
-					),\
-					$(if $(filter $(_CURRENT_OS),linux),\
-						$(warning ⚠️ Внимание: Для Linux рекомендуется указать конкретный дистрибутив (debian, arch и т. д.). Автоматическая установка не выполняется, остановка программы) \
-						exit 1, \
-						$(warning ⚠️ Внимание: Неизвестная ОС. Автоматическая установка OpenSSL не поддерживается, остановка программы) \
-						exit 1; \
-					)\
-				)\
+	$(if $(filter $(_CURRENT_OS),macos),\
+		$(if $(shell command -v openssl >/dev/null 2>&1),,\
+			$(if $(shell command -v brew >/dev/null 2>&1),,\
+				@brew install openssl || { echo "$(ERR_BREW_MISSING)" >&2; exit 1; }\
 			)\
-		)\
-	)
+		),\
+	$(if $(filter $(_CURRENT_OS),debian),\
+		$(if $(shell command -v openssl >/dev/null 2>&1),,\
+			@sudo apt-get update && \
+			sudo apt-get install -y openssl || \
+			{ echo "$(ERR_APT_MISSING)" >&2; exit 1; }\
+		),\
+	$(if $(filter $(_CURRENT_OS),arch),\
+		$(if $(shell command -v openssl >/dev/null 2>&1),,\
+			@sudo pacman -Sy --needed openssl || \
+			{ echo "$(ERR_PACMAN_MISSING)" >&2; exit 1; }\
+		),\
+	$(if $(filter $(_CURRENT_OS),linux),\
+		@echo "Укажите дистрибутив для установки OpenSSL" >&2; exit 1,\
+		@echo "⚠️  Внимание: неизвестная ОС для OpenSSL: $(_CURRENT_OS)" >&2; exit 1\
+	)))))
 endef

@@ -11,11 +11,11 @@ settings:
 	@echo "🛠️  Проверка валидности параметров..."
 	$(call validate_mode,$(MODE))
 	$(call validate_os,$(OS_NAME))
+	@echo "🛠️  Определение опрерационной системы..."
+	$(call detect_os, $(OS_NAME))
 
 utils: settings
 	@echo "✨ Подготовка сервисов системы"
-	@echo "🛠️  Определение опрерационной системы..."
-	$(call detect_os, $(OS_NAME))
 	@echo "🛠️  Проверка и установка необходимых зависимотей..."
 	$(call check_docker, $(OS_NAME))
 	$(call check_docker_compose, $(OS_NAME))

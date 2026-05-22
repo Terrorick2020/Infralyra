@@ -2,20 +2,20 @@ BASE_ENV_PATHES := ./main ./main/apps/app ./main/apps/api
 BASE_SSL_PATHES := ./main/apps/nginx ./main/apps/app
 
 TEST_ENV_PATHES := ./ \
-	./test/user-defined-devices/personal-computer \
-	./test/user-defined-devices/laptop \
-	./test/user-defined-devices/mobile-phone \
-	./test/user-defined-devices/iot-device \
-	./test/peripheral-devices/printer \
-	./test/peripheral-devices/scanner \
-	./test/service-devices/file-server \
-	./test/service-devices/remote-access-server \
-	./test/service-devices/web-server
+ ./test/user-defined-devices/personal-computer \
+ ./test/user-defined-devices/laptop \
+ ./test/user-defined-devices/mobile-phone \
+ ./test/user-defined-devices/iot-device \
+ ./test/peripheral-devices/printer \
+ ./test/peripheral-devices/scanner \
+ ./test/service-devices/file-server \
+ ./test/service-devices/remote-access-server \
+ ./test/service-devices/web-server
 
 TEST_SSL_PATHES := ./test/service-devices/web-server \
-	./test/user-defined-devices/laptop \
-	./test/user-defined-devices/mobile-phone \
-	./test/user-defined-devices/personal-computer
+ ./test/user-defined-devices/laptop \
+ ./test/user-defined-devices/mobile-phone \
+ ./test/user-defined-devices/personal-computer
 
 HOSTNAME := 0.0.0.0
 TARGET_HOSTNAME := localhost
@@ -70,41 +70,26 @@ define create_env
 endef
 
 define generate_secret
-	$(eval _THIS_OS := $(strip $1))
-	$(if $(filter windows,$(_THIS_OS)),\
-		$(if $(shell where openssl 2>NUL),\
-			$(shell openssl rand -hex 16),\
-			$(DEFAULT_SECRET)\
-		),\
-		$(if $(shell command -v openssl 2>/dev/null),\
-			$(shell openssl rand -hex 16),\
-			$(DEFAULT_SECRET)\
-	)\
-)
+	$(strip $(if $(filter windows,$(strip $1)),\
+		$(if $(shell where openssl 2>NUL),$(shell openssl rand -hex 16),$(DEFAULT_SECRET)),\
+		$(if $(shell command -v openssl 2>/dev/null),$(shell openssl rand -hex 16),$(DEFAULT_SECRET))\
+	))
 endef
 
 define generate_password
-	$(eval _THIS_OS := $(strip $1))
-	$(if $(filter windows,$(_THIS_OS)),\
-		$(if $(shell where openssl 2>NUL),\
-			$(shell openssl rand -hex 4),\
-			$(DEFAULT_PASSWORD)\
-		),\
-		$(if $(shell command -v openssl 2>/dev/null),\
-			$(shell openssl rand -hex 4),\
-			$(DEFAULT_PASSWORD)\
-		)\
-	)
+	$(strip $(strip $(if $(filter windows,$(strip $1)),\
+		$(if $(shell where openssl 2>NUL),$(shell openssl rand -hex 4),$(DEFAULT_PASSWORD)),\
+		$(if $(shell command -v openssl 2>/dev/null),$(shell openssl rand -hex 4),$(DEFAULT_PASSWORD))\
+	)))
 endef
 
 define generate_env
 	$(eval _CURRENT_MODE := $(strip $1))
 	$(eval _CURRENT_OS := $(strip $2))
 	$(eval _ENV_PATHES := $(BASE_ENV_PATHES))
-	$(if $(filter test,$(_CURRENT_MODE)),\
-		$(eval _ENV_PATHES := $(BASE_ENV_PATHES) $(TEST_ENV_PATHES))\
-	)
+	$(if $(filter test,$(_CURRENT_MODE)),$(eval _ENV_PATHES := $(BASE_ENV_PATHES) $(TEST_ENV_PATHES)))
 
+	# Генерируем секреты заранее (один раз на весь цикл)
 	$(eval _GEN_SECRET := $(call generate_secret,$(_CURRENT_OS)))
 	$(eval _GEN_PSWD := $(call generate_password,$(_CURRENT_OS)))
 
@@ -147,51 +132,56 @@ define generate_env
 						.Replace('{{MODE}}', '$(_CURRENT_MODE)') \
 						.Replace('{{PSWD}}', '$(_GEN_PSWD)') \
 						.Replace('{{SECRET}}', '$(_GEN_SECRET)'); \
-					Set-Content -Path '$(p)\.env' -Value $$c"
+					Set-Content -Path '$(p)\.env' -Value $$c" &\
 			) &\
-		)\
-		,\
+		),\
 		$(if $(filter macos linux debian arch,$(_CURRENT_OS)),\
 			$(foreach p,$(_ENV_PATHES),\
-				if test -f "$(p)/.env.example"; then\
-					cp "$(p)/.env.example" "$(p)/.env" &&\
-					sed -i.bak\
-						-e 's|{{HOSTNAME}}|$(HOSTNAME)|g'\
-						-e 's|{{TARGET_HOSTNAME}}|$(TARGET_HOSTNAME)|g'\
-						-e 's|{{PERIPH_PORT}}|$(PERIPH_PORT)|g'\
-						-e 's|{{SMB_PORT}}|$(SMB_PORT)|g'\
-						-e 's|{{NFS_PORT}}|$(NFS_PORT)|g'\
-						-e 's|{{FTP_PORT}}|$(FTP_PORT)|g'\
-						-e 's|{{SSH_PORT}}|$(SSH_PORT)|g'\
-						-e 's|{{MQTT_PORT}}|$(MQTT_PORT)|g'\
-						-e 's|{{HTTP_PORT}}|$(HTTP_PORT)|g'\
-						-e 's|{{UDP_PORT}}|$(UDP_PORT)|g'\
-						-e 's|{{TELEMETRY_PORT}}|$(TELEMETRY_PORT)|g'\
-						-e 's|{{RPC_PORT}}|$(RPC_PORT)|g'\
-						-e 's|{{NETBIOS_PORT}}|$(NETBIOS_PORT)|g'\
-						-e 's|{{HTTPS_PORT}}|$(HTTPS_PORT)|g'\
-						-e 's|{{RDP_PORT}}|$(RDP_PORT)|g'\
-						-e 's|{{ADB_PORT}}|$(ADB_PORT)|g'\
-						-e 's|{{HTTP_MOB_PORT}}|$(HTTP_MOB_PORT)|g'\
-						-e 's|{{HTTPS_MOB_PORT}}|$(HTTPS_MOB_PORT)|g'\
-						-e 's|{{BINDER_PORT}}|$(BINDER_PORT)|g'\
-						-e 's|{{TELEPHONY_PORT}}|$(TELEPHONY_PORT)|g'\
-						-e 's|{{DOCKER_PORT}}|$(DOCKER_PORT)|g'\
-						-e 's|{{SYSLOG_PORT}}|$(SYSLOG_PORT)|g'\
-						-e 's|{{TARGET_PORT}}|$(TARGET_PORT)|g'\
-						-e 's|{{APP_PORT}}|$(APP_PORT)|g'\
-						-e 's|{{POSTGRES_DB}}|$(POSTGRES_DB)|g'\
-						-e 's|{{POSTGRES_USER}}|$(POSTGRES_USER)|g'\
-						-e 's|{{POSTGRES_DEFAULT_USER}}|$(POSTGRES_DEFAULT_USER)|g'\
-						-e 's|{{POSTGRES_DEFAULT_LOGIN}}|$(POSTGRES_DEFAULT_LOGIN)|g'\
-						-e 's|{{POSTGRES_DEFAULT_ROLE}}|$(POSTGRES_DEFAULT_ROLE)|g'\
-						-e 's|{{MODE}}|$(_CURRENT_MODE)|g'\
-						-e 's|{{PSWD}}|$(_GEN_PSWD)|g'\
-						-e 's|{{SECRET}}|$(_GEN_SECRET)|g'\
-						"$(p)/.env" && rm -f "$(p)/.env.bak";\
-				fi;\
-			)\
-			,\
+				if [ -f "$(p)/.env.example" ]; then \
+					echo "✅ Копирование $(p)/.env"; \
+					cp "$(p)/.env.example" "$(p)/.env" || { echo "❌ cp failed"; exit 1; }; \
+					echo "⚙️ Замена переменных..."; \
+					sed -i.bak \
+						-e "s|{{HOSTNAME}}|$(HOSTNAME)|g" \
+						-e "s|{{TARGET_HOSTNAME}}|$(TARGET_HOSTNAME)|g" \
+						-e "s|{{PERIPH_PORT}}|$(PERIPH_PORT)|g" \
+						-e "s|{{SMB_PORT}}|$(SMB_PORT)|g" \
+						-e "s|{{NFS_PORT}}|$(NFS_PORT)|g" \
+						-e "s|{{FTP_PORT}}|$(FTP_PORT)|g" \
+						-e "s|{{SSH_PORT}}|$(SSH_PORT)|g" \
+						-e "s|{{MQTT_PORT}}|$(MQTT_PORT)|g" \
+						-e "s|{{HTTP_PORT}}|$(HTTP_PORT)|g" \
+						-e "s|{{UDP_PORT}}|$(UDP_PORT)|g" \
+						-e "s|{{TELEMETRY_PORT}}|$(TELEMETRY_PORT)|g" \
+						-e "s|{{RPC_PORT}}|$(RPC_PORT)|g" \
+						-e "s|{{NETBIOS_PORT}}|$(NETBIOS_PORT)|g" \
+						-e "s|{{HTTPS_PORT}}|$(HTTPS_PORT)|g" \
+						-e "s|{{RDP_PORT}}|$(RDP_PORT)|g" \
+						-e "s|{{ADB_PORT}}|$(ADB_PORT)|g" \
+						-e "s|{{HTTP_MOB_PORT}}|$(HTTP_MOB_PORT)|g" \
+						-e "s|{{HTTPS_MOB_PORT}}|$(HTTPS_MOB_PORT)|g" \
+						-e "s|{{BINDER_PORT}}|$(BINDER_PORT)|g" \
+						-e "s|{{TELEPHONY_PORT}}|$(TELEPHONY_PORT)|g" \
+						-e "s|{{DOCKER_PORT}}|$(DOCKER_PORT)|g" \
+						-e "s|{{SYSLOG_PORT}}|$(SYSLOG_PORT)|g" \
+						-e "s|{{TARGET_PORT}}|$(TARGET_PORT)|g" \
+						-e "s|{{APP_PORT}}|$(APP_PORT)|g" \
+						-e "s|{{POSTGRES_DB}}|$(POSTGRES_DB)|g" \
+						-e "s|{{POSTGRES_USER}}|$(POSTGRES_USER)|g" \
+						-e "s|{{POSTGRES_DEFAULT_USER}}|$(POSTGRES_DEFAULT_USER)|g" \
+						-e "s|{{POSTGRES_DEFAULT_LOGIN}}|$(POSTGRES_DEFAULT_LOGIN)|g" \
+						-e "s|{{POSTGRES_DEFAULT_ROLE}}|$(POSTGRES_DEFAULT_ROLE)|g" \
+						-e "s|{{MODE}}|$(_CURRENT_MODE)|g" \
+						-e "s|{{PSWD}}|$(_GEN_PSWD)|g" \
+						-e "s|{{SECRET}}|$(_GEN_SECRET)|g" \
+						"$(p)/.env" || { echo "❌ sed failed в $(p)/.env"; exit 1; }; \
+					rm -f "$(p)/.env.bak"; \
+					echo "✅ Готово: $(p)/.env"; \
+				else \
+					echo "⚠️ Пропуск: не найден $(p)/.env.example"; \
+				fi; \
+			) \
+		,\
 			$(warning ⚠️ Неизвестная ОС. Невозможно сгенерировать .env файлы)\
 		)\
 	)
@@ -226,10 +216,10 @@ define generate_ssl
 		$(eval _SSL_PATHES := $(BASE_SSL_PATHES) $(TEST_SSL_PATHES))\
 	)
 
-	$(if $(filter windows,$(OS_NAME)),\
+	$(if $(filter windows,$(_CURRENT_OS)),\
 		$(foreach p,$(_SSL_PATHES), openssl req -x509 -newkey rsa:4096 -keyout "$(p)\ssl\key.pem" -out "$(p)\ssl\cert.pem" -days 3650 -nodes -subj "/CN=localhost" -batch 2>NUL & )\
 		,\
-		$(if $(filter macos linux debian arch,$(OS_NAME)),\
+		$(if $(filter macos linux debian arch,$(_CURRENT_OS)),\
 			$(foreach p,$(_SSL_PATHES), openssl req -x509 -newkey rsa:4096 -keyout "$(p)/ssl/key.pem" -out "$(p)/ssl/cert.pem" -days 3650 -nodes -subj "/CN=localhost" -batch 2>/dev/null; )\
 			,\
 			$(warning ⚠️ Неизвестная ОС. Невозможно сгенерировать SSL сертификаты)\

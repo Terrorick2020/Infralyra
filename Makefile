@@ -1,15 +1,19 @@
 include ./make/check.mk
 include ./make/generate.mk
+include ./make/management.mk
 
 MODE ?= dev
 OS_NAME ?= unknown
 
-.PHONY: utils generate run stop clean
-utils:
+.PHONY: settings utils generate run stop clean
+settings:
 	@echo "✨ Подготовка системы"
 	@echo "🛠️  Проверка валидности параметров..."
 	$(call validate_mode,$(MODE))
 	$(call validate_os,$(OS_NAME))
+
+utils: settings
+	@echo "✨ Подготовка сервисов системы"
 	@echo "🛠️  Определение опрерационной системы..."
 	$(call detect_os, $(OS_NAME))
 	@echo "🛠️  Проверка и установка необходимых зависимотей..."
@@ -28,12 +32,12 @@ generate: utils
 
 run: generate
 	@echo "✨ Запуск системы"
-	$(call run_compose,$(MODE))
+	$(call sys_run,$(MODE),$(OS_NAME))
 
-stop:
+stop: settings
 	@echo "✨ Остановка системы"
-	$(call sys_stop,$(MODE))
+	$(call sys_stop,$(MODE),$(OS_NAME))
 
-clean:
+clean: settings
 	@echo "✨ Очистка устройства от зависимостей системы"
-	$(call sys_clean,$(MODE))
+	$(call sys_clean,$(MODE),$(OS_NAME))

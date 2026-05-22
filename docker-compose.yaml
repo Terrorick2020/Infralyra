@@ -4,7 +4,7 @@ services:
       context: ./test/user-defined-devices/personal-computer
       dockerfile: Dockerfile
     env_file:
-      - ./test/user-defined-devices/personal-computer
+      - ./test/user-defined-devices/personal-computer/.env
     restart: unless-stopped
     networks:
       - planner_network
@@ -14,7 +14,7 @@ services:
       context: ./test/user-defined-devices/laptop
       dockerfile: Dockerfile
     env_file:
-      - ./test/user-defined-devices/laptop
+      - ./test/user-defined-devices/laptop/.env
     restart: unless-stopped
     networks:
       - planner_network
@@ -24,7 +24,7 @@ services:
       context: ./test/user-defined-devices/mobile-phone
       dockerfile: Dockerfile
     env_file:
-      - ./test/user-defined-devices/mobile-phone
+      - ./test/user-defined-devices/mobile-phone/.env
     restart: unless-stopped
     networks:
       - planner_network
@@ -34,7 +34,7 @@ services:
       context: ./test/user-defined-devices/iot-device
       dockerfile: Dockerfile
     env_file:
-      - ./test/user-defined-devices/iot-device
+      - ./test/user-defined-devices/iot-device/.env
     restart: unless-stopped
     networks:
       - planner_network
@@ -44,7 +44,7 @@ services:
       context: ./test/peripheral-devices/printer
       dockerfile: Dockerfile
     env_file:
-      - ./test/peripheral-devices/printer
+      - ./test/peripheral-devices/printer/.env
     restart: unless-stopped
     networks:
       - planner_network
@@ -54,7 +54,7 @@ services:
       context: ./test/peripheral-devices/scanner
       dockerfile: Dockerfile
     env_file:
-      - ./test/peripheral-devices/scanner
+      - ./test/peripheral-devices/scanner/.env
     restart: unless-stopped
     networks:
       - planner_network
@@ -64,7 +64,7 @@ services:
       context: ./test/service-devices/file-server
       dockerfile: Dockerfile
     env_file:
-      - ./test/service-devices/file-server
+      - ./test/service-devices/file-server/.env
     restart: unless-stopped
     networks:
       - planner_network
@@ -74,7 +74,7 @@ services:
       context: ./test/service-devices/remote-access-server
       dockerfile: Dockerfile
     env_file:
-      - ./test/service-devices/remote-access-server
+      - ./test/service-devices/remote-access-server/.env
     restart: unless-stopped
     networks:
       - planner_network
@@ -95,7 +95,7 @@ services:
       context: ./main
       dockerfile: Dockerfile.test
     env_file:
-      - ./main
+      - ./main/.env
     restart: unless-stopped
     networks:
       - planner_network

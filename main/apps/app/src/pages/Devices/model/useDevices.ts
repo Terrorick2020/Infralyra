@@ -2,12 +2,13 @@
 
 import { useId, useState, useEffect } from "react";
 import type { DeviceWithIp } from ".";
+import api from '@/src/shared/config/axios';
 
 export const MOCK_DEVICES: DeviceWithIp[] = [
   // 1. Ubuntu PC
   {
     device: {
-      ip: "192.168.1.10",
+      ip: "192.168.10.1",
       mac: "00:1A:2B:3C:4D:10",
       alive: true,
       hostname: "personal-computer-01",
@@ -59,7 +60,7 @@ export const MOCK_DEVICES: DeviceWithIp[] = [
   // 2. Windows laptop
   {
     device: {
-      ip: "192.168.1.11",
+      ip: "192.168.10.2",
       mac: "00:1A:2B:3C:4D:11",
       alive: true,
       hostname: "laptop-01",
@@ -104,7 +105,7 @@ export const MOCK_DEVICES: DeviceWithIp[] = [
   // 3. Android phone
   {
     device: {
-      ip: "192.168.1.20",
+      ip: "192.168.10.3",
       mac: "AA:BB:CC:DD:EE:01",
       alive: true,
       hostname: "mobile-phone-01",
@@ -139,7 +140,7 @@ export const MOCK_DEVICES: DeviceWithIp[] = [
 
   {
     device: {
-      ip: "192.168.1.30",
+      ip: "192.168.10.4",
       mac: "AA:BB:CC:DD:EE:02",
       alive: true,
       hostname: "iot-signal-sensor-01",
@@ -184,7 +185,7 @@ export const MOCK_DEVICES: DeviceWithIp[] = [
   // 5. Network printer
   {
     device: {
-      ip: "192.168.1.40",
+      ip: "192.168.10.5",
       mac: "DE:AD:BE:EF:00:01",
       alive: true,
       hostname: "printer-01",
@@ -235,7 +236,7 @@ export const MOCK_DEVICES: DeviceWithIp[] = [
 
   {
     device: {
-      ip: "192.168.1.41",
+      ip: "192.168.10.6",
       mac: "DE:AD:BE:EF:00:02",
       alive: true,
       hostname: "scanner-01",
@@ -280,7 +281,7 @@ export const MOCK_DEVICES: DeviceWithIp[] = [
   // 7. File server
   {
     device: {
-      ip: "192.168.1.50",
+      ip: "192.168.10.7",
       mac: "00:AA:BB:CC:DD:50",
       alive: true,
       hostname: "file-server-01",
@@ -339,7 +340,7 @@ export const MOCK_DEVICES: DeviceWithIp[] = [
   // 8. Web server (Debian)
   {
     device: {
-      ip: "192.168.1.60",
+      ip: "192.168.10.8",
       mac: "00:AA:BB:CC:DD:60",
       alive: true,
       hostname: "web-server-01",
@@ -391,7 +392,7 @@ export const MOCK_DEVICES: DeviceWithIp[] = [
   // 9. Remote access server
   {
     device: {
-      ip: "192.168.1.70",
+      ip: "192.168.10.9",
       mac: "00:AA:BB:CC:DD:70",
       alive: true,
       hostname: "remote-access-server-01",
@@ -443,7 +444,7 @@ export const MOCK_DEVICES: DeviceWithIp[] = [
   // 10. Gateway / router
   {
     device: {
-      ip: "192.168.1.1",
+      ip: "192.168.10.10",
       mac: "00:11:22:33:44:55",
       alive: true,
       hostname: "router",
@@ -498,7 +499,15 @@ export function useDevices() {
   const [devices, setDevices] = useState<DeviceWithIp[]>([]);
 
   const asyncSetDevices = async () => {
-    setDevices(MOCK_DEVICES);
+    try {
+      const respose = await api.get("/scan/get-devices")
+
+      if(respose.status === 200) {
+        setDevices(MOCK_DEVICES);
+      }
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   useEffect(() => {

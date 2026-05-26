@@ -1,4 +1,4 @@
 include:
-  - ./docker/docker-compose.dbs.yaml
-  - ./docker/docker-compose.eaver.yaml
-  - ./docker/docker-compose.services.yaml
+  - path: ./docker/docker-compose.dbs.yaml
+  - path: ./docker/docker-compose.eaver.yaml
+  - path: ./docker/docker-compose.services.yaml

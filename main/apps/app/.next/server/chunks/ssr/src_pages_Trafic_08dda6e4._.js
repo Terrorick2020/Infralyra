@@ -28,7 +28,7 @@ const MOCK_PACKETS = [
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.0.2",
+            srcIP: "192.168.10.1",
             dstIP: "192.168.0.1",
             protocol: "UDP"
         },
@@ -52,7 +52,7 @@ const MOCK_PACKETS = [
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.0.2",
+            srcIP: "192.168.10.2",
             dstIP: "8.8.8.8",
             protocol: "TCP"
         },
@@ -77,7 +77,7 @@ const MOCK_PACKETS = [
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.0.3",
+            srcIP: "192.168.10.1",
             dstIP: "142.250.74.14",
             protocol: "TCP"
         },
@@ -107,7 +107,7 @@ const MOCK_PACKETS = [
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.0.4",
+            srcIP: "192.168.10.4",
             dstIP: "1.1.1.1",
             protocol: "ICMP"
         },
@@ -155,7 +155,7 @@ const MOCK_PACKETS = [
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.0.5",
+            srcIP: "192.168.10.5",
             dstIP: "172.217.16.206",
             protocol: "TCP"
         },
@@ -204,7 +204,7 @@ const MOCK_PACKETS = [
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.0.7",
+            srcIP: "192.168.10.1",
             dstIP: "93.184.216.34",
             protocol: "TCP"
         },
@@ -230,7 +230,7 @@ const MOCK_PACKETS = [
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.0.8",
+            srcIP: "192.168.10.7",
             dstIP: "192.168.0.255",
             protocol: "UDP"
         },
@@ -254,7 +254,7 @@ const MOCK_PACKETS = [
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.0.9",
+            srcIP: "192.168.10.6",
             dstIP: "151.101.1.69",
             protocol: "TCP"
         },
@@ -277,7 +277,13 @@ function formatDateTime(ts) {
 }
 function useTraffic() {
     const idKey = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useId"])();
-    const [packets, _setPackets] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(MOCK_PACKETS);
+    const [packets, setPackets] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(MOCK_PACKETS);
+    const asyncGetTrafic = async ()=>{
+        setPackets(MOCK_PACKETS);
+    };
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        asyncGetTrafic();
+    }, []);
     return {
         idKey,
         packets
@@ -298,6 +304,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$mo
 __turbopack_context__.v({
   "body": "Page-module-scss-module__TfiqGa__body",
   "body__ctx": "Page-module-scss-module__TfiqGa__body__ctx",
+  "empty": "Page-module-scss-module__TfiqGa__empty",
   "head": "Page-module-scss-module__TfiqGa__head",
   "head__block": "Page-module-scss-module__TfiqGa__head__block",
   "info": "Page-module-scss-module__TfiqGa__info",
@@ -325,7 +332,7 @@ function TraficPage() {
     const { idKey, packets } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$model$2f$useTraffic$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTraffic"])();
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["trafic-page"],
-        children: packets.map((item, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("details", {
+        children: packets.length ? packets.map((item, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("details", {
                 className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["item"],
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("summary", {
@@ -336,30 +343,30 @@ function TraficPage() {
                                 children: item.network.srcIP
                             }, void 0, false, {
                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                lineNumber: 14,
-                                columnNumber: 13
+                                lineNumber: 15,
+                                columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
                                 className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["head__block"],
                                 children: item.network.protocol
                             }, void 0, false, {
                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                lineNumber: 15,
-                                columnNumber: 13
+                                lineNumber: 16,
+                                columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
                                 className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["head__block"],
                                 children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$model$2f$useTraffic$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["formatDateTime"])(item.timestamp)
                             }, void 0, false, {
                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                lineNumber: 16,
-                                columnNumber: 13
+                                lineNumber: 17,
+                                columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                        lineNumber: 13,
-                        columnNumber: 11
+                        lineNumber: 14,
+                        columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["body"],
@@ -368,8 +375,8 @@ function TraficPage() {
                                 className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["line"]
                             }, void 0, false, {
                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                lineNumber: 21,
-                                columnNumber: 13
+                                lineNumber: 22,
+                                columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["body__ctx"],
@@ -381,16 +388,16 @@ function TraficPage() {
                                                 children: "MAC отправителя:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                                lineNumber: 24,
-                                                columnNumber: 17
+                                                lineNumber: 25,
+                                                columnNumber: 19
                                             }, this),
                                             " ",
                                             item.ethernet.srcMAC
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                        lineNumber: 23,
-                                        columnNumber: 15
+                                        lineNumber: 24,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h6", {
                                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["info"],
@@ -399,16 +406,16 @@ function TraficPage() {
                                                 children: "MAC получателя:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                                lineNumber: 27,
-                                                columnNumber: 17
+                                                lineNumber: 28,
+                                                columnNumber: 19
                                             }, this),
                                             " ",
                                             item.ethernet.dstMAC
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                        lineNumber: 26,
-                                        columnNumber: 15
+                                        lineNumber: 27,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h6", {
                                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["info"],
@@ -417,16 +424,16 @@ function TraficPage() {
                                                 children: "Версия IP:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                                lineNumber: 30,
-                                                columnNumber: 17
+                                                lineNumber: 31,
+                                                columnNumber: 19
                                             }, this),
                                             " ",
                                             item.network.version
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                        lineNumber: 29,
-                                        columnNumber: 15
+                                        lineNumber: 30,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h6", {
                                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["info"],
@@ -435,16 +442,16 @@ function TraficPage() {
                                                 children: "IP отправителя:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                                lineNumber: 33,
-                                                columnNumber: 17
+                                                lineNumber: 34,
+                                                columnNumber: 19
                                             }, this),
                                             " ",
                                             item.network.srcIP
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                        lineNumber: 32,
-                                        columnNumber: 15
+                                        lineNumber: 33,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h6", {
                                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["info"],
@@ -453,16 +460,16 @@ function TraficPage() {
                                                 children: "IP получателя:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                                lineNumber: 36,
-                                                columnNumber: 17
+                                                lineNumber: 37,
+                                                columnNumber: 19
                                             }, this),
                                             " ",
                                             item.network.dstIP
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                        lineNumber: 35,
-                                        columnNumber: 15
+                                        lineNumber: 36,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h6", {
                                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["info"],
@@ -471,16 +478,16 @@ function TraficPage() {
                                                 children: "Протокол сети:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                                lineNumber: 39,
-                                                columnNumber: 17
+                                                lineNumber: 40,
+                                                columnNumber: 19
                                             }, this),
                                             " ",
                                             item.network.protocol
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                        lineNumber: 38,
-                                        columnNumber: 15
+                                        lineNumber: 39,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h6", {
                                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["info"],
@@ -489,16 +496,16 @@ function TraficPage() {
                                                 children: "Транспортный протокол:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                                lineNumber: 42,
-                                                columnNumber: 17
+                                                lineNumber: 43,
+                                                columnNumber: 19
                                             }, this),
                                             " ",
                                             item.transport.proto
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                        lineNumber: 41,
-                                        columnNumber: 15
+                                        lineNumber: 42,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h6", {
                                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["info"],
@@ -507,16 +514,16 @@ function TraficPage() {
                                                 children: "Порт отправителя:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                                lineNumber: 45,
-                                                columnNumber: 17
+                                                lineNumber: 46,
+                                                columnNumber: 19
                                             }, this),
                                             " ",
                                             item.transport.srcPort
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                        lineNumber: 44,
-                                        columnNumber: 15
+                                        lineNumber: 45,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h6", {
                                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["info"],
@@ -525,16 +532,16 @@ function TraficPage() {
                                                 children: "Порт получателя:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                                lineNumber: 48,
-                                                columnNumber: 17
+                                                lineNumber: 49,
+                                                columnNumber: 19
                                             }, this),
                                             " ",
                                             item.transport.dstPort
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                        lineNumber: 47,
-                                        columnNumber: 15
+                                        lineNumber: 48,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h6", {
                                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["info"],
@@ -543,35 +550,48 @@ function TraficPage() {
                                                 children: "Полезная нагрузка:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                                lineNumber: 51,
-                                                columnNumber: 17
+                                                lineNumber: 52,
+                                                columnNumber: 19
                                             }, this),
                                             " ",
                                             item.application.join(" ")
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                        lineNumber: 50,
-                                        columnNumber: 15
+                                        lineNumber: 51,
+                                        columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                                lineNumber: 22,
-                                columnNumber: 13
+                                lineNumber: 23,
+                                columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                        lineNumber: 20,
-                        columnNumber: 11
+                        lineNumber: 21,
+                        columnNumber: 13
                     }, this)
                 ]
             }, `${idKey}-${index}`, true, {
                 fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
-                lineNumber: 12,
-                columnNumber: 9
-            }, this))
+                lineNumber: 13,
+                columnNumber: 11
+            }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Trafic$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["empty"],
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h6", {
+                children: "Пока ничего не найдено"
+            }, void 0, false, {
+                fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
+                lineNumber: 60,
+                columnNumber: 11
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
+            lineNumber: 59,
+            columnNumber: 9
+        }, this)
     }, void 0, false, {
         fileName: "[project]/src/pages/Trafic/ui/Page.tsx",
         lineNumber: 10,

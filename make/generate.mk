@@ -1,5 +1,5 @@
 BASE_ENV_PATHES := ./main ./main/apps/app ./main/apps/api
-BASE_SSL_PATHES := ./main/apps/nginx ./main/apps/app
+BASE_SSL_PATHES := ./main/apps/app
 
 TEST_ENV_PATHES := ./ \
  ./test/user-defined-devices/personal-computer \
@@ -40,16 +40,19 @@ BINDER_PORT := 4000
 TELEPHONY_PORT := 5000
 DOCKER_PORT := 2375
 SYSLOG_PORT := 514
-TARGET_PORT := 3000
-APP_PORT := 3475
+API_PORT := 8080
+WS_PORT := 7000
+APP_PORT := 4174
 
-POSTGRES_DB := postgres
+POSTGRES_DB := infralyra_db
 POSTGRES_USER := postgres
-POSTGRES_DEFAULT_USER := admine
-POSTGRES_DEFAULT_LOGIN := admine
-POSTGRES_DEFAULT_ROLE := admine
+POSTGRES_DEFAULT_USER := Администратор
+POSTGRES_DEFAULT_LOGIN := admin
+POSTGRES_DEFAULT_ROLE := admin
 PSWD := Pswd1234
 SECRET := <Secret>@_retr54o\#wefQwer34tyfvsedw1343452</Secret>
+DOMAIN = client
+API_HOSTNAME = localhost/api
 
 define create_env
 	$(eval _CURRENT_MODE := $(strip $1))
@@ -122,13 +125,16 @@ define generate_env
 						.Replace('{{TELEPHONY_PORT}}', '$(TELEPHONY_PORT)') \
 						.Replace('{{DOCKER_PORT}}', '$(DOCKER_PORT)') \
 						.Replace('{{SYSLOG_PORT}}', '$(SYSLOG_PORT)') \
-						.Replace('{{TARGET_PORT}}', '$(TARGET_PORT)') \
+						.Replace('{{TARGET_PORT}}', '$(API_PORT)') \
+						.Replace('{{WS_PORT}}', '$(WS_PORT)') \
 						.Replace('{{APP_PORT}}', '$(APP_PORT)') \
 						.Replace('{{POSTGRES_DB}}', '$(POSTGRES_DB)') \
 						.Replace('{{POSTGRES_USER}}', '$(POSTGRES_USER)') \
 						.Replace('{{POSTGRES_DEFAULT_USER}}', '$(POSTGRES_DEFAULT_USER)') \
 						.Replace('{{POSTGRES_DEFAULT_LOGIN}}', '$(POSTGRES_DEFAULT_LOGIN)') \
 						.Replace('{{POSTGRES_DEFAULT_ROLE}}', '$(POSTGRES_DEFAULT_ROLE)') \
+						.Replace('{{DOMAIN}}', '$(DOMAIN)') \
+						.Replace('{{API_HOSTNAME}}', '$(API_HOSTNAME)') \
 						.Replace('{{MODE}}', '$(_CURRENT_MODE)') \
 						.Replace('{{PSWD}}', '$(_GEN_PSWD)') \
 						.Replace('{{SECRET}}', '$(_GEN_SECRET)'); \
@@ -164,13 +170,16 @@ define generate_env
 						-e "s|{{TELEPHONY_PORT}}|$(TELEPHONY_PORT)|g" \
 						-e "s|{{DOCKER_PORT}}|$(DOCKER_PORT)|g" \
 						-e "s|{{SYSLOG_PORT}}|$(SYSLOG_PORT)|g" \
-						-e "s|{{TARGET_PORT}}|$(TARGET_PORT)|g" \
+						-e "s|{{TARGET_PORT}}|$(API_PORT)|g" \
+						-e "s|{{WS_PORT}}|$(WS_PORT)|g" \
 						-e "s|{{APP_PORT}}|$(APP_PORT)|g" \
 						-e "s|{{POSTGRES_DB}}|$(POSTGRES_DB)|g" \
 						-e "s|{{POSTGRES_USER}}|$(POSTGRES_USER)|g" \
 						-e "s|{{POSTGRES_DEFAULT_USER}}|$(POSTGRES_DEFAULT_USER)|g" \
 						-e "s|{{POSTGRES_DEFAULT_LOGIN}}|$(POSTGRES_DEFAULT_LOGIN)|g" \
 						-e "s|{{POSTGRES_DEFAULT_ROLE}}|$(POSTGRES_DEFAULT_ROLE)|g" \
+						-e "s|{{DOMAIN}}|$(DOMAIN)|g" \
+						-e "s|{{API_HOSTNAME}}|$(API_HOSTNAME)|g" \
 						-e "s|{{MODE}}|$(_CURRENT_MODE)|g" \
 						-e "s|{{PSWD}}|$(_GEN_PSWD)|g" \
 						-e "s|{{SECRET}}|$(_GEN_SECRET)|g" \

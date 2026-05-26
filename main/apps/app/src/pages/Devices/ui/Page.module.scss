@@ -48,5 +48,21 @@
                 }
             }
         }
+
+        &:has(.empty) {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: safe center;
+        }
+
+        .empty {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: safe center;
+        }
     }
 }

@@ -1,12 +1,12 @@
 package handler
 
 import (
+	"github.com/gin-gonic/gin"
+	socketio "github.com/googollee/go-socket.io"
+
 	"InfralyraApi/internal/handler/dto"
 	"InfralyraApi/internal/service"
 	"InfralyraApi/pkg/server"
-
-	"github.com/gin-gonic/gin"
-	socketio "github.com/googollee/go-socket.io"
 )
 
 type Handler struct {

@@ -23,7 +23,7 @@
     }
 
     &[open] .body {
-        max-height: 500px;
+      max-height: 500px;
     }
 
     .head {
@@ -61,12 +61,20 @@
         gap: 0.4rem;
 
         .info {
-            mark {
-                background: transparent;
-                color: #f25f4c;
-            }
+          mark {
+            background: transparent;
+            color: #f25f4c;
+          }
         }
       }
     }
+  }
+
+  .empty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: safe center;
   }
 }

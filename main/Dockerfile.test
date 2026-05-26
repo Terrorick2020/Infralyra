@@ -1,13 +1,16 @@
 FROM docker:24.0.5-dind
 
-RUN apk add --no-cache python3 py3-pip bash git curl
+RUN apk add --no-cache python3 bash git curl
 
-RUN pip3 install docker-compose
+RUN curl -L "https://github.com/docker/compose/releases/download/v2.24.0/docker-compose-$(uname -s)-$(uname -m)" \
+  -o /usr/local/bin/docker-compose && \
+  chmod +x /usr/local/bin/docker-compose
 
-WORKDIR /server
+WORKDIR /infralira
 
 COPY ./apps/ .
+COPY ./docker/ .
 COPY ./.env .
-COPY ./docker-compose.test.yml .
+COPY ./docker-compose.test.yaml .
 
-CMD ["docker-compose", "-f", "docker-compose.test.yml", "up", "--build"]
+CMD ["docker-compose", "-f", "docker-compose.test.yaml", "up", "--build"]

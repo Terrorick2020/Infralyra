@@ -55,4 +55,20 @@
   color: #f25f4c;
 }
 
+.Page-module-scss-module__QDGgUq__devices-page .Page-module-scss-module__QDGgUq__body:has(.Page-module-scss-module__QDGgUq__empty) {
+  justify-content: center;
+  align-items: safe center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.Page-module-scss-module__QDGgUq__devices-page .Page-module-scss-module__QDGgUq__body .Page-module-scss-module__QDGgUq__empty {
+  justify-content: center;
+  align-items: safe center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
 /*# sourceMappingURL=src_pages_Devices_ui_Page_module_scss_module_910ead92.css.map*/

@@ -46,13 +46,11 @@ const DevicesPage = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_mod
     throw new Error("Attempted to call DevicesPage() from the server but DevicesPage is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");
 }, "[project]/src/pages/Devices/ui/Page.tsx", "DevicesPage");
 }),
-"[project]/src/pages/Devices/ui/Page.tsx [app-rsc] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
+"[project]/src/pages/Devices/ui/Page.tsx [app-rsc] (ecmascript)", ((__turbopack_context__, module, exports) => {
 
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$tsx__$5b$app$2d$rsc$5d$__$28$client__reference__proxy$29$__$3c$module__evaluation$3e$__ = __turbopack_context__.i("[project]/src/pages/Devices/ui/Page.tsx [app-rsc] (client reference proxy) <module evaluation>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$tsx__$5b$app$2d$rsc$5d$__$28$client__reference__proxy$29$__ = __turbopack_context__.i("[project]/src/pages/Devices/ui/Page.tsx [app-rsc] (client reference proxy)");
-;
-__turbopack_context__.n(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$tsx__$5b$app$2d$rsc$5d$__$28$client__reference__proxy$29$__);
+const e = new Error("Could not parse module '[project]/src/pages/Devices/ui/Page.tsx'\n\nExpected '</', got 'jsx text (\n          )'");
+e.code = 'MODULE_UNPARSABLE';
+throw e;
 }),
 "[project]/src/pages/Devices/index.ts [app-rsc] (ecmascript) <locals>", ((__turbopack_context__) => {
 "use strict";

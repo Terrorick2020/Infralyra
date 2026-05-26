@@ -8,25 +8,26 @@ services:
       - planner_network
     ports:
       - "8080:8080"
+      - "7000:7000"
     depends_on:
       - psql_db
       - redis_db
     env_file:
-      - ../apps/api
+      - ../apps/api/.env
 
-  app:
-    build:
-      context: ../apps/app
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    networks:
-      - planner_network
-    ports:
-      - "3000:3000"
-    depends_on:
-      - api
-    env_file:
-      - ../apps/app
+  # app:
+  #   build:
+  #     context: ../apps/app
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   networks:
+  #     - planner_network
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - api
+  #   env_file:
+  #     - ../apps/app/.env
 
   nginx:
     build:
@@ -38,10 +39,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    depends_on:
-      - app
-    env_file:
-      - ../apps/nginx
+    # depends_on:
+    #   - app
 
 networks:
   planner_network:

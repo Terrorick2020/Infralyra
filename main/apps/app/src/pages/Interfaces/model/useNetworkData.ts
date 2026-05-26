@@ -2,64 +2,9 @@
 
 import { useState, useEffect, useId } from 'react';
 import type { InterfaceInfo, IfaceStats } from '.';
+import { useRouter } from 'next/navigation';
+import api from '@/src/shared/config/axios';
 
-export const MOCK_INTERFACES: InterfaceInfo[] = [
-  {
-    pcapName: "\\Device\\NPF_{8C4A9B1D-1122-3344-5566-778899AABBCC}",
-    description: "Loopback Interface",
-    localName: "lo",
-    mac: "00:00:00:00:00:00",
-    mtu: 65536,
-    index: 1,
-    flags: ["broadcast", "loopback"],
-    type: "loopback",
-    ips: [{ ip: "127.0.0.1", netmask: "255.0.0.0" }]
-  },
-  {
-    pcapName: "\\Device\\NPF_{A1B2C3D4-5566-7788-99AA-BBCCDDEEFF00}",
-    description: "Intel I211 Gigabit Network Connection",
-    localName: "eth0",
-    mac: "A4:BB:6D:8F:12:3C",
-    mtu: 1500,
-    index: 2,
-    flags: ["up", "broadcast", "multicast"],
-    type: "ethernet",
-    ips: [{ ip: "192.168.1.42", netmask: "255.255.255.0", broadcast: "192.168.1.255" }]
-  },
-  {
-    pcapName: "\\Device\\NPF_{E5F6A7B8-9900-1122-3344-5566778899AA}",
-    description: "Realtek RTL8822BE 802.11ac Wireless Adapter",
-    localName: "wlan0",
-    mac: "F0:2F:4B:9A:0C:1E",
-    mtu: 1500,
-    index: 3,
-    flags: ["up", "broadcast", "multicast"],
-    type: "wireless",
-    ips: [{ ip: "10.0.0.15", netmask: "255.255.255.0", broadcast: "10.0.0.255" }]
-  },
-  {
-    pcapName: "\\Device\\NPF_{11223344-5566-7788-99AA-BBCCDDEEFF01}",
-    description: "Docker Bridge Network",
-    localName: "docker0",
-    mac: "02:42:AC:11:00:01",
-    mtu: 1500,
-    index: 4,
-    flags: ["up", "broadcast", "multicast"],
-    type: "bridge",
-    ips: [{ ip: "172.17.0.1", netmask: "255.255.0.0" }]
-  },
-  {
-    pcapName: "\\Device\\NPF_{99887766-5544-3322-1100-AABBCCDDEEFF}",
-    description: "OpenVPN Tunnel Interface",
-    localName: "tun0",
-    mac: "",
-    mtu: 1500,
-    index: 5,
-    flags: ["point-to-point", "multicast", "noarp"],
-    type: "tunnel",
-    ips: []
-  }
-];
 
 export const generateInitialStats = (interfaces: InterfaceInfo[]): IfaceStats[] =>
   interfaces.map(iface => {
@@ -80,8 +25,40 @@ export const generateInitialStats = (interfaces: InterfaceInfo[]): IfaceStats[] 
 
 export function useNetworkData({ intervalMs = 1500, enableLive = true } = {}) {
   const idKey = useId();
-  const [interfaces] = useState<InterfaceInfo[]>(MOCK_INTERFACES);
-  const [stats, setStats] = useState<IfaceStats[]>(() => generateInitialStats(MOCK_INTERFACES));
+  const router = useRouter();
+  const [interfaces, setInterfaces] = useState<InterfaceInfo[]>([]);
+  const [stats, setStats] = useState<IfaceStats[]>(() => generateInitialStats(interfaces));
+
+  const getInterfaces = async () => {
+    try {
+      const response = await api.get("/scan/get-interfaces");
+
+      if(response.status === 200) {
+        const data: InterfaceInfo[] = response.data.data;
+
+        const result: InterfaceInfo[] = data.map(dataItem => ({
+          pcapName: dataItem.pcapName,
+          description: dataItem.description || "Не определено",
+          localName: dataItem.localName || dataItem.pcapName,
+          mac: dataItem.mac || "Не определено",
+          mtu: dataItem.mtu || 0,
+          index: dataItem.index || undefined,
+          flags: dataItem.flags,
+          type: dataItem.type || "Не определено",
+          ips: dataItem.ips,
+        }));
+
+        setInterfaces(result);
+      }
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const onToClick = () => {
+    router.replace("/trafic")
+  }
 
   useEffect(() => {
     if (!enableLive) return;
@@ -108,10 +85,12 @@ export function useNetworkData({ intervalMs = 1500, enableLive = true } = {}) {
           };
         })
       );
+
+      getInterfaces();
     }, intervalMs);
 
     return () => clearInterval(timer);
   }, [enableLive, intervalMs, interfaces]);
 
-  return { idKey, interfaces, stats };
+  return { idKey, interfaces, stats, onToClick };
 }

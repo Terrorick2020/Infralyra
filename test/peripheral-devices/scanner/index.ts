@@ -17,7 +17,7 @@ let PER_CFG: ICfg | undefined = undefined;
 function loadEnv(): IEnv {
   if (!PER_ENV) {
     const hostname = process.env.HOSTNAME;
-    const periph_port = Number(process.env.PORT);
+    const periph_port = Number(process.env.PERIPH_PORT);
     const target_hostname = process.env.TARGET_HOSTNAME;
     const target_port = Number(process.env.TARGET_PORT);
 

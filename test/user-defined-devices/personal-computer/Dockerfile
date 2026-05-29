@@ -18,6 +18,4 @@ RUN mkdir -p /app/ssl \
   -nodes \
   -subj "/CN=PERSONAL_COMPUTER-01/O=Linux Ubuntu/C=RU"
 
-EXPOSE ${PORT}
-
 CMD ["bun", "run", "start"]

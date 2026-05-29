@@ -313,7 +313,7 @@ async function smbService() {
 
   Bun.listen({
     hostname: env.hostname,
-    port: env.rpcPort,
+    port: env.smbPort,
     socket: {
       open: (sock) =>
         sockOpen(sock, serviceName, Buffer.from("FF534D42", "hex")),

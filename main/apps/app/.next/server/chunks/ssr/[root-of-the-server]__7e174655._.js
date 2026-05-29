@@ -251,7 +251,7 @@ __turbopack_context__.s([
     "MODE",
     ()=>MODE
 ]);
-const MODE = ("TURBOPACK compile-time value", "prod");
+const MODE = ("TURBOPACK compile-time value", "test");
 const HOSTNAME = ("TURBOPACK compile-time value", "0.0.0.0");
 const APP_PORT = ("TURBOPACK compile-time value", "4174");
 const DOMAIN = ("TURBOPACK compile-time value", "client");

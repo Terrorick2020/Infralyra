@@ -18,6 +18,4 @@ RUN mkdir -p /app/ssl \
   -nodes \
   -subj "/CN=LAPTOP-01/O=Microsoft Windows/C=RU"
 
-EXPOSE ${PORT}
-
 CMD ["bun", "run", "start"]

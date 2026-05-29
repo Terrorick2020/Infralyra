@@ -8,7 +8,9 @@ TEST_ENV_PATHES := ./ \
  ./test/user-defined-devices/iot-device \
  ./test/peripheral-devices/printer \
  ./test/peripheral-devices/scanner \
- ./test/service-devices/file-server
+ ./test/service-devices/file-server \
+ ./test/service-devices/remote-access-server \
+ ./test/service-devices/web-server
 
 TEST_SSL_PATHES := ./test/service-devices/web-server \
  ./test/user-defined-devices/laptop \
@@ -24,7 +26,7 @@ NFS_PORT := 2049
 FTP_PORT := 21
 SSH_PORT := 22
 MQTT_PORT := 1883
-HTTP_PORT := 8080
+HTTP_PORT := 80
 UDP_PORT := 5683
 TELEMETRY_PORT := 6543
 RPC_PORT := 135
@@ -47,8 +49,8 @@ POSTGRES_USER := postgres
 POSTGRES_DEFAULT_USER := Администратор
 POSTGRES_DEFAULT_LOGIN := admin
 POSTGRES_DEFAULT_ROLE := admin
-PSWD := Pswd1234
-SECRET := <Secret>@_retr54o\#wefQwer34tyfvsedw1343452</Secret>
+DEFAULT_PASSWORD := Pswd1234
+DEFAULT_SECRET := <sdvxdvsdvd vsef wef2wef wefwefwefw
 DOMAIN = client
 API_HOSTNAME = localhost/api
 

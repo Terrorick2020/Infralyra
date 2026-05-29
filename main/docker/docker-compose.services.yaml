@@ -15,19 +15,19 @@ services:
     env_file:
       - ../apps/api/.env
 
-  app:
-    build:
-      context: ../apps/app
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    networks:
-      - planner_network
-    ports:
-      - "4174:4174"
-    depends_on:
-      - api
-    env_file:
-      - ../apps/app/.env
+  # app:
+  #   build:
+  #     context: ../apps/app
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   networks:
+  #     - planner_network
+  #   ports:
+  #     - "4174:4174"
+  #   depends_on:
+  #     - api
+  #   env_file:
+  #     - ../apps/app/.env
 
   nginx:
     build:
@@ -39,8 +39,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    depends_on:
-      - app
+    # depends_on:
+    #   - app
 
 networks:
   planner_network:

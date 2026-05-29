@@ -57,7 +57,7 @@ type PacketInfoTrans struct {
 }
 
 type PacketInfo struct {
-	Timestamp   int64             `json:"timestamp"`
+	Timestamp   int64           `json:"timestamp"`
 	Ethernet    PacketInfoEther `json:"ethernet"`
 	Network     PacketInfoNet   `json:"network"`
 	Transport   PacketInfoTrans `json:"transport"`

@@ -8,6 +8,4 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-EXPOSE ${PORT}
-
 CMD ["bun", "run", "start"]

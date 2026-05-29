@@ -18,6 +18,4 @@ RUN mkdir -p /app/ssl \
   -nodes \
   -subj "/CN=MOBILE_PHONE-01/O=Android MobilePhone/C=RU"
 
-EXPOSE ${PORT}
-
 CMD ["bun", "run", "start"]

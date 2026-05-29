@@ -3,21 +3,42 @@ services:
     build:
       context: ./test/user-defined-devices/personal-computer
       dockerfile: Dockerfile
+    cap_add:
+      - NET_BIND_SERVICE
     env_file:
       - ./test/user-defined-devices/personal-computer/.env
     restart: unless-stopped
     networks:
       - planner_network
+    ports:
+      - "${SSH_PORT}:${SSH_PORT}"
+      - "${HTTP_PORT}:${HTTP_PORT}"
+      - "${RPC_PORT}:${RPC_PORT}"
+      - "${HTTPS_PORT}:${HTTPS_PORT}"
+      - "${SMB_PORT}:${SMB_PORT}"
+      - "${NFS_PORT}:${NFS_PORT}"
+      - "${SYSLOG_PORT}:${SYSLOG_PORT}"
+      - "${DOCKER_PORT}:${DOCKER_PORT}"
   
   laptop:
     build:
       context: ./test/user-defined-devices/laptop
       dockerfile: Dockerfile
+    cap_add:
+      - NET_BIND_SERVICE
     env_file:
       - ./test/user-defined-devices/laptop/.env
     restart: unless-stopped
     networks:
       - planner_network
+    ports:
+      - "${SSH_PORT}:${SSH_PORT}"
+      - "${HTTP_PORT}:${HTTP_PORT}"
+      - "${RPC_PORT}:${RPC_PORT}"
+      - "${NETBIOS_PORT}:${NETBIOS_PORT}"
+      - "${HTTPS_PORT}:${HTTPS_PORT}"
+      - "${SMB_PORT}:${SMB_PORT}"
+      - "${RDP_PORT}:${RDP_PORT}"
 
   mobile_phone:
     build:
@@ -28,6 +49,12 @@ services:
     restart: unless-stopped
     networks:
       - planner_network
+    ports:
+      - "${ADB_PORT}:${ADB_PORT}"
+      - "${HTTP_MOB_PORT}:${HTTP_MOB_PORT}"
+      - "${HTTPS_MOB_PORT}:${HTTPS_MOB_PORT}"
+      - "${BINDER_PORT}:${BINDER_PORT}"
+      - "${TELEPHONY_PORT}:${TELEPHONY_PORT}"
 
   iot_device:
     build:
@@ -38,6 +65,11 @@ services:
     restart: unless-stopped
     networks:
       - planner_network
+    ports:
+      - "${MQTT_PORT}:${MQTT_PORT}"
+      - "${HTTP_PORT}:${HTTP_PORT}"
+      - "${UDP_PORT}:${UDP_PORT}"
+      - "${TELEMETRY_PORT}:${TELEMETRY_PORT}"
 
   printer:
     build:
@@ -48,6 +80,8 @@ services:
     restart: unless-stopped
     networks:
       - planner_network
+    ports:
+      - "${PERIPH_PORT}:${PERIPH_PORT}"
 
   scanner:
     build:
@@ -58,26 +92,39 @@ services:
     restart: unless-stopped
     networks:
       - planner_network
+    ports:
+      - "${PERIPH_PORT}:${PERIPH_PORT}"
 
   file_server:
     build:
       context: ./test/service-devices/file-server
       dockerfile: Dockerfile
+    cap_add:
+      - NET_BIND_SERVICE
     env_file:
       - ./test/service-devices/file-server/.env
     restart: unless-stopped
     networks:
       - planner_network
+    ports:
+      - "${SMB_PORT}:${SMB_PORT}"
+      - "${NFS_PORT}:${NFS_PORT}"
+      - "${FTP_PORT}:${FTP_PORT}"
+      - "${SSH_PORT}:${SSH_PORT}"
 
   remote_access_server:
     build:
       context: ./test/service-devices/remote-access-server
       dockerfile: Dockerfile
+    cap_add:
+      - NET_BIND_SERVICE
     env_file:
       - ./test/service-devices/remote-access-server/.env
     restart: unless-stopped
     networks:
       - planner_network
+    ports:
+      - "${SSH_PORT}:${SSH_PORT}"
 
   web_server:
     build:
@@ -90,27 +137,27 @@ services:
       - "80:80"
       - "443:443"
 
-  main:
-    build:
-      context: ./main
-      dockerfile: Dockerfile.test
-    env_file:
-      - ./main/.env
-    restart: unless-stopped
-    networks:
-      - planner_network
-    ports:
-      - "${TARGET_PORT}:${TARGET_PORT}"
-    depends_on:
-     - personal_computer
-     - laptop
-     - mobile_phone
-     - iot_device
-     - printer
-     - scanner
-     - file_server
-     - remote_access_server
-     - web_server
+  # main:
+  #   build:
+  #     context: ./main
+  #     dockerfile: Dockerfile.test
+  #   env_file:
+  #     - ./main/.env
+  #   restart: unless-stopped
+  #   networks:
+  #     - planner_network
+  #   ports:
+  #     - "${TARGET_PORT}:${TARGET_PORT}"
+  #   depends_on:
+  #    - personal_computer
+  #    - laptop
+  #    - mobile_phone
+  #    - iot_device
+  #    - printer
+  #    - scanner
+  #    - file_server
+  #    - remote_access_server
+  #    - web_server
 
 networks:
   planner_network:

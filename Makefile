@@ -5,7 +5,7 @@ include ./make/management.mk
 MODE ?= dev
 OS_NAME ?= unknown
 
-.PHONY: settings utils generate run stop clean
+.PHONY: settings utils generate run stop clear
 settings:
 	@echo "✨ Подготовка системы"
 	@echo "🛠️  Проверка валидности параметров..."
@@ -30,7 +30,7 @@ generate: utils
 	$(call create_ssl,$(MODE),$(OS_NAME))
 	$(call generate_ssl,$(MODE),$(OS_NAME))
 
-run: generate
+run:settings
 	@echo "✨ Запуск системы"
 	$(call sys_run,$(MODE),$(OS_NAME))
 
@@ -38,6 +38,6 @@ stop: settings
 	@echo "✨ Остановка системы"
 	$(call sys_stop,$(MODE),$(OS_NAME))
 
-clean: settings
+clear: settings
 	@echo "✨ Очистка устройства от зависимостей системы"
 	$(call sys_clean,$(MODE),$(OS_NAME))

@@ -28,11 +28,11 @@
   - Linux (Debian/Ubuntu, bash): `sudo apt update && sudo apt install build-essential && make --version`;
   - Linux (Arch, bash): `sudo pacman -S base-devel && make --version`;
   - MacOS: `brew install make && make --version`;
- 4) Запуск системы:
-  - Режим разработки (dev - по умолчанию): `make start` | `make start MODE=dev`;
-  - Режим тестировки (test): `make start MODE=test`;
-  - Режим реальной работы (prod): `make start MODE=prod`;
-  - PS: Можно указать свою ОС для ускорения сборки: `make start MODE='dev | test | prod' OS_NAME='windows | macos | debian | arch | linux'`
+ 5) Запуск системы:
+  - Режим разработки (dev - по умолчанию): `make init` | `make init MODE=dev`;
+  - Режим тестировки (test): `make init MODE=test`;
+  - Режим реальной работы (prod): `make init MODE=prod`;
+  - PS: Можно указать свою ОС для ускорения сборки: `make init MODE='dev | test | prod' OS_NAME='windows | macos | debian | arch | linux'`
 
 ## Устраннение неполадок:
  1) При ошибках запуска сервиса проверьте, чтобы файлы  переменных сред `.env` в дирректориях [./]; [./apps/api]; [./apps/app] по примерам из `.env.example`, которые находятся в этих же дирректориях;

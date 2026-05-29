@@ -23,7 +23,7 @@ services:
     networks:
       - planner_network
     ports:
-      - "4173:4173"
+      - "4174:4174"
     depends_on:
       - api
     env_file:

@@ -26,6 +26,11 @@
   display: flex;
 }
 
+.SignInForm-module-scss-module__DxwZ-W__signIn-form .SignInForm-module-scss-module__DxwZ-W__Mui-disabled {
+  color: red;
+  background: red;
+}
+
 /* [project]/src/pages/SignIn/ui/Page.module.scss.module.css [app-client] (css) */
 .Page-module-scss-module__j6eFaW__sign-in-page {
   justify-content: center;

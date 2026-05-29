@@ -12,283 +12,64 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 "use strict";
 
 __turbopack_context__.s([
-    "MOCK_PACKETS",
-    ()=>MOCK_PACKETS,
     "formatDateTime",
     ()=>formatDateTime,
     "useTraffic",
     ()=>useTraffic
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-redux/dist/react-redux.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$index$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/shared/config/index.ts [app-client] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$ui$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/config/ui.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$axios$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/config/axios.ts [app-client] (ecmascript)");
 var _s = __turbopack_context__.k.signature();
 "use client";
 ;
-const MOCK_PACKETS = [
-    {
-        timestamp: 1715001234567,
-        ethernet: {
-            srcMAC: "00:1A:2B:3C:4D:5E",
-            dstMAC: "FF:FF:FF:FF:FF:FF"
-        },
-        network: {
-            version: "IPv4",
-            srcIP: "192.168.10.1",
-            dstIP: "192.168.0.1",
-            protocol: "UDP"
-        },
-        transport: {
-            proto: "UDP",
-            srcPort: 5353,
-            dstPort: 5353
-        },
-        application: new Uint8Array([
-            109,
-            68,
-            78,
-            83
-        ])
-    },
-    {
-        timestamp: 1715001234567,
-        ethernet: {
-            srcMAC: "00:1A:2B:3C:4D:5E",
-            dstMAC: "A4:5E:60:12:34:56"
-        },
-        network: {
-            version: "IPv4",
-            srcIP: "192.168.10.2",
-            dstIP: "8.8.8.8",
-            protocol: "TCP"
-        },
-        transport: {
-            proto: "TCP",
-            srcPort: 51234,
-            dstPort: 443
-        },
-        application: new Uint8Array([
-            22,
-            3,
-            1,
-            2,
-            0
-        ])
-    },
-    {
-        timestamp: 1715001234567,
-        ethernet: {
-            srcMAC: "AA:BB:CC:DD:EE:FF",
-            dstMAC: "11:22:33:44:55:66"
-        },
-        network: {
-            version: "IPv4",
-            srcIP: "192.168.10.1",
-            dstIP: "142.250.74.14",
-            protocol: "TCP"
-        },
-        transport: {
-            proto: "TCP",
-            srcPort: 52344,
-            dstPort: 80
-        },
-        application: new Uint8Array([
-            71,
-            69,
-            84,
-            32,
-            47,
-            32,
-            72,
-            84,
-            84,
-            80
-        ])
-    },
-    {
-        timestamp: 1715001234567,
-        ethernet: {
-            srcMAC: "12:34:56:78:9A:BC",
-            dstMAC: "98:76:54:32:10:FE"
-        },
-        network: {
-            version: "IPv4",
-            srcIP: "192.168.10.4",
-            dstIP: "1.1.1.1",
-            protocol: "ICMP"
-        },
-        transport: {
-            proto: "ICMP",
-            srcPort: 0,
-            dstPort: 0
-        },
-        application: new Uint8Array([
-            8,
-            0,
-            0,
-            0
-        ])
-    },
-    {
-        timestamp: 1715001234567,
-        ethernet: {
-            srcMAC: "DE:AD:BE:EF:00:01",
-            dstMAC: "FF:FF:FF:FF:FF:FF"
-        },
-        network: {
-            version: "IPv6",
-            srcIP: "fe80::1",
-            dstIP: "ff02::1",
-            protocol: "ICMPv6"
-        },
-        transport: {
-            proto: "ICMP",
-            srcPort: 0,
-            dstPort: 0
-        },
-        application: new Uint8Array([
-            128,
-            0,
-            0,
-            0
-        ])
-    },
-    {
-        timestamp: 1715001234567,
-        ethernet: {
-            srcMAC: "00:AA:BB:CC:DD:EE",
-            dstMAC: "FF:EE:DD:CC:BB:AA"
-        },
-        network: {
-            version: "IPv4",
-            srcIP: "192.168.10.5",
-            dstIP: "172.217.16.206",
-            protocol: "TCP"
-        },
-        transport: {
-            proto: "TCP",
-            srcPort: 53000,
-            dstPort: 443
-        },
-        application: new Uint8Array([
-            23,
-            3,
-            3,
-            0,
-            50
-        ])
-    },
-    {
-        timestamp: 1715001234567,
-        ethernet: {
-            srcMAC: "01:23:45:67:89:AB",
-            dstMAC: "BA:98:76:54:32:10"
-        },
-        network: {
-            version: "IPv4",
-            srcIP: "192.168.0.6",
-            dstIP: "224.0.0.251",
-            protocol: "UDP"
-        },
-        transport: {
-            proto: "UDP",
-            srcPort: 5353,
-            dstPort: 5353
-        },
-        application: new Uint8Array([
-            0,
-            0,
-            0,
-            0
-        ])
-    },
-    {
-        timestamp: 1715001234567,
-        ethernet: {
-            srcMAC: "FE:DC:BA:98:76:54",
-            dstMAC: "12:34:56:78:9A:BC"
-        },
-        network: {
-            version: "IPv4",
-            srcIP: "192.168.10.1",
-            dstIP: "93.184.216.34",
-            protocol: "TCP"
-        },
-        transport: {
-            proto: "TCP",
-            srcPort: 54000,
-            dstPort: 80
-        },
-        application: new Uint8Array([
-            80,
-            79,
-            83,
-            84,
-            32,
-            47
-        ])
-    },
-    {
-        timestamp: 1715001234567,
-        ethernet: {
-            srcMAC: "11:22:33:44:55:66",
-            dstMAC: "66:55:44:33:22:11"
-        },
-        network: {
-            version: "IPv4",
-            srcIP: "192.168.10.7",
-            dstIP: "192.168.0.255",
-            protocol: "UDP"
-        },
-        transport: {
-            proto: "UDP",
-            srcPort: 68,
-            dstPort: 67
-        },
-        application: new Uint8Array([
-            68,
-            72,
-            67,
-            80
-        ])
-    },
-    {
-        timestamp: 1715001234567,
-        ethernet: {
-            srcMAC: "CA:FE:BA:BE:00:02",
-            dstMAC: "DE:AD:BE:EF:00:02"
-        },
-        network: {
-            version: "IPv4",
-            srcIP: "192.168.10.6",
-            dstIP: "151.101.1.69",
-            protocol: "TCP"
-        },
-        transport: {
-            proto: "TCP",
-            srcPort: 55000,
-            dstPort: 443
-        },
-        application: new Uint8Array([
-            22,
-            3,
-            3,
-            0,
-            100
-        ])
-    }
-];
+;
+;
+;
 function formatDateTime(ts) {
     return new Date(ts).toLocaleString();
 }
 function useTraffic() {
     _s();
     const idKey = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useId"])();
-    const [packets, setPackets] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(MOCK_PACKETS);
+    const [packets, setPackets] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const settings = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSelector"])({
+        "useTraffic.useSelector[settings]": (state)=>state.settings
+    }["useTraffic.useSelector[settings]"]);
     const asyncGetTrafic = async ()=>{
-        setPackets(MOCK_PACKETS);
+        if (!settings.pcapName || !settings.userName) return;
+        try {
+            const data = {
+                username: settings.userName,
+                roomname: "roomName",
+                inface: settings.pcapName,
+                payloadLimit: 10
+            };
+            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$axios$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].post("/scan/get-packets", data);
+            if (response.status === 200) {
+                const data = response.data;
+                const res = !data ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$ui$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getPackUi"])().reverse() : data.data;
+                setPackets((prev)=>[
+                        ...res,
+                        ...prev
+                    ]);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "useTraffic.useEffect": ()=>{
-            asyncGetTrafic();
+            const interPack = setInterval({
+                "useTraffic.useEffect.interPack": ()=>asyncGetTrafic()
+            }["useTraffic.useEffect.interPack"], 1500);
+            return ({
+                "useTraffic.useEffect": ()=>{
+                    clearInterval(interPack);
+                }
+            })["useTraffic.useEffect"];
         }
     }["useTraffic.useEffect"], []);
     return {
@@ -296,9 +77,10 @@ function useTraffic() {
         packets
     };
 }
-_s(useTraffic, "t9S3yTiXmCXmUozhkHr0MaEahk4=", false, function() {
+_s(useTraffic, "7gyGxV/T45Oxz1IIj5lxcgktxGY=", false, function() {
     return [
-        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useId"]
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useId"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSelector"]
     ];
 });
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {

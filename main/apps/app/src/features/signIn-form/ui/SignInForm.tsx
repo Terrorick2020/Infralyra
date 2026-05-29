@@ -44,9 +44,7 @@ export function SignInForm(): JSX.Element {
       <Button
         fullWidth
         variant="contained"
-        disabled={!login.trim() || !pswd.trim() || isLoading}
         onClick={onAuth}
-        sx={{ mt: 2 }}
       >
         {isLoading ? "Вход..." : "Войти"}
       </Button>

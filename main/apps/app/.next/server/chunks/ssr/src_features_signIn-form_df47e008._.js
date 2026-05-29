@@ -7,13 +7,18 @@ __turbopack_context__.s([
     ()=>useSignIn
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-ssr] (ecmascript)"); // Next.js роутинг
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-redux/dist/react-redux.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$store$2f$slices$2f$settings$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/store/slices/settings.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$axios$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/config/axios.ts [app-ssr] (ecmascript)");
 "use client";
 ;
 ;
 ;
+;
+;
 function useSignIn() {
+    const dispatch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDispatch"])();
     const [login, setLogin] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [pswd, setPswd] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -28,6 +33,7 @@ function useSignIn() {
         if (error) setError(null);
     };
     const onAuth = async ()=>{
+        if (isLoading) return;
         const trimmedLogin = login.trim();
         const trimmedPswd = pswd.trim();
         if (!trimmedLogin || !trimmedPswd) {
@@ -42,6 +48,7 @@ function useSignIn() {
                 password: trimmedPswd
             });
             if (response.status === 200) {
+                dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$store$2f$slices$2f$settings$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["setUserName"])(trimmedLogin));
                 router.replace('/interfaces');
             }
         } catch (err) {
@@ -72,6 +79,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$features$2f$signIn$2d
 "[project]/src/features/signIn-form/ui/SignInForm.module.scss [app-ssr] (css module)", ((__turbopack_context__) => {
 
 __turbopack_context__.v({
+  "Mui-disabled": "SignInForm-module-scss-module__DxwZ-W__Mui-disabled",
   "body": "SignInForm-module-scss-module__DxwZ-W__body",
   "signIn-form": "SignInForm-module-scss-module__DxwZ-W__signIn-form",
   "title": "SignInForm-module-scss-module__DxwZ-W__title",
@@ -157,11 +165,7 @@ function SignInForm() {
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$material$2f$esm$2f$Button$2f$Button$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Button$3e$__["Button"], {
                 fullWidth: true,
                 variant: "contained",
-                disabled: !login.trim() || !pswd.trim() || isLoading,
                 onClick: onAuth,
-                sx: {
-                    mt: 2
-                },
                 children: isLoading ? "Вход..." : "Войти"
             }, void 0, false, {
                 fileName: "[project]/src/features/signIn-form/ui/SignInForm.tsx",

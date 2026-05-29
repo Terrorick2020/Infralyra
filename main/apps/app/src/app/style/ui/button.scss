@@ -3,4 +3,8 @@
     color: var(--btn-font-color);
     font-weight: 600;
     font-family: var(--font-craftwork);
+
+    &:disabled {
+        opacity: 0.9;
+    }
 }

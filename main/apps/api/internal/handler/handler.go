@@ -37,6 +37,7 @@ func (h *Handler) InitHttpRoutes() *gin.Engine {
 		scan.GET("/get-interfaces", h.getInterfaces)
 		scan.GET("/get-activity", h.getActivity)
 		scan.GET("/get-devices", h.getDevices)
+		scan.POST("/get-packets", h.getHttpSniff)
 	}
 
 	return router
@@ -49,7 +50,7 @@ func (h *Handler) InitSocketEvents() server.TSInitEvents {
 		joinRoomWithMiddle := CheckCorrectSockUser(h.service.Authorization, h.joinRoom)
 		leaveRoomWithMiddle := CheckCorrectSockUser(h.service.Authorization, h.leaveRoom)
 
-		getTraficWithCheck_1 := CheckCorrectSockUser(h.service.Authorization, h.GetTrafic)
+		getTraficWithCheck_1 := CheckCorrectSockUser(h.service.Authorization, h.GetSocketTrafic)
 		getTraficWithCheck_2 := CheckCorrectRoomName(h.service.Authorization, getTraficWithCheck_1)
 
 		srv.OnConnect(nspSniff, h.OnSockConn)

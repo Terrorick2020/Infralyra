@@ -6,4 +6,8 @@
   font-family: var(--font-craftwork);
 }
 
+:root .MuiButtonBase-root:disabled {
+  opacity: .9;
+}
+
 /*# sourceMappingURL=src_app_style_ui_button_scss_css_bad6b30c._.single.css.map*/

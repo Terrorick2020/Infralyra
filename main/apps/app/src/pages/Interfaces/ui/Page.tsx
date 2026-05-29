@@ -18,7 +18,7 @@ export function InterfacesPage() {
               <div
                 className={styles["box__item"]}
                 key={`${idKey}-${index}`}
-                onClick={onToClick}
+                onClick={() => onToClick(item.pcapName)}
               >
                 <h5>
                   <mark>Интерфейс:</mark>{" "}
@@ -49,8 +49,8 @@ export function InterfacesPage() {
                   <mark>Статус:</mark> {isActive ? "Активен" : "Неактивен"}
                 </h6>
                 <h6>
-                  <mark>Статистика:</mark> ↓{stat?.packetsIn || 0} ↑
-                  {stat?.packetsOut || 0}
+                  <mark>Статистика:</mark> ↓{stat?.bytesRecv || 0} Байт/с ↑
+                  {stat?.bytesSent || 0} Байт/с
                 </h6>
               </div>
             );

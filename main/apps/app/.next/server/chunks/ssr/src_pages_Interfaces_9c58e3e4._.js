@@ -9,37 +9,54 @@ __turbopack_context__.s([]);
 "use strict";
 
 __turbopack_context__.s([
-    "generateInitialStats",
-    ()=>generateInitialStats,
     "useNetworkData",
     ()=>useNetworkData
 ]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-redux/dist/react-redux.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$store$2f$slices$2f$settings$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/store/slices/settings.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$axios$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/config/axios.ts [app-ssr] (ecmascript)");
 "use client";
 ;
 ;
 ;
-const generateInitialStats = (interfaces)=>interfaces.map((iface)=>{
-        const isActive = iface.flags?.includes("up");
-        const baseSent = isActive ? Math.floor(Math.random() * 500_000_000) : 0;
-        const baseRecv = isActive ? Math.floor(Math.random() * 1_200_000_000) : 0;
-        return {
-            pcapName: iface.pcapName,
-            bytesSent: baseSent,
-            bytesRecv: baseRecv,
-            sentSpeedKbps: isActive ? Math.random() * 100 : 0,
-            recvSpeedKbps: isActive ? Math.random() * 300 : 0,
-            packetsIn: isActive ? Math.floor(Math.random() * 50_000) : 0,
-            packetsOut: isActive ? Math.floor(Math.random() * 10_000) : 0
-        };
-    });
-function useNetworkData({ intervalMs = 1500, enableLive = true } = {}) {
+;
+;
+function useNetworkData() {
     const idKey = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useId"])();
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
+    const dispatch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDispatch"])();
     const [interfaces, setInterfaces] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [stats, setStats] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(()=>generateInitialStats(interfaces));
+    const [stats, setStats] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+    const intervalRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const getActivities = async (interfaces)=>{
+        if (!interfaces.length) return;
+        try {
+            const respose = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$axios$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get("/scan/get-activity");
+            if (respose.status === 200) {
+                const data = respose.data.data;
+                const result = interfaces.map((item)=>{
+                    const findStat = data.find((innItem)=>innItem.pcapName === item.pcapName);
+                    const isActive = item.flags?.includes("up");
+                    const baseSent = isActive ? Math.floor(Math.random() * 5) : 0;
+                    const baseRecv = isActive ? Math.floor(Math.random() * 10) : 0;
+                    return {
+                        pcapName: item.pcapName,
+                        bytesSent: findStat?.bytesSent || baseSent,
+                        bytesRecv: findStat?.bytesRecv || baseRecv,
+                        sentSpeedKbps: findStat?.sentSpeedKbps || 0,
+                        recvSpeedKbps: findStat?.recvSpeedKbps || 0,
+                        packetsIn: findStat?.packetsIn || Math.floor(Math.random() * 2),
+                        packetsOut: findStat?.packetsOut || Math.floor(Math.random() * 5)
+                    };
+                });
+                setStats(result);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
     const getInterfaces = async ()=>{
         try {
             const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$axios$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get("/scan/get-interfaces");
@@ -57,41 +74,28 @@ function useNetworkData({ intervalMs = 1500, enableLive = true } = {}) {
                         ips: dataItem.ips
                     }));
                 setInterfaces(result);
+                if (intervalRef.current) {
+                    clearInterval(intervalRef.current);
+                    intervalRef.current = null;
+                }
+                intervalRef.current = setInterval(()=>getActivities(result), 1000);
             }
         } catch (error) {
             console.log(error);
         }
     };
-    const onToClick = ()=>{
-        router.replace("/trafic");
+    const onToClick = (pcapName)=>{
+        dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$store$2f$slices$2f$settings$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["setPcapName"])(pcapName));
+        router.replace(`/trafic?pcapName=${pcapName}`);
     };
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        if (!enableLive) return;
-        const timer = setInterval(()=>{
-            setStats((prev)=>prev.map((s)=>{
-                    const iface = interfaces.find((i)=>i.pcapName === s.pcapName);
-                    const isActive = iface?.flags?.includes("up");
-                    if (!isActive) return s;
-                    const recvSpeed = Math.max(0, s.recvSpeedKbps + (Math.random() * 400 - 200));
-                    const sentSpeed = Math.max(0, s.sentSpeedKbps + (Math.random() * 200 - 100));
-                    return {
-                        ...s,
-                        recvSpeedKbps: recvSpeed,
-                        sentSpeedKbps: sentSpeed,
-                        bytesRecv: s.bytesRecv + Math.floor(recvSpeed * 1000 / 8 * (intervalMs / 1000)),
-                        bytesSent: s.bytesSent + Math.floor(sentSpeed * 1000 / 8 * (intervalMs / 1000)),
-                        packetsIn: s.packetsIn + Math.floor(Math.random() * 50),
-                        packetsOut: s.packetsOut + Math.floor(Math.random() * 30)
-                    };
-                }));
-            getInterfaces();
-        }, intervalMs);
-        return ()=>clearInterval(timer);
-    }, [
-        enableLive,
-        intervalMs,
-        interfaces
-    ]);
+        getInterfaces();
+        return ()=>{
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+    }, []);
     return {
         idKey,
         interfaces,
@@ -143,7 +147,7 @@ function InterfacesPage() {
                 const isActive = item.flags?.includes("up") ?? false;
                 return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Interfaces$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["box__item"],
-                    onClick: onToClick,
+                    onClick: ()=>onToClick(item.pcapName),
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
                             children: [
@@ -274,9 +278,10 @@ function InterfacesPage() {
                                     columnNumber: 19
                                 }, this),
                                 " ↓",
-                                stat?.packetsIn || 0,
-                                " ↑",
-                                stat?.packetsOut || 0
+                                stat?.bytesRecv || 0,
+                                " Байт/с ↑",
+                                stat?.bytesSent || 0,
+                                " Байт/с"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/pages/Interfaces/ui/Page.tsx",

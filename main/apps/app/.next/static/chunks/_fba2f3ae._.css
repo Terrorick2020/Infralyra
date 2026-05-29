@@ -303,6 +303,10 @@ p, a {
   font-family: var(--font-craftwork);
 }
 
+:root .MuiButtonBase-root:disabled {
+  opacity: .9;
+}
+
 /* [project]/src/app/style/ui/text-field.scss.css [app-client] (css) */
 :root .MuiFormControl-root.MuiTextField-root {
   background: none;

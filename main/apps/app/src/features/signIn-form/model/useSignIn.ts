@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Next.js роутинг
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { setUserName } from '@/src/shared/store/slices/settings';
+import type { TRootDispatch } from '@/src/shared/store';
 import api from '@/src/shared/config/axios';
 
 export function useSignIn() {
+  const dispatch = useDispatch<TRootDispatch>();
   const [login, setLogin] = useState<string>("");
   const [pswd, setPswd] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -23,6 +27,8 @@ export function useSignIn() {
   };
 
   const onAuth = async () => {
+    if(isLoading) return;
+
     const trimmedLogin = login.trim();
     const trimmedPswd = pswd.trim();
 
@@ -42,6 +48,7 @@ export function useSignIn() {
       });
 
       if(response.status === 200) {
+        dispatch(setUserName(trimmedLogin));
         router.replace('/interfaces')
       }
     } catch (err: any) {

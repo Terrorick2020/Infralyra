@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"InfralyraApi/pkg/logger"
-
 	socketio "github.com/googollee/go-socket.io"
+
+	"InfralyraApi/pkg/logger"
 )
 
 func (h *Handler) OnSockConn(conn socketio.Conn) error {

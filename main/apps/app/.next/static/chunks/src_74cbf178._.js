@@ -49,8 +49,12 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 __turbopack_context__.s([
     "default",
     ()=>__TURBOPACK__default__export__,
+    "setPcapName",
+    ()=>setPcapName,
     "setTheme",
     ()=>setTheme,
+    "setUserName",
+    ()=>setUserName,
     "settingsSliceName",
     ()=>settingsSliceName
 ]);
@@ -59,7 +63,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$store$2f$sl
 ;
 ;
 const initialState = {
-    theme: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$store$2f$slices$2f$types$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["EThemes"].Dark
+    theme: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$store$2f$slices$2f$types$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["EThemes"].Dark,
+    pcapName: undefined,
+    userName: undefined
 };
 const settingsSliceName = 'settings';
 const settingsSlice = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$reduxjs$2f$toolkit$2f$dist$2f$redux$2d$toolkit$2e$modern$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createSlice"])({
@@ -68,11 +74,17 @@ const settingsSlice = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_m
     reducers: {
         setTheme: (state, action)=>{
             state.theme = action.payload;
+        },
+        setPcapName: (state, action)=>{
+            state.pcapName = action.payload;
+        },
+        setUserName: (state, action)=>{
+            state.userName = action.payload;
         }
     },
     extraReducers: (_builder)=>{}
 });
-const { setTheme } = settingsSlice.actions;
+const { setTheme, setPcapName, setUserName } = settingsSlice.actions;
 ;
 const __TURBOPACK__default__export__ = settingsSlice.reducer;
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -247,7 +259,7 @@ __turbopack_context__.s([
     ()=>MODE
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
-const MODE = ("TURBOPACK compile-time value", "dev");
+const MODE = ("TURBOPACK compile-time value", "prod");
 const HOSTNAME = ("TURBOPACK compile-time value", "0.0.0.0");
 const APP_PORT = ("TURBOPACK compile-time value", "4174");
 const DOMAIN = ("TURBOPACK compile-time value", "client");
@@ -263,10 +275,954 @@ __turbopack_context__.s([
     "CraftworkFontVarName",
     ()=>CraftworkFontVarName,
     "InterFontVarName",
-    ()=>InterFontVarName
+    ()=>InterFontVarName,
+    "dev_ui",
+    ()=>dev_ui,
+    "getDevUi",
+    ()=>getDevUi,
+    "getPackUi",
+    ()=>getPackUi,
+    "pack_ui",
+    ()=>pack_ui
 ]);
 const InterFontVarName = '--font-inter';
 const CraftworkFontVarName = '--font-craftwork';
+const pack_ui = [
+    {
+        timestamp: 1715001234567,
+        ethernet: {
+            srcMAC: "00:1A:2B:3C:4D:5E",
+            dstMAC: "FF:FF:FF:FF:FF:FF"
+        },
+        network: {
+            version: "IPv4",
+            srcIP: "192.168.10.1",
+            dstIP: "192.168.0.1",
+            protocol: "UDP"
+        },
+        transport: {
+            proto: "UDP",
+            srcPort: 5353,
+            dstPort: 5353
+        },
+        application: new Uint8Array([
+            109,
+            68,
+            78,
+            83
+        ])
+    },
+    {
+        timestamp: 1715001234567,
+        ethernet: {
+            srcMAC: "00:1A:2B:3C:4D:5E",
+            dstMAC: "A4:5E:60:12:34:56"
+        },
+        network: {
+            version: "IPv4",
+            srcIP: "192.168.10.2",
+            dstIP: "8.8.8.8",
+            protocol: "TCP"
+        },
+        transport: {
+            proto: "TCP",
+            srcPort: 51234,
+            dstPort: 443
+        },
+        application: new Uint8Array([
+            22,
+            3,
+            1,
+            2,
+            0
+        ])
+    },
+    {
+        timestamp: 1715001234567,
+        ethernet: {
+            srcMAC: "AA:BB:CC:DD:EE:FF",
+            dstMAC: "11:22:33:44:55:66"
+        },
+        network: {
+            version: "IPv4",
+            srcIP: "192.168.10.1",
+            dstIP: "142.250.74.14",
+            protocol: "TCP"
+        },
+        transport: {
+            proto: "TCP",
+            srcPort: 52344,
+            dstPort: 80
+        },
+        application: new Uint8Array([
+            71,
+            69,
+            84,
+            32,
+            47,
+            32,
+            72,
+            84,
+            84,
+            80
+        ])
+    },
+    {
+        timestamp: 1715001234567,
+        ethernet: {
+            srcMAC: "12:34:56:78:9A:BC",
+            dstMAC: "98:76:54:32:10:FE"
+        },
+        network: {
+            version: "IPv4",
+            srcIP: "192.168.10.4",
+            dstIP: "1.1.1.1",
+            protocol: "ICMP"
+        },
+        transport: {
+            proto: "ICMP",
+            srcPort: 0,
+            dstPort: 0
+        },
+        application: new Uint8Array([
+            8,
+            0,
+            0,
+            0
+        ])
+    },
+    {
+        timestamp: 1715001234567,
+        ethernet: {
+            srcMAC: "DE:AD:BE:EF:00:01",
+            dstMAC: "FF:FF:FF:FF:FF:FF"
+        },
+        network: {
+            version: "IPv6",
+            srcIP: "fe80::1",
+            dstIP: "ff02::1",
+            protocol: "ICMPv6"
+        },
+        transport: {
+            proto: "ICMP",
+            srcPort: 0,
+            dstPort: 0
+        },
+        application: new Uint8Array([
+            128,
+            0,
+            0,
+            0
+        ])
+    },
+    {
+        timestamp: 1715001234567,
+        ethernet: {
+            srcMAC: "00:AA:BB:CC:DD:EE",
+            dstMAC: "FF:EE:DD:CC:BB:AA"
+        },
+        network: {
+            version: "IPv4",
+            srcIP: "192.168.10.5",
+            dstIP: "172.217.16.206",
+            protocol: "TCP"
+        },
+        transport: {
+            proto: "TCP",
+            srcPort: 53000,
+            dstPort: 443
+        },
+        application: new Uint8Array([
+            23,
+            3,
+            3,
+            0,
+            50
+        ])
+    },
+    {
+        timestamp: 1715001234567,
+        ethernet: {
+            srcMAC: "01:23:45:67:89:AB",
+            dstMAC: "BA:98:76:54:32:10"
+        },
+        network: {
+            version: "IPv4",
+            srcIP: "192.168.0.6",
+            dstIP: "224.0.0.251",
+            protocol: "UDP"
+        },
+        transport: {
+            proto: "UDP",
+            srcPort: 5353,
+            dstPort: 5353
+        },
+        application: new Uint8Array([
+            0,
+            0,
+            0,
+            0
+        ])
+    },
+    {
+        timestamp: 1715001234567,
+        ethernet: {
+            srcMAC: "FE:DC:BA:98:76:54",
+            dstMAC: "12:34:56:78:9A:BC"
+        },
+        network: {
+            version: "IPv4",
+            srcIP: "192.168.10.1",
+            dstIP: "93.184.216.34",
+            protocol: "TCP"
+        },
+        transport: {
+            proto: "TCP",
+            srcPort: 54000,
+            dstPort: 80
+        },
+        application: new Uint8Array([
+            80,
+            79,
+            83,
+            84,
+            32,
+            47
+        ])
+    },
+    {
+        timestamp: 1715001234567,
+        ethernet: {
+            srcMAC: "11:22:33:44:55:66",
+            dstMAC: "66:55:44:33:22:11"
+        },
+        network: {
+            version: "IPv4",
+            srcIP: "192.168.10.7",
+            dstIP: "192.168.0.255",
+            protocol: "UDP"
+        },
+        transport: {
+            proto: "UDP",
+            srcPort: 68,
+            dstPort: 67
+        },
+        application: new Uint8Array([
+            68,
+            72,
+            67,
+            80
+        ])
+    },
+    {
+        timestamp: 1715001234567,
+        ethernet: {
+            srcMAC: "CA:FE:BA:BE:00:02",
+            dstMAC: "DE:AD:BE:EF:00:02"
+        },
+        network: {
+            version: "IPv4",
+            srcIP: "192.168.10.6",
+            dstIP: "151.101.1.69",
+            protocol: "TCP"
+        },
+        transport: {
+            proto: "TCP",
+            srcPort: 55000,
+            dstPort: 443
+        },
+        application: new Uint8Array([
+            22,
+            3,
+            3,
+            0,
+            100
+        ])
+    }
+];
+const getPackUi = ()=>{
+    const min = 1;
+    const max = Math.min(3, pack_ui.length);
+    const count = Math.floor(Math.random() * (max - min + 1)) + min;
+    const shuffled = [
+        ...pack_ui
+    ];
+    for(let i = shuffled.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [
+            shuffled[j],
+            shuffled[i]
+        ];
+    }
+    return shuffled.slice(0, count);
+};
+const dev_ui = [
+    // 1. Ubuntu PC
+    {
+        device: {
+            ip: "192.168.10.1",
+            mac: "00:1A:2B:3C:4D:10",
+            alive: true,
+            hostname: "personal-computer-01",
+            os: "Ubuntu 22.04",
+            osTtl: 64,
+            osMethod: "TCP SYN",
+            services: [
+                {
+                    port: 22,
+                    protocol: "TCP",
+                    product: "OpenSSH",
+                    version: "9.0",
+                    banner: "SSH-2.0-OpenSSH_9.0"
+                },
+                {
+                    port: 631,
+                    protocol: "TCP",
+                    product: "CUPS",
+                    version: "2.4",
+                    banner: "IPP Printing"
+                }
+            ],
+            iot: "",
+            snmp: "disabled",
+            mdns: "enabled",
+            ssdp: "enabled",
+            webStack: "nginx"
+        },
+        interface: {
+            name: "eth0",
+            description: "Ethernet",
+            flags: 4163,
+            addresses: [
+                {
+                    ip: new Uint8Array([
+                        192,
+                        168,
+                        1,
+                        10
+                    ]),
+                    netmask: new Uint8Array([
+                        255,
+                        255,
+                        255,
+                        0
+                    ])
+                }
+            ]
+        },
+        net: {
+            IP: new Uint8Array([
+                192,
+                168,
+                1,
+                10
+            ]),
+            Mask: new Uint8Array([
+                255,
+                255,
+                255,
+                0
+            ])
+        }
+    },
+    // 2. Windows laptop
+    {
+        device: {
+            ip: "192.168.10.2",
+            mac: "00:1A:2B:3C:4D:11",
+            alive: true,
+            hostname: "laptop-01",
+            os: "Windows 11/10",
+            osTtl: 128,
+            osMethod: "ICMP Echo",
+            services: [
+                {
+                    port: 445,
+                    protocol: "TCP",
+                    product: "SMB",
+                    version: "3.1.1",
+                    banner: "Windows SMB"
+                }
+            ],
+            iot: "",
+            snmp: "disabled",
+            mdns: "enabled",
+            ssdp: "enabled",
+            webStack: "IIS"
+        },
+        interface: {
+            name: "wifi0",
+            description: "Wi-Fi",
+            flags: 4163,
+            addresses: [
+                {
+                    ip: new Uint8Array([
+                        192,
+                        168,
+                        1,
+                        11
+                    ]),
+                    netmask: new Uint8Array([
+                        255,
+                        255,
+                        255,
+                        0
+                    ])
+                }
+            ]
+        },
+        net: {
+            IP: new Uint8Array([
+                192,
+                168,
+                1,
+                11
+            ]),
+            Mask: new Uint8Array([
+                255,
+                255,
+                255,
+                0
+            ])
+        }
+    },
+    // 3. Android phone
+    {
+        device: {
+            ip: "192.168.10.3",
+            mac: "AA:BB:CC:DD:EE:01",
+            alive: true,
+            hostname: "mobile-phone-01",
+            os: "Android 14",
+            osTtl: 64,
+            osMethod: "ICMP",
+            services: [],
+            iot: "mobile",
+            snmp: "disabled",
+            mdns: "enabled",
+            ssdp: "enabled",
+            webStack: ""
+        },
+        interface: {
+            name: "wlan0",
+            description: "Wi-Fi",
+            flags: 4163,
+            addresses: [
+                {
+                    ip: new Uint8Array([
+                        192,
+                        168,
+                        1,
+                        20
+                    ]),
+                    netmask: new Uint8Array([
+                        255,
+                        255,
+                        255,
+                        0
+                    ])
+                }
+            ]
+        },
+        net: {
+            IP: new Uint8Array([
+                192,
+                168,
+                1,
+                20
+            ]),
+            Mask: new Uint8Array([
+                255,
+                255,
+                255,
+                0
+            ])
+        }
+    },
+    {
+        device: {
+            ip: "192.168.10.4",
+            mac: "AA:BB:CC:DD:EE:02",
+            alive: true,
+            hostname: "iot-signal-sensor-01",
+            os: "RTOS",
+            osTtl: 255,
+            osMethod: "ARP",
+            services: [
+                {
+                    port: 80,
+                    protocol: "TCP",
+                    product: "Embedded HTTP",
+                    version: "1.0",
+                    banner: "IoT Web UI"
+                }
+            ],
+            iot: "sensor",
+            snmp: "limited",
+            mdns: "enabled",
+            ssdp: "disabled",
+            webStack: "lighttpd"
+        },
+        interface: {
+            name: "eth0",
+            description: "IoT Ethernet",
+            flags: 4099,
+            addresses: [
+                {
+                    ip: new Uint8Array([
+                        192,
+                        168,
+                        1,
+                        30
+                    ]),
+                    netmask: new Uint8Array([
+                        255,
+                        255,
+                        255,
+                        0
+                    ])
+                }
+            ]
+        },
+        net: {
+            IP: new Uint8Array([
+                192,
+                168,
+                1,
+                30
+            ]),
+            Mask: new Uint8Array([
+                255,
+                255,
+                255,
+                0
+            ])
+        }
+    },
+    // 5. Network printer
+    {
+        device: {
+            ip: "192.168.10.5",
+            mac: "DE:AD:BE:EF:00:01",
+            alive: true,
+            hostname: "printer-01",
+            os: "Embedded Linux",
+            osTtl: 255,
+            osMethod: "SNMP",
+            services: [
+                {
+                    port: 80,
+                    protocol: "TCP",
+                    product: "Web UI",
+                    version: "2.0",
+                    banner: "Printer Admin"
+                },
+                {
+                    port: 9100,
+                    protocol: "TCP",
+                    product: "JetDirect",
+                    version: "1.0",
+                    banner: "RAW Printing"
+                }
+            ],
+            iot: "printer",
+            snmp: "enabled",
+            mdns: "enabled",
+            ssdp: "enabled",
+            webStack: "nginx"
+        },
+        interface: {
+            name: "eth0",
+            description: "Ethernet",
+            flags: 4163,
+            addresses: [
+                {
+                    ip: new Uint8Array([
+                        192,
+                        168,
+                        1,
+                        40
+                    ]),
+                    netmask: new Uint8Array([
+                        255,
+                        255,
+                        255,
+                        0
+                    ])
+                }
+            ]
+        },
+        net: {
+            IP: new Uint8Array([
+                192,
+                168,
+                1,
+                40
+            ]),
+            Mask: new Uint8Array([
+                255,
+                255,
+                255,
+                0
+            ])
+        }
+    },
+    {
+        device: {
+            ip: "192.168.10.6",
+            mac: "DE:AD:BE:EF:00:02",
+            alive: true,
+            hostname: "scanner-01",
+            os: "Embedded Linux",
+            osTtl: 255,
+            osMethod: "SNMP",
+            services: [
+                {
+                    port: 80,
+                    protocol: "TCP",
+                    product: "Scan Web UI",
+                    version: "1.3",
+                    banner: "Scanner Admin"
+                }
+            ],
+            iot: "scanner",
+            snmp: "enabled",
+            mdns: "enabled",
+            ssdp: "enabled",
+            webStack: "lighttpd"
+        },
+        interface: {
+            name: "eth0",
+            description: "Ethernet",
+            flags: 4163,
+            addresses: [
+                {
+                    ip: new Uint8Array([
+                        192,
+                        168,
+                        1,
+                        41
+                    ]),
+                    netmask: new Uint8Array([
+                        255,
+                        255,
+                        255,
+                        0
+                    ])
+                }
+            ]
+        },
+        net: {
+            IP: new Uint8Array([
+                192,
+                168,
+                1,
+                41
+            ]),
+            Mask: new Uint8Array([
+                255,
+                255,
+                255,
+                0
+            ])
+        }
+    },
+    // 7. File server
+    {
+        device: {
+            ip: "192.168.10.7",
+            mac: "00:AA:BB:CC:DD:50",
+            alive: true,
+            hostname: "file-server-01",
+            os: "Ubuntu Server 22.04",
+            osTtl: 64,
+            osMethod: "TCP SYN",
+            services: [
+                {
+                    port: 22,
+                    protocol: "TCP",
+                    product: "OpenSSH",
+                    version: "9.0",
+                    banner: "SSH"
+                },
+                {
+                    port: 445,
+                    protocol: "TCP",
+                    product: "Samba",
+                    version: "4.15",
+                    banner: "SMB File Share"
+                },
+                {
+                    port: 2049,
+                    protocol: "TCP",
+                    product: "NFS",
+                    version: "4",
+                    banner: "NFS Share"
+                }
+            ],
+            iot: "",
+            snmp: "enabled",
+            mdns: "disabled",
+            ssdp: "disabled",
+            webStack: "nginx"
+        },
+        interface: {
+            name: "eth0",
+            description: "Server NIC",
+            flags: 4163,
+            addresses: [
+                {
+                    ip: new Uint8Array([
+                        192,
+                        168,
+                        1,
+                        50
+                    ]),
+                    netmask: new Uint8Array([
+                        255,
+                        255,
+                        255,
+                        0
+                    ])
+                }
+            ]
+        },
+        net: {
+            IP: new Uint8Array([
+                192,
+                168,
+                1,
+                50
+            ]),
+            Mask: new Uint8Array([
+                255,
+                255,
+                255,
+                0
+            ])
+        }
+    },
+    // 8. Web server (Debian)
+    {
+        device: {
+            ip: "192.168.10.8",
+            mac: "00:AA:BB:CC:DD:60",
+            alive: true,
+            hostname: "web-server-01",
+            os: "Debian 12",
+            osTtl: 64,
+            osMethod: "TCP SYN",
+            services: [
+                {
+                    port: 80,
+                    protocol: "TCP",
+                    product: "nginx",
+                    version: "1.24",
+                    banner: "HTTP Server"
+                },
+                {
+                    port: 443,
+                    protocol: "TCP",
+                    product: "nginx",
+                    version: "1.24",
+                    banner: "HTTPS Server"
+                }
+            ],
+            iot: "",
+            snmp: "enabled",
+            mdns: "disabled",
+            ssdp: "disabled",
+            webStack: "nginx + node"
+        },
+        interface: {
+            name: "eth0",
+            description: "Server NIC",
+            flags: 4163,
+            addresses: [
+                {
+                    ip: new Uint8Array([
+                        192,
+                        168,
+                        1,
+                        60
+                    ]),
+                    netmask: new Uint8Array([
+                        255,
+                        255,
+                        255,
+                        0
+                    ])
+                }
+            ]
+        },
+        net: {
+            IP: new Uint8Array([
+                192,
+                168,
+                1,
+                60
+            ]),
+            Mask: new Uint8Array([
+                255,
+                255,
+                255,
+                0
+            ])
+        }
+    },
+    // 9. Remote access server
+    {
+        device: {
+            ip: "192.168.10.9",
+            mac: "00:AA:BB:CC:DD:70",
+            alive: true,
+            hostname: "remote-access-server-01",
+            os: "Debian 12",
+            osTtl: 64,
+            osMethod: "TCP SYN",
+            services: [
+                {
+                    port: 22,
+                    protocol: "TCP",
+                    product: "OpenSSH",
+                    version: "9.2",
+                    banner: "SSH VPN Gateway"
+                },
+                {
+                    port: 1194,
+                    protocol: "UDP",
+                    product: "OpenVPN",
+                    version: "2.6",
+                    banner: "VPN Service"
+                }
+            ],
+            iot: "",
+            snmp: "enabled",
+            mdns: "disabled",
+            ssdp: "disabled",
+            webStack: ""
+        },
+        interface: {
+            name: "eth0",
+            description: "Server NIC",
+            flags: 4163,
+            addresses: [
+                {
+                    ip: new Uint8Array([
+                        192,
+                        168,
+                        1,
+                        70
+                    ]),
+                    netmask: new Uint8Array([
+                        255,
+                        255,
+                        255,
+                        0
+                    ])
+                }
+            ]
+        },
+        net: {
+            IP: new Uint8Array([
+                192,
+                168,
+                1,
+                70
+            ]),
+            Mask: new Uint8Array([
+                255,
+                255,
+                255,
+                0
+            ])
+        }
+    },
+    // 10. Gateway / router
+    {
+        device: {
+            ip: "192.168.10.10",
+            mac: "00:11:22:33:44:55",
+            alive: true,
+            hostname: "router",
+            os: "RouterOS",
+            osTtl: 255,
+            osMethod: "ICMP",
+            services: [
+                {
+                    port: 80,
+                    protocol: "TCP",
+                    product: "Router UI",
+                    version: "1.0",
+                    banner: "Admin Panel"
+                },
+                {
+                    port: 53,
+                    protocol: "UDP",
+                    product: "DNS",
+                    version: "1.0",
+                    banner: "DNS Resolver"
+                }
+            ],
+            iot: "gateway",
+            snmp: "enabled",
+            mdns: "enabled",
+            ssdp: "enabled",
+            webStack: "embedded"
+        },
+        interface: {
+            name: "wan0",
+            description: "Router WAN/LAN",
+            flags: 4163,
+            addresses: [
+                {
+                    ip: new Uint8Array([
+                        192,
+                        168,
+                        1,
+                        1
+                    ]),
+                    netmask: new Uint8Array([
+                        255,
+                        255,
+                        255,
+                        0
+                    ])
+                }
+            ]
+        },
+        net: {
+            IP: new Uint8Array([
+                192,
+                168,
+                1,
+                1
+            ]),
+            Mask: new Uint8Array([
+                255,
+                255,
+                255,
+                0
+            ])
+        }
+    }
+];
+const getDevUi = ()=>{
+    const min = 1;
+    const max = Math.min(3, dev_ui.length);
+    const count = Math.floor(Math.random() * (max - min + 1)) + min;
+    const shuffled = [
+        ...dev_ui
+    ];
+    for(let i = shuffled.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [
+            shuffled[j],
+            shuffled[i]
+        ];
+    }
+    return shuffled.slice(0, count);
+};
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
@@ -301,27 +1257,108 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 "[project]/src/shared/config/socket-io.ts [app-client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-// src/shared/config/socket.ts
 __turbopack_context__.s([
-    "socketConfig",
-    ()=>socketConfig
+    "createSocket",
+    ()=>createSocket
 ]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$socket$2e$io$2d$client$2f$build$2f$esm$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/socket.io-client/build/esm/index.js [app-client] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$index$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/shared/config/index.ts [app-client] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$env$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/config/env.ts [app-client] (ecmascript)");
 ;
-const socketConfig = {
-    url: "http://".concat(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$env$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["API_HOSTNAME"], "/socket-io"),
-    options: {
+;
+const createSocket = (namespace)=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$socket$2e$io$2d$client$2f$build$2f$esm$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["io"])("http://".concat(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$env$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["API_HOSTNAME"] === null || __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$env$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["API_HOSTNAME"] === void 0 ? void 0 : __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$env$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["API_HOSTNAME"].replace("/api", ""), "/socket.io").concat(namespace), {
         transports: [
-            'websocket'
+            "websocket",
+            "polling"
         ],
         reconnection: true,
         reconnectionAttempts: 5,
         reconnectionDelay: 1000,
-        timeout: 10000,
-        autoConnect: true
-    }
-};
+        timeout: 1000,
+        autoConnect: true,
+        forceNew: false
+    }); // export const SOCKET_OPTIONS: Partial<ManagerOptions & SocketOptions> = {
+ //   path: "/socket.io",
+ //   transports: ["websocket"],
+ //   reconnection: true,
+ //   reconnectionAttempts: 5,
+ //   reconnectionDelay: 1000,
+ //   timeout: 10000,
+ //   autoConnect: false,
+ //   forceNew: false,
+ // };
+ // export const SOCKET_CONFIG = {
+ //   url: `http://${API_HOSTNAME?.replace("api", "").replace("/", "")}`,
+ //   namespace: "/sniff",
+ //   options: SOCKET_OPTIONS,
+ // };
+ // console.log(SOCKET_CONFIG)
+ // let _socket: Socket<ServerToClientEvents, ClientToServerEvents> | null = null;
+ // export const createSocket = (
+ //   token?: string,
+ //   username?: string,
+ // ): Socket<ServerToClientEvents, ClientToServerEvents> => {
+ //   return io(`${SOCKET_CONFIG.url}${SOCKET_CONFIG.namespace}`, {
+ //     ...SOCKET_CONFIG.options,
+ //     auth: token ? { token, username } : undefined,
+ //     query: token ? { token, username } : undefined,
+ //   });
+ // };
+ // export const getSocket = (token?: string, username?: string) => {
+ //   if (!_socket || !_socket.connected) {
+ //     _socket = createSocket(token, username);
+ //   }
+ //   return _socket;
+ // };
+ // export const disconnectSocket = () => {
+ //   if (_socket) {
+ //     _socket.disconnect();
+ //     _socket = null;
+ //   }
+ // };
+ // export const emitJoinRoom = (
+ //   socket: Socket<ServerToClientEvents, ClientToServerEvents>,
+ //   username: string,
+ //   roomName: string,
+ // ) => {
+ //   if (!socket.connected) {
+ //     console.warn("⚠️ Socket not connected");
+ //     return false;
+ //   }
+ //   socket.emit("JoinRoom", { username, roomName });
+ //   return true;
+ // };
+ // export const emitGetTraffic = (
+ //   socket: Socket<ServerToClientEvents, ClientToServerEvents>,
+ //   username: string,
+ //   roomName: string,
+ //   inface: string,
+ //   payloadLimit?: number,
+ // ) => {
+ //   if (!socket.connected) {
+ //     console.warn("⚠️ Socket not connected");
+ //     return false;
+ //   }
+ //   socket.emit("SockMGetTraffic", {
+ //     username,
+ //     roomName,
+ //     inface,
+ //     payloadLimit: payloadLimit ?? 1500,
+ //   });
+ //   return true;
+ // };
+ // export const emitLeaveRoom = (
+ //   socket: Socket<ServerToClientEvents, ClientToServerEvents>,
+ //   username: string,
+ //   roomName: string,
+ // ) => {
+ //   if (!socket.connected) {
+ //     console.warn("⚠️ Socket not connected");
+ //     return false;
+ //   }
+ //   socket.emit("LeaveRoom", { username, roomName });
+ //   return true;
+ // };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }

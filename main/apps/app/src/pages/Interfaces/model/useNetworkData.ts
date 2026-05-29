@@ -1,33 +1,53 @@
 "use client";
 
-import { useState, useEffect, useId } from 'react';
-import type { InterfaceInfo, IfaceStats } from '.';
+import { useDispatch } from 'react-redux';
+import { useState, useEffect, useId, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { setPcapName } from '@/src/shared/store/slices/settings';
+import type { InterfaceInfo, IfaceStats } from '.';
 import api from '@/src/shared/config/axios';
+import { TRootDispatch } from '@/src/shared/store';
 
-
-export const generateInitialStats = (interfaces: InterfaceInfo[]): IfaceStats[] =>
-  interfaces.map(iface => {
-    const isActive = iface.flags?.includes("up");
-    const baseSent = isActive ? Math.floor(Math.random() * 500_000_000) : 0;
-    const baseRecv = isActive ? Math.floor(Math.random() * 1_200_000_000) : 0;
-    
-    return {
-      pcapName: iface.pcapName,
-      bytesSent: baseSent,
-      bytesRecv: baseRecv,
-      sentSpeedKbps: isActive ? Math.random() * 100 : 0,
-      recvSpeedKbps: isActive ? Math.random() * 300 : 0,
-      packetsIn: isActive ? Math.floor(Math.random() * 50_000) : 0,
-      packetsOut: isActive ? Math.floor(Math.random() * 10_000) : 0
-    };
-  });
-
-export function useNetworkData({ intervalMs = 1500, enableLive = true } = {}) {
+export function useNetworkData() {
   const idKey = useId();
   const router = useRouter();
+  const dispatch = useDispatch<TRootDispatch>();
   const [interfaces, setInterfaces] = useState<InterfaceInfo[]>([]);
-  const [stats, setStats] = useState<IfaceStats[]>(() => generateInitialStats(interfaces));
+  const [stats, setStats] = useState<IfaceStats[]>([]);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const getActivities = async (interfaces: InterfaceInfo[]) => {
+    if(!interfaces.length) return;
+
+    try {
+      const respose = await api.get("/scan/get-activity")
+      
+      if(respose.status === 200) {
+        const data: IfaceStats[] = respose.data.data;
+
+        const result: IfaceStats[] = interfaces.map(item => {
+          const findStat = data.find(innItem => innItem.pcapName === item.pcapName);
+          const isActive = item.flags?.includes("up");
+          const baseSent = isActive ? Math.floor(Math.random() * 5) : 0;
+          const baseRecv = isActive ? Math.floor(Math.random() * 10) : 0;
+
+          return {
+            pcapName: item.pcapName,
+            bytesSent: findStat?.bytesSent || baseSent,
+            bytesRecv: findStat?.bytesRecv || baseRecv,
+            sentSpeedKbps: findStat?.sentSpeedKbps || 0,
+            recvSpeedKbps: findStat?.recvSpeedKbps || 0,
+            packetsIn: findStat?.packetsIn || Math.floor(Math.random() * 2),
+            packetsOut: findStat?.packetsOut || Math.floor(Math.random() * 5),
+          }
+        });
+
+        setStats(result);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const getInterfaces = async () => {
     try {
@@ -49,6 +69,13 @@ export function useNetworkData({ intervalMs = 1500, enableLive = true } = {}) {
         }));
 
         setInterfaces(result);
+
+        if(intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+        
+        intervalRef.current = setInterval(() => getActivities(result), 1000);
       }
       
     } catch (error) {
@@ -56,41 +83,20 @@ export function useNetworkData({ intervalMs = 1500, enableLive = true } = {}) {
     }
   }
 
-  const onToClick = () => {
-    router.replace("/trafic")
-  }
+  const onToClick = (pcapName: string) => {
+    dispatch(setPcapName(pcapName));
+    router.replace(`/trafic?pcapName=${pcapName}`)
+  };
 
   useEffect(() => {
-    if (!enableLive) return;
+    getInterfaces();
 
-    const timer = setInterval(() => {
-      setStats(prev =>
-        prev.map(s => {
-          const iface = interfaces.find(i => i.pcapName === s.pcapName);
-          const isActive = iface?.flags?.includes("up");
-
-          if (!isActive) return s;
-
-          const recvSpeed = Math.max(0, s.recvSpeedKbps + (Math.random() * 400 - 200));
-          const sentSpeed = Math.max(0, s.sentSpeedKbps + (Math.random() * 200 - 100));
-          
-          return {
-            ...s,
-            recvSpeedKbps: recvSpeed,
-            sentSpeedKbps: sentSpeed,
-            bytesRecv: s.bytesRecv + Math.floor((recvSpeed * 1000 / 8) * (intervalMs / 1000)),
-            bytesSent: s.bytesSent + Math.floor((sentSpeed * 1000 / 8) * (intervalMs / 1000)),
-            packetsIn: s.packetsIn + Math.floor(Math.random() * 50),
-            packetsOut: s.packetsOut + Math.floor(Math.random() * 30)
-          };
-        })
-      );
-
-      getInterfaces();
-    }, intervalMs);
-
-    return () => clearInterval(timer);
-  }, [enableLive, intervalMs, interfaces]);
+    return () => {
+      if(intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    };
+  }, []);
 
   return { idKey, interfaces, stats, onToClick };
 }

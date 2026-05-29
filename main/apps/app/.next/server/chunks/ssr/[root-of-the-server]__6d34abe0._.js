@@ -46,6 +46,8 @@ var EThemes = /*#__PURE__*/ function(EThemes) {
 __turbopack_context__.s([
     "default",
     ()=>__TURBOPACK__default__export__,
+    "setPcapName",
+    ()=>setPcapName,
     "setTheme",
     ()=>setTheme,
     "settingsSliceName",
@@ -56,7 +58,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$store$2f$sl
 ;
 ;
 const initialState = {
-    theme: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$store$2f$slices$2f$types$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["EThemes"].Dark
+    theme: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$store$2f$slices$2f$types$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["EThemes"].Dark,
+    pcapName: undefined
 };
 const settingsSliceName = 'settings';
 const settingsSlice = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$reduxjs$2f$toolkit$2f$dist$2f$redux$2d$toolkit$2e$modern$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createSlice"])({
@@ -65,11 +68,12 @@ const settingsSlice = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_m
     reducers: {
         setTheme: (state, action)=>{
             state.theme = action.payload;
-        }
+        },
+        setPcapName: (state, action)=>{}
     },
     extraReducers: (_builder)=>{}
 });
-const { setTheme } = settingsSlice.actions;
+const { setTheme, setPcapName } = settingsSlice.actions;
 ;
 const __TURBOPACK__default__export__ = settingsSlice.reducer;
 }),
@@ -239,7 +243,7 @@ __turbopack_context__.s([
     "MODE",
     ()=>MODE
 ]);
-const MODE = ("TURBOPACK compile-time value", "dev");
+const MODE = ("TURBOPACK compile-time value", "prod");
 const HOSTNAME = ("TURBOPACK compile-time value", "0.0.0.0");
 const APP_PORT = ("TURBOPACK compile-time value", "4174");
 const DOMAIN = ("TURBOPACK compile-time value", "client");
@@ -376,15 +380,17 @@ const __TURBOPACK__default__export__ = api;
 
 // src/shared/config/socket.ts
 __turbopack_context__.s([
-    "socketConfig",
-    ()=>socketConfig
+    "SOCKET_CONFIG",
+    ()=>SOCKET_CONFIG
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$index$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/shared/config/index.ts [app-ssr] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$env$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/config/env.ts [app-ssr] (ecmascript)");
 ;
-const socketConfig = {
-    url: `http://${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$env$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["API_HOSTNAME"]}/socket-io`,
+const SOCKET_CONFIG = {
+    url: `http://${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$env$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["API_HOSTNAME"]}`,
+    namespace: '/sniff',
     options: {
+        path: '/socket.io',
         transports: [
             'websocket'
         ],
@@ -392,7 +398,7 @@ const socketConfig = {
         reconnectionAttempts: 5,
         reconnectionDelay: 1000,
         timeout: 10000,
-        autoConnect: true
+        autoConnect: false
     }
 };
 }),

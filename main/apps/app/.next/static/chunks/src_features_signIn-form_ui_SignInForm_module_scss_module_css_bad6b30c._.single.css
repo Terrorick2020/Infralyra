@@ -26,4 +26,9 @@
   display: flex;
 }
 
+.SignInForm-module-scss-module__DxwZ-W__signIn-form .SignInForm-module-scss-module__DxwZ-W__Mui-disabled {
+  color: red;
+  background: red;
+}
+
 /*# sourceMappingURL=src_features_signIn-form_ui_SignInForm_module_scss_module_css_bad6b30c._.single.css.map*/

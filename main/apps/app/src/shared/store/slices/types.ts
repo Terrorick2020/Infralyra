@@ -1,8 +1,10 @@
 export enum EThemes {
-    Dark = 'dark',
-    Light = 'light',
+  Dark = "dark",
+  Light = "light",
 }
 
 export interface ISettingsState {
-    theme: EThemes,
+  theme: EThemes;
+  pcapName: string | undefined;
+  userName: string | undefined;
 }

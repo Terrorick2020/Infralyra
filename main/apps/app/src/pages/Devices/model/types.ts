@@ -20,18 +20,14 @@ export interface Device {
   mac: string;
   alive: boolean;
   hostname: string;
-
   os: string;
   osTtl: number;
   osMethod: string;
-
   services: ServiceInfo[];
-
   iot: string;
   snmp: string;
   mdns: string;
   ssdp: string;
-
   tls?: TLSInfo;
   webStack: string;
 }

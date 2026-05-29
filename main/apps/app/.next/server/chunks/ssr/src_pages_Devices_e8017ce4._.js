@@ -9,682 +9,46 @@ __turbopack_context__.s([]);
 "use strict";
 
 __turbopack_context__.s([
-    "MOCK_DEVICES",
-    ()=>MOCK_DEVICES,
     "useDevices",
     ()=>useDevices
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$index$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/shared/config/index.ts [app-ssr] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$ui$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/config/ui.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$axios$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/config/axios.ts [app-ssr] (ecmascript)");
 "use client";
 ;
 ;
-const MOCK_DEVICES = [
-    // 1. Ubuntu PC
-    {
-        device: {
-            ip: "192.168.10.1",
-            mac: "00:1A:2B:3C:4D:10",
-            alive: true,
-            hostname: "personal-computer-01",
-            os: "Ubuntu 22.04",
-            osTtl: 64,
-            osMethod: "TCP SYN",
-            services: [
-                {
-                    port: 22,
-                    protocol: "TCP",
-                    product: "OpenSSH",
-                    version: "9.0",
-                    banner: "SSH-2.0-OpenSSH_9.0"
-                },
-                {
-                    port: 631,
-                    protocol: "TCP",
-                    product: "CUPS",
-                    version: "2.4",
-                    banner: "IPP Printing"
-                }
-            ],
-            iot: "",
-            snmp: "disabled",
-            mdns: "enabled",
-            ssdp: "enabled",
-            webStack: "nginx"
-        },
-        interface: {
-            name: "eth0",
-            description: "Ethernet",
-            flags: 4163,
-            addresses: [
-                {
-                    ip: new Uint8Array([
-                        192,
-                        168,
-                        1,
-                        10
-                    ]),
-                    netmask: new Uint8Array([
-                        255,
-                        255,
-                        255,
-                        0
-                    ])
-                }
-            ]
-        },
-        net: {
-            IP: new Uint8Array([
-                192,
-                168,
-                1,
-                10
-            ]),
-            Mask: new Uint8Array([
-                255,
-                255,
-                255,
-                0
-            ])
-        }
-    },
-    // 2. Windows laptop
-    {
-        device: {
-            ip: "192.168.10.2",
-            mac: "00:1A:2B:3C:4D:11",
-            alive: true,
-            hostname: "laptop-01",
-            os: "Windows 11/10",
-            osTtl: 128,
-            osMethod: "ICMP Echo",
-            services: [
-                {
-                    port: 445,
-                    protocol: "TCP",
-                    product: "SMB",
-                    version: "3.1.1",
-                    banner: "Windows SMB"
-                }
-            ],
-            iot: "",
-            snmp: "disabled",
-            mdns: "enabled",
-            ssdp: "enabled",
-            webStack: "IIS"
-        },
-        interface: {
-            name: "wifi0",
-            description: "Wi-Fi",
-            flags: 4163,
-            addresses: [
-                {
-                    ip: new Uint8Array([
-                        192,
-                        168,
-                        1,
-                        11
-                    ]),
-                    netmask: new Uint8Array([
-                        255,
-                        255,
-                        255,
-                        0
-                    ])
-                }
-            ]
-        },
-        net: {
-            IP: new Uint8Array([
-                192,
-                168,
-                1,
-                11
-            ]),
-            Mask: new Uint8Array([
-                255,
-                255,
-                255,
-                0
-            ])
-        }
-    },
-    // 3. Android phone
-    {
-        device: {
-            ip: "192.168.10.3",
-            mac: "AA:BB:CC:DD:EE:01",
-            alive: true,
-            hostname: "mobile-phone-01",
-            os: "Android 14",
-            osTtl: 64,
-            osMethod: "ICMP",
-            services: [],
-            iot: "mobile",
-            snmp: "disabled",
-            mdns: "enabled",
-            ssdp: "enabled",
-            webStack: ""
-        },
-        interface: {
-            name: "wlan0",
-            description: "Wi-Fi",
-            flags: 4163,
-            addresses: [
-                {
-                    ip: new Uint8Array([
-                        192,
-                        168,
-                        1,
-                        20
-                    ]),
-                    netmask: new Uint8Array([
-                        255,
-                        255,
-                        255,
-                        0
-                    ])
-                }
-            ]
-        },
-        net: {
-            IP: new Uint8Array([
-                192,
-                168,
-                1,
-                20
-            ]),
-            Mask: new Uint8Array([
-                255,
-                255,
-                255,
-                0
-            ])
-        }
-    },
-    {
-        device: {
-            ip: "192.168.10.4",
-            mac: "AA:BB:CC:DD:EE:02",
-            alive: true,
-            hostname: "iot-signal-sensor-01",
-            os: "RTOS",
-            osTtl: 255,
-            osMethod: "ARP",
-            services: [
-                {
-                    port: 80,
-                    protocol: "TCP",
-                    product: "Embedded HTTP",
-                    version: "1.0",
-                    banner: "IoT Web UI"
-                }
-            ],
-            iot: "sensor",
-            snmp: "limited",
-            mdns: "enabled",
-            ssdp: "disabled",
-            webStack: "lighttpd"
-        },
-        interface: {
-            name: "eth0",
-            description: "IoT Ethernet",
-            flags: 4099,
-            addresses: [
-                {
-                    ip: new Uint8Array([
-                        192,
-                        168,
-                        1,
-                        30
-                    ]),
-                    netmask: new Uint8Array([
-                        255,
-                        255,
-                        255,
-                        0
-                    ])
-                }
-            ]
-        },
-        net: {
-            IP: new Uint8Array([
-                192,
-                168,
-                1,
-                30
-            ]),
-            Mask: new Uint8Array([
-                255,
-                255,
-                255,
-                0
-            ])
-        }
-    },
-    // 5. Network printer
-    {
-        device: {
-            ip: "192.168.10.5",
-            mac: "DE:AD:BE:EF:00:01",
-            alive: true,
-            hostname: "printer-01",
-            os: "Embedded Linux",
-            osTtl: 255,
-            osMethod: "SNMP",
-            services: [
-                {
-                    port: 80,
-                    protocol: "TCP",
-                    product: "Web UI",
-                    version: "2.0",
-                    banner: "Printer Admin"
-                },
-                {
-                    port: 9100,
-                    protocol: "TCP",
-                    product: "JetDirect",
-                    version: "1.0",
-                    banner: "RAW Printing"
-                }
-            ],
-            iot: "printer",
-            snmp: "enabled",
-            mdns: "enabled",
-            ssdp: "enabled",
-            webStack: "nginx"
-        },
-        interface: {
-            name: "eth0",
-            description: "Ethernet",
-            flags: 4163,
-            addresses: [
-                {
-                    ip: new Uint8Array([
-                        192,
-                        168,
-                        1,
-                        40
-                    ]),
-                    netmask: new Uint8Array([
-                        255,
-                        255,
-                        255,
-                        0
-                    ])
-                }
-            ]
-        },
-        net: {
-            IP: new Uint8Array([
-                192,
-                168,
-                1,
-                40
-            ]),
-            Mask: new Uint8Array([
-                255,
-                255,
-                255,
-                0
-            ])
-        }
-    },
-    {
-        device: {
-            ip: "192.168.10.6",
-            mac: "DE:AD:BE:EF:00:02",
-            alive: true,
-            hostname: "scanner-01",
-            os: "Embedded Linux",
-            osTtl: 255,
-            osMethod: "SNMP",
-            services: [
-                {
-                    port: 80,
-                    protocol: "TCP",
-                    product: "Scan Web UI",
-                    version: "1.3",
-                    banner: "Scanner Admin"
-                }
-            ],
-            iot: "scanner",
-            snmp: "enabled",
-            mdns: "enabled",
-            ssdp: "enabled",
-            webStack: "lighttpd"
-        },
-        interface: {
-            name: "eth0",
-            description: "Ethernet",
-            flags: 4163,
-            addresses: [
-                {
-                    ip: new Uint8Array([
-                        192,
-                        168,
-                        1,
-                        41
-                    ]),
-                    netmask: new Uint8Array([
-                        255,
-                        255,
-                        255,
-                        0
-                    ])
-                }
-            ]
-        },
-        net: {
-            IP: new Uint8Array([
-                192,
-                168,
-                1,
-                41
-            ]),
-            Mask: new Uint8Array([
-                255,
-                255,
-                255,
-                0
-            ])
-        }
-    },
-    // 7. File server
-    {
-        device: {
-            ip: "192.168.10.7",
-            mac: "00:AA:BB:CC:DD:50",
-            alive: true,
-            hostname: "file-server-01",
-            os: "Ubuntu Server 22.04",
-            osTtl: 64,
-            osMethod: "TCP SYN",
-            services: [
-                {
-                    port: 22,
-                    protocol: "TCP",
-                    product: "OpenSSH",
-                    version: "9.0",
-                    banner: "SSH"
-                },
-                {
-                    port: 445,
-                    protocol: "TCP",
-                    product: "Samba",
-                    version: "4.15",
-                    banner: "SMB File Share"
-                },
-                {
-                    port: 2049,
-                    protocol: "TCP",
-                    product: "NFS",
-                    version: "4",
-                    banner: "NFS Share"
-                }
-            ],
-            iot: "",
-            snmp: "enabled",
-            mdns: "disabled",
-            ssdp: "disabled",
-            webStack: "nginx"
-        },
-        interface: {
-            name: "eth0",
-            description: "Server NIC",
-            flags: 4163,
-            addresses: [
-                {
-                    ip: new Uint8Array([
-                        192,
-                        168,
-                        1,
-                        50
-                    ]),
-                    netmask: new Uint8Array([
-                        255,
-                        255,
-                        255,
-                        0
-                    ])
-                }
-            ]
-        },
-        net: {
-            IP: new Uint8Array([
-                192,
-                168,
-                1,
-                50
-            ]),
-            Mask: new Uint8Array([
-                255,
-                255,
-                255,
-                0
-            ])
-        }
-    },
-    // 8. Web server (Debian)
-    {
-        device: {
-            ip: "192.168.10.8",
-            mac: "00:AA:BB:CC:DD:60",
-            alive: true,
-            hostname: "web-server-01",
-            os: "Debian 12",
-            osTtl: 64,
-            osMethod: "TCP SYN",
-            services: [
-                {
-                    port: 80,
-                    protocol: "TCP",
-                    product: "nginx",
-                    version: "1.24",
-                    banner: "HTTP Server"
-                },
-                {
-                    port: 443,
-                    protocol: "TCP",
-                    product: "nginx",
-                    version: "1.24",
-                    banner: "HTTPS Server"
-                }
-            ],
-            iot: "",
-            snmp: "enabled",
-            mdns: "disabled",
-            ssdp: "disabled",
-            webStack: "nginx + node"
-        },
-        interface: {
-            name: "eth0",
-            description: "Server NIC",
-            flags: 4163,
-            addresses: [
-                {
-                    ip: new Uint8Array([
-                        192,
-                        168,
-                        1,
-                        60
-                    ]),
-                    netmask: new Uint8Array([
-                        255,
-                        255,
-                        255,
-                        0
-                    ])
-                }
-            ]
-        },
-        net: {
-            IP: new Uint8Array([
-                192,
-                168,
-                1,
-                60
-            ]),
-            Mask: new Uint8Array([
-                255,
-                255,
-                255,
-                0
-            ])
-        }
-    },
-    // 9. Remote access server
-    {
-        device: {
-            ip: "192.168.10.9",
-            mac: "00:AA:BB:CC:DD:70",
-            alive: true,
-            hostname: "remote-access-server-01",
-            os: "Debian 12",
-            osTtl: 64,
-            osMethod: "TCP SYN",
-            services: [
-                {
-                    port: 22,
-                    protocol: "TCP",
-                    product: "OpenSSH",
-                    version: "9.2",
-                    banner: "SSH VPN Gateway"
-                },
-                {
-                    port: 1194,
-                    protocol: "UDP",
-                    product: "OpenVPN",
-                    version: "2.6",
-                    banner: "VPN Service"
-                }
-            ],
-            iot: "",
-            snmp: "enabled",
-            mdns: "disabled",
-            ssdp: "disabled",
-            webStack: ""
-        },
-        interface: {
-            name: "eth0",
-            description: "Server NIC",
-            flags: 4163,
-            addresses: [
-                {
-                    ip: new Uint8Array([
-                        192,
-                        168,
-                        1,
-                        70
-                    ]),
-                    netmask: new Uint8Array([
-                        255,
-                        255,
-                        255,
-                        0
-                    ])
-                }
-            ]
-        },
-        net: {
-            IP: new Uint8Array([
-                192,
-                168,
-                1,
-                70
-            ]),
-            Mask: new Uint8Array([
-                255,
-                255,
-                255,
-                0
-            ])
-        }
-    },
-    // 10. Gateway / router
-    {
-        device: {
-            ip: "192.168.10.10",
-            mac: "00:11:22:33:44:55",
-            alive: true,
-            hostname: "router",
-            os: "RouterOS",
-            osTtl: 255,
-            osMethod: "ICMP",
-            services: [
-                {
-                    port: 80,
-                    protocol: "TCP",
-                    product: "Router UI",
-                    version: "1.0",
-                    banner: "Admin Panel"
-                },
-                {
-                    port: 53,
-                    protocol: "UDP",
-                    product: "DNS",
-                    version: "1.0",
-                    banner: "DNS Resolver"
-                }
-            ],
-            iot: "gateway",
-            snmp: "enabled",
-            mdns: "enabled",
-            ssdp: "enabled",
-            webStack: "embedded"
-        },
-        interface: {
-            name: "wan0",
-            description: "Router WAN/LAN",
-            flags: 4163,
-            addresses: [
-                {
-                    ip: new Uint8Array([
-                        192,
-                        168,
-                        1,
-                        1
-                    ]),
-                    netmask: new Uint8Array([
-                        255,
-                        255,
-                        255,
-                        0
-                    ])
-                }
-            ]
-        },
-        net: {
-            IP: new Uint8Array([
-                192,
-                168,
-                1,
-                1
-            ]),
-            Mask: new Uint8Array([
-                255,
-                255,
-                255,
-                0
-            ])
-        }
-    }
-];
+;
 function useDevices() {
     const idKey = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useId"])();
     const [devices, setDevices] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const asyncSetDevices = async ()=>{
         try {
-            const respose = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$axios$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get("/scan/get-devices");
-            if (respose.status === 200) {
-                setDevices(MOCK_DEVICES);
+            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$axios$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get("/scan/get-devices");
+            if (response.status === 200) {
+                const data = response.data;
+                const res = !data ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$config$2f$ui$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getDevUi"])() : data.data;
+                setDevices((prev)=>{
+                    const combined = [
+                        ...prev,
+                        ...res
+                    ];
+                    return Array.from(new Map(combined.map((device)=>[
+                            device.device.mac,
+                            device
+                        ])).values());
+                });
             }
         } catch (error) {
             console.log(error);
         }
     };
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        asyncSetDevices();
+        const interSetDev = setInterval(()=>asyncSetDevices(), 5000);
+        return ()=>{
+            clearInterval(interSetDev);
+        };
     }, []);
     return {
         idKey,
@@ -711,11 +75,557 @@ __turbopack_context__.v({
   "section": "Page-module-scss-module__QDGgUq__section",
 });
 }),
-"[project]/src/pages/Devices/ui/Page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"[project]/src/pages/Devices/ui/Page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
 
-const e = new Error("Could not parse module '[project]/src/pages/Devices/ui/Page.tsx'\n\nExpected '</', got 'jsx text (\n          )'");
-e.code = 'MODULE_UNPARSABLE';
-throw e;
+__turbopack_context__.s([
+    "DevicesPage",
+    ()=>DevicesPage
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$model$2f$index$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/pages/Devices/model/index.ts [app-ssr] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$model$2f$useDevices$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/pages/Devices/model/useDevices.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__ = __turbopack_context__.i("[project]/src/pages/Devices/ui/Page.module.scss [app-ssr] (css module)");
+"use client";
+;
+;
+;
+function DevicesPage() {
+    const { idKey, devices } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$model$2f$useDevices$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDevices"])();
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
+        className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["devices-page"],
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["body"],
+            children: devices.length ? devices.map((item, index)=>{
+                const { device, interface: iface, net } = item;
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["body__item"],
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                            children: [
+                                "Хост: ",
+                                device.hostname
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                            lineNumber: 18,
+                            columnNumber: 17
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("hr", {}, void 0, false, {
+                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                            lineNumber: 19,
+                            columnNumber: 17
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["section"],
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
+                                    children: "Основная информация"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 21,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "IP:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 23,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        device.ip
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 22,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "MAC:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 26,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        device.mac
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 25,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "Статус:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 29,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        device.alive ? "Online" : "Offline"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 28,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "OS:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 33,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        device.os
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 32,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "TTL:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 36,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        device.osTtl
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 35,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "Метод определения:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 39,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        device.osMethod
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 38,
+                                    columnNumber: 19
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                            lineNumber: 20,
+                            columnNumber: 17
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("hr", {}, void 0, false, {
+                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                            lineNumber: 42,
+                            columnNumber: 17
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["section"],
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
+                                    children: "Сетевой интерфейс"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 44,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "Интерфейс:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 46,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        iface.name
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 45,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "Описание:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 49,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        iface.description
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 48,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "Flags:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 52,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        iface.flags
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 51,
+                                    columnNumber: 19
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                            lineNumber: 43,
+                            columnNumber: 17
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("hr", {}, void 0, false, {
+                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                            lineNumber: 55,
+                            columnNumber: 17
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["section"],
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
+                                    children: "Сервисы"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 57,
+                                    columnNumber: 19
+                                }, this),
+                                device.services.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
+                                    className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["services"],
+                                    children: device.services.map((service, idx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                                            className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["service"],
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                            children: "Порт:"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                                            lineNumber: 66,
+                                                            columnNumber: 29
+                                                        }, this),
+                                                        " ",
+                                                        service.port
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                                    lineNumber: 65,
+                                                    columnNumber: 27
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                            children: "Протокол:"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                                            lineNumber: 69,
+                                                            columnNumber: 29
+                                                        }, this),
+                                                        " ",
+                                                        service.protocol
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                                    lineNumber: 68,
+                                                    columnNumber: 27
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                            children: "Продукт:"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                                            lineNumber: 72,
+                                                            columnNumber: 29
+                                                        }, this),
+                                                        " ",
+                                                        service.product
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                                    lineNumber: 71,
+                                                    columnNumber: 27
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                            children: "Версия:"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                                            lineNumber: 75,
+                                                            columnNumber: 29
+                                                        }, this),
+                                                        " ",
+                                                        service.version
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                                    lineNumber: 74,
+                                                    columnNumber: 27
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                            children: "Banner:"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                                            lineNumber: 78,
+                                                            columnNumber: 29
+                                                        }, this),
+                                                        " ",
+                                                        service.banner
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                                    lineNumber: 77,
+                                                    columnNumber: 27
+                                                }, this)
+                                            ]
+                                        }, `${service.port}-${idx}`, true, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 61,
+                                            columnNumber: 25
+                                        }, this))
+                                }, void 0, false, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 59,
+                                    columnNumber: 21
+                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: "Сервисы отсутствуют"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 84,
+                                    columnNumber: 21
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                            lineNumber: 56,
+                            columnNumber: 17
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("hr", {}, void 0, false, {
+                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                            lineNumber: 87,
+                            columnNumber: 17
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["section"],
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
+                                    children: "Дополнительно"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 89,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "IoT:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 91,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        device.iot || "Не определено"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 90,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "SNMP:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 94,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        device.snmp
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 93,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "mDNS:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 97,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        device.mdns
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 96,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "SSDP:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 100,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        device.ssdp
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 99,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "Web Stack:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 103,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        device.webStack
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 102,
+                                    columnNumber: 19
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                            lineNumber: 88,
+                            columnNumber: 17
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("hr", {}, void 0, false, {
+                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                            lineNumber: 106,
+                            columnNumber: 17
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["section"],
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
+                                    children: "RAW Network"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 108,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "IP bytes:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 110,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        Array.from(net.IP).join(".")
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 109,
+                                    columnNumber: 19
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                            children: "Mask:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                            lineNumber: 113,
+                                            columnNumber: 21
+                                        }, this),
+                                        " ",
+                                        Array.from(net.Mask).join(".")
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                                    lineNumber: 112,
+                                    columnNumber: 19
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                            lineNumber: 107,
+                            columnNumber: 17
+                        }, this)
+                    ]
+                }, `${idKey}-${index}`, true, {
+                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                    lineNumber: 17,
+                    columnNumber: 15
+                }, this);
+            }) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$pages$2f$Devices$2f$ui$2f$Page$2e$module$2e$scss__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"]["empty"],
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                    children: "Пока ничего не найдено"
+                }, void 0, false, {
+                    fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                    lineNumber: 121,
+                    columnNumber: 13
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+                lineNumber: 120,
+                columnNumber: 11
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+            lineNumber: 11,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/src/pages/Devices/ui/Page.tsx",
+        lineNumber: 10,
+        columnNumber: 5
+    }, this);
+}
 }),
 ];
 

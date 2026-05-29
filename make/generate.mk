@@ -8,9 +8,7 @@ TEST_ENV_PATHES := ./ \
  ./test/user-defined-devices/iot-device \
  ./test/peripheral-devices/printer \
  ./test/peripheral-devices/scanner \
- ./test/service-devices/file-server \
- ./test/service-devices/remote-access-server \
- ./test/service-devices/web-server
+ ./test/service-devices/file-server
 
 TEST_SSL_PATHES := ./test/service-devices/web-server \
  ./test/user-defined-devices/laptop \

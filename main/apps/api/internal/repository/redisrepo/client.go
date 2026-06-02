@@ -1,20 +1,22 @@
 package redisrepo
 
 import (
-	"InfralyraApi/pkg/logger"
 	"context"
 	"encoding/json"
 	"fmt"
 	"time"
 
 	"github.com/redis/go-redis/v9"
+
+	"InfralyraApi/pkg/logger"
 )
 
 const (
-	rateLimitTemplate = "rl:%s"
-	tokenKeyTemplate = "refresh_token:%v"
-	userKeyTemplate  = "user:%v"
+	rateLimitTemplate   = "rl:%s"
+	tokenKeyTemplate    = "refresh_token:%v"
+	userKeyTemplate     = "user:%v"
 	roomNameKeyTemplate = "room:%v:user:%v"
+	deviceKey           = "dev_from_inface:%s"
 )
 
 type RedisKey interface {
@@ -47,10 +49,10 @@ func (r *RedisRepoClient) Set(ctx context.Context, key string, value any, ttl ti
 			key,
 			err.Error(),
 		)
-		
+
 		return err
 	}
-	
+
 	return r.rdb.Set(ctx, key, data, ttl).Err()
 }
 
@@ -63,7 +65,7 @@ func (r *RedisRepoClient) JsonSet(ctx context.Context, key string, path string, 
 			key,
 			err.Error(),
 		)
-		
+
 		return err
 	}
 

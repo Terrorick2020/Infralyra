@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useId, useEffect } from "react";
+import { useState, useId, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { getPackUi } from '@/src/shared/config';
 import type { IGetPackData } from ".";
@@ -17,6 +17,7 @@ export function useTraffic() {
   const idKey = useId();
   const [packets, setPackets] = useState<PacketInfo[]>([]);
   const settings = useSelector((state: IRootState) => state.settings);
+  const count = useRef<number>(1);
 
   const asyncGetTrafic = async () => {
     if (!settings.pcapName || !settings.userName) return;
@@ -26,7 +27,8 @@ export function useTraffic() {
         username: settings.userName,
         roomname: "roomName",
         inface: settings.pcapName,
-        payloadLimit: 10,
+        count: 15,
+        step: count.current,
       };
 
       const response = await api.post("/scan/get-packets", data);
@@ -34,6 +36,7 @@ export function useTraffic() {
       if (response.status === 200) {
         const data = response.data;
         const res: PacketInfo[] = !data ? getPackUi().reverse() : data.data;
+        count.current = count.current + 1;
 
         setPackets(prev => [...res, ...prev])
       }
@@ -47,6 +50,7 @@ export function useTraffic() {
 
     return () => {
       clearInterval(interPack);
+      count.current = 1;
     };
   }, []);
 

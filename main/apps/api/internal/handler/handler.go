@@ -22,7 +22,7 @@ func (h *Handler) InitHttpRoutes() *gin.Engine {
 
 	router.Use(RateLimiterMiddleware(h.service.Authorization))
 
-	router.GET("/ping", h.Ping)
+	router.Any("/mirror", h.Ping)
 
 	auth := router.Group("/auth")
 	{

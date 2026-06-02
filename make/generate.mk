@@ -18,7 +18,8 @@ TEST_SSL_PATHES := ./test/service-devices/web-server \
  ./test/user-defined-devices/personal-computer
 
 HOSTNAME := 0.0.0.0
-TARGET_HOSTNAME := localhost
+TARGET_HOSTNAME := main
+TARGET_PORT := 80
 
 PERIPH_PORT := 9100
 SMB_PORT := 445
@@ -125,7 +126,8 @@ define generate_env
 						.Replace('{{TELEPHONY_PORT}}', '$(TELEPHONY_PORT)') \
 						.Replace('{{DOCKER_PORT}}', '$(DOCKER_PORT)') \
 						.Replace('{{SYSLOG_PORT}}', '$(SYSLOG_PORT)') \
-						.Replace('{{TARGET_PORT}}', '$(API_PORT)') \
+						.Replace('{{TARGET_PORT}}', '$(TARGET_PORT)') \
+						.Replace('{{API_PORT}}', '$(API_PORT)') \
 						.Replace('{{WS_PORT}}', '$(WS_PORT)') \
 						.Replace('{{APP_PORT}}', '$(APP_PORT)') \
 						.Replace('{{POSTGRES_DB}}', '$(POSTGRES_DB)') \
@@ -170,7 +172,8 @@ define generate_env
 						-e "s|{{TELEPHONY_PORT}}|$(TELEPHONY_PORT)|g" \
 						-e "s|{{DOCKER_PORT}}|$(DOCKER_PORT)|g" \
 						-e "s|{{SYSLOG_PORT}}|$(SYSLOG_PORT)|g" \
-						-e "s|{{TARGET_PORT}}|$(API_PORT)|g" \
+						-e "s|{{TARGET_PORT}}|$(TARGET_PORT)|g" \
+						-e "s|{{API_PORT}}|$(API_PORT)|g" \
 						-e "s|{{WS_PORT}}|$(WS_PORT)|g" \
 						-e "s|{{APP_PORT}}|$(APP_PORT)|g" \
 						-e "s|{{POSTGRES_DB}}|$(POSTGRES_DB)|g" \

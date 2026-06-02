@@ -1,11 +1,12 @@
 package cron
 
 import (
-	"InfralyraApi/config"
-	"InfralyraApi/internal/service"
 	"fmt"
 
 	"github.com/robfig/cron/v3"
+
+	"InfralyraApi/config"
+	"InfralyraApi/internal/service"
 )
 
 type Scaner interface {

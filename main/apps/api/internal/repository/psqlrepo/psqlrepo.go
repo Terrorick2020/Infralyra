@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"github.com/jmoiron/sqlx"
+
+	"InfralyraApi/pkg/scan"
 )
 
 type Users interface {
@@ -12,7 +14,8 @@ type Users interface {
 }
 
 type Sniff interface {
-
+	SetPacket(ctx context.Context, inface string, pkt scan.PacketInfo) error
+	GetPackets(ctx context.Context, inface string, count int16, step int16) ([]scan.PacketInfo, error)
 }
 
 type PsqlRepo struct {

@@ -1,11 +1,12 @@
 package redisdb
 
 import (
-	"InfralyraApi/config"
 	"fmt"
 	"log"
 
 	"github.com/redis/go-redis/v9"
+
+	"InfralyraApi/config"
 )
 
 type DBRSConfig struct {

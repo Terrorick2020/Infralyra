@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 
+	"InfralyraApi/internal/handler/dto"
 	"InfralyraApi/internal/repository/redisrepo"
 	"InfralyraApi/pkg/logger"
 	"InfralyraApi/pkg/scan"
@@ -47,8 +48,54 @@ func (ss *ScanService) GetActivity(ctx context.Context) ([]scan.IfaceStats, erro
 
 	activity, err := scan.GetInterfacesActivity()
 	if err != nil {
-		logger.Logger.Errorf("❌ Ошибка получения актвностей интерфейсов: %s", err.Error())
+		logger.Logger.Errorf("❌ Ошибка получения активностей интерфейсов: %s", err.Error())
 	}
 
 	return activity, err
+}
+
+func (ss *ScanService) SearchDevices(ctx context.Context) error {
+	var infaces []scan.InterfaceInfo
+
+	infaces, err := ss.GetInterfaces(ctx)
+	if err != nil {
+		logger.Logger.Errorf("❌ Ошибка получения интерфейсов при сканировании: %s", err.Error())
+		return err
+	}
+
+	for _, iface := range infaces { 
+		var devices []scan.DeviceWithIp
+
+		devices, err := scan.GetScan(iface.PCAPName)
+		if err != nil {
+			logger.Logger.Errorf("❌ Ошибка получения устройств интерфейса '%s': %s", iface.PCAPName, err.Error())
+			continue
+		}
+
+		ss.redisRepo.SetDevices(
+			ctx,
+			scan.DivicesInfo{
+				Inface: iface.PCAPName,
+				Devices: devices,
+			},
+		)
+	}
+
+	return nil
+}
+
+func (ss *ScanService) GetDevices(ctx context.Context, data dto.GetDevicesDto) ([]scan.DeviceWithIp, error) {
+	var devices []scan.DeviceWithIp
+
+	devices, err := ss.redisRepo.GetDevices(ctx, data.Inface)
+	if err != nil {
+		logger.Logger.Errorf("❌ Ошибка получения устройств интерфейса '%s': %s", data.Inface, err.Error())
+	}
+
+	if devices == nil {
+		logger.Logger.Warn("⚠️ Список устройств в redis пустой")
+		ss.SearchDevices(ctx)
+	}
+
+	return []scan.DeviceWithIp{}, err
 }

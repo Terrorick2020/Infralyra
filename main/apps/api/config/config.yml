@@ -31,4 +31,4 @@ interfaces:
   save_ttl: "6h"
 
 cron:
-  net_scan_ttl: "1h"
+  net_scan_ttl: "10m"

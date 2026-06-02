@@ -1,6 +1,12 @@
 package cron
 
-import "InfralyraApi/internal/service"
+import (
+	"context"
+	"time"
+
+	"InfralyraApi/internal/service"
+	"InfralyraApi/pkg/logger"
+)
 
 type ScanStruct struct {
 	LogLvl      string
@@ -9,11 +15,21 @@ type ScanStruct struct {
 
 func NewScanStruct(scanService service.Scan) *ScanStruct {
 	return &ScanStruct{
-		LogLvl: "CronJobs: `Scaner`",
+		LogLvl:      "CronJobs: `Scaner`",
 		scanService: scanService,
 	}
 }
 
 func (ss *ScanStruct) NetScanning() {
-	return
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Minute)
+	defer cancel()
+	
+	err := ss.scanService.SearchDevices(ctx)
+	if err != nil {
+		logger.Logger.Errorf("❌ Ошибка сканирования сети: %s", err.Error())
+		return
+	}
+
+	logger.Logger.Info("✅ Сканирование завершено")
+
 }

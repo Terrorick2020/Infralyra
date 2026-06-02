@@ -8,6 +8,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/gin-gonic/gin"
+
 	"InfralyraApi/config"
 	"InfralyraApi/internal/cron"
 	"InfralyraApi/internal/handler"
@@ -17,8 +19,6 @@ import (
 	"InfralyraApi/internal/service"
 	"InfralyraApi/pkg/logger"
 	"InfralyraApi/pkg/server"
-
-	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -64,6 +64,19 @@ func main() {
 	repos := repository.NewRepository(db, rdb)
 	service := service.NewService(repos)
 	handler := handler.NewHandler(service)
+
+	bgCtx, bgCancel := context.WithCancel(context.Background())
+	defer bgCancel()
+
+	go func() {
+		logger.Logger.Info("👂 Запуск процесса сниффинга пакетов...")
+		err := service.Sniff.SearchPackets(bgCtx)
+		if err != nil && err != context.Canceled {
+			logger.Logger.Errorf("❌ Сниффер завершился с ошибкой: %s", err)
+		} else {
+			logger.Logger.Info("✅ Сниффер успешно остановлен")
+		}
+	}()
 
 	httpSrv := new(server.HtttpServer)
 	httpPath := fmt.Sprintf(

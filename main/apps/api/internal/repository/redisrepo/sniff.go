@@ -9,3 +9,5 @@ type RedisRepoSniff struct {
 func NewRedisRepoSniff(rdb *redis.Client) *RedisRepoSniff {
 	return &RedisRepoSniff{client: RedisRepoClient{rdb: rdb}}
 }
+
+

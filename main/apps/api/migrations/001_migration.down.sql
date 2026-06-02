@@ -1,4 +1,5 @@
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS packets CASCADE;
 
 DO
 $$
@@ -10,3 +11,10 @@ END
 $$;
 
 DROP EXTENSION IF EXISTS pgcrypto;
+DROP EXTENSION IF EXISTS uuid-ossp;
+DROP EXTENSION IF EXISTS pg_stat_statements;
+
+SELECT cron.unschedule('create-packets-partitions');
+
+DROP FUNCTION IF EXISTS create_monthly_partitions(text, int);
+DROP FUNCTION IF EXISTS packets_drop_old_partitions();

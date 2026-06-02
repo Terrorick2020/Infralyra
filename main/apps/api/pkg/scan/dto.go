@@ -107,3 +107,8 @@ type DeviceWithIp struct {
 	Interface *pcap.Interface `json:"interface"`
 	Net       *net.IPNet      `json:"net"`
 }
+
+type DivicesInfo struct {
+	Inface  string         `json:"inface"`
+	Devices []DeviceWithIp `json:"devices"`
+}

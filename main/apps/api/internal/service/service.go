@@ -1,11 +1,12 @@
 package service
 
 import (
+	"context"
+
 	"InfralyraApi/internal/handler/dto"
 	"InfralyraApi/internal/repository"
 	"InfralyraApi/internal/repository/redisrepo"
 	"InfralyraApi/pkg/scan"
-	"context"
 )
 
 type Authorization interface {
@@ -22,10 +23,13 @@ type Authorization interface {
 type Scan interface {
 	GetInterfaces(ctx context.Context) ([]scan.InterfaceInfo, error)
 	GetActivity(ctx context.Context) ([]scan.IfaceStats, error)
+	SearchDevices(ctx context.Context) error
+	GetDevices(ctx context.Context, data dto.GetDevicesDto) ([]scan.DeviceWithIp, error)
 }
 
 type Sniff interface {
-	GetPackets(ctx context.Context, data dto.GetTraficDto) (<- chan scan.PacketInfo, error)
+	SearchPackets(ctx context.Context) error
+	GetPackets(ctx context.Context, data dto.GetTraficDto) ([]scan.PacketInfo, error)
 }
 
 type Service struct {
@@ -41,7 +45,7 @@ func NewService(repository *repository.Repository) *Service {
 			repository.RedisRepo.Authorization,
 			repository.RedisRepo.User,
 		),
-		Scan:  NewScanService(repository.RedisRepo.Scan),
+		Scan: NewScanService(repository.RedisRepo.Scan),
 		Sniff: NewSniffService(
 			repository.PsqlRepo.Sniff,
 			repository.RedisRepo.Scan,

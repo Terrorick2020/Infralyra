@@ -22,4 +22,6 @@ RUN chmod +x /home/device/traffic.sh
 RUN echo "* * * * * /home/device/traffic.sh" > /etc/cron.d/traffic
 RUN chmod 0644 /etc/cron.d/traffic
 
+EXPOSE 22
+
 CMD cron && tail -f /dev/null

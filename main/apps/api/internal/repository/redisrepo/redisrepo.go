@@ -1,11 +1,12 @@
 package redisrepo
 
 import (
-	"InfralyraApi/pkg/scan"
 	"context"
 	"time"
 
 	"github.com/redis/go-redis/v9"
+
+	"InfralyraApi/pkg/scan"
 )
 
 type Client interface {
@@ -26,6 +27,8 @@ type Authorization interface {
 type Scan interface {
 	GetInterfaces(ctx context.Context) ([]scan.InterfaceInfo, error)
 	SetInterfaces(ctx context.Context, data []scan.InterfaceInfo) error
+	SetDevices(ctx context.Context, data scan.DivicesInfo) error
+	GetDevices(ctx context.Context, inface string) ([]scan.DeviceWithIp, error)
 }
 
 type Sniff interface{}

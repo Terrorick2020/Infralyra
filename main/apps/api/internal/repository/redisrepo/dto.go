@@ -1,14 +1,16 @@
 package redisrepo
 
-import "time"
+import (
+	"time"
+)
 
 type Status string
 
 const (
-	Online  Status = "online"
-	Offline Status = "offline"
-	InterfacesKey = "interfaces"
-	ActivityKey = "activity"
+	Online        Status = "online"
+	Offline       Status = "offline"
+	InterfacesKey        = "interfaces"
+	ActivityKey          = "activity"
 )
 
 type UserClient struct {

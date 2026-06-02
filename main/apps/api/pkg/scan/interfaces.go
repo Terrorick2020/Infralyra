@@ -197,3 +197,12 @@ func DetectType(name string, f net.Flags) string {
 
 	return "unknown"
 }
+
+func IsSkipInterface(name string) bool {
+	switch name {
+	case "dbus-system", "dbus-session", "bluetooth-monitor", "bluetooth", "any":
+		return true
+	}
+	
+	return false
+}

@@ -7,7 +7,7 @@ import (
 )
 
 func (h *Handler) Ping(ctx *gin.Context) {
-	cuccessRes := SuccessRes[*struct{}]("Pong", nil)
+	cuccessRes := SuccessRes[*struct{}]("Mirror out", nil)
 
 	SendResponse(ctx, http.StatusOK, cuccessRes)
 }

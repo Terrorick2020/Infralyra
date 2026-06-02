@@ -1,13 +1,14 @@
 package psqldb
 
 import (
-	"InfralyraApi/config"
 	"errors"
 	"fmt"
 	"log"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/jmoiron/sqlx"
+
+	"InfralyraApi/config"
 
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -45,6 +46,7 @@ func InitPsqlDbConnect() (*sqlx.DB, error) {
 func InitPsqlDbMigration() error {
 	m, err := migrate.New(mPath, config.InfralyraEnv.PsqlDb.Url)
 	if err != nil {
+		log.Printf("❌ Ошибка создания миграций: %v", err)
 		return err
 	}
 

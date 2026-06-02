@@ -9,17 +9,9 @@ services:
       - ./test/user-defined-devices/personal-computer/.env
     restart: unless-stopped
     networks:
-      - planner_network
-    ports:
-      - "${SSH_PORT}:${SSH_PORT}"
-      - "${HTTP_PORT}:${HTTP_PORT}"
-      - "${RPC_PORT}:${RPC_PORT}"
-      - "${HTTPS_PORT}:${HTTPS_PORT}"
-      - "${SMB_PORT}:${SMB_PORT}"
-      - "${NFS_PORT}:${NFS_PORT}"
-      - "${SYSLOG_PORT}:${SYSLOG_PORT}"
-      - "${DOCKER_PORT}:${DOCKER_PORT}"
-  
+      test_network:
+        ipv4_address: 192.168.103.2
+
   laptop:
     build:
       context: ./test/user-defined-devices/laptop
@@ -30,15 +22,10 @@ services:
       - ./test/user-defined-devices/laptop/.env
     restart: unless-stopped
     networks:
-      - planner_network
-    ports:
-      - "${SSH_PORT}:${SSH_PORT}"
-      - "${HTTP_PORT}:${HTTP_PORT}"
-      - "${RPC_PORT}:${RPC_PORT}"
-      - "${NETBIOS_PORT}:${NETBIOS_PORT}"
-      - "${HTTPS_PORT}:${HTTPS_PORT}"
-      - "${SMB_PORT}:${SMB_PORT}"
-      - "${RDP_PORT}:${RDP_PORT}"
+      test_network:
+        ipv4_address: 192.168.103.3
+    depends_on:
+      - main
 
   mobile_phone:
     build:
@@ -48,13 +35,10 @@ services:
       - ./test/user-defined-devices/mobile-phone/.env
     restart: unless-stopped
     networks:
-      - planner_network
-    ports:
-      - "${ADB_PORT}:${ADB_PORT}"
-      - "${HTTP_MOB_PORT}:${HTTP_MOB_PORT}"
-      - "${HTTPS_MOB_PORT}:${HTTPS_MOB_PORT}"
-      - "${BINDER_PORT}:${BINDER_PORT}"
-      - "${TELEPHONY_PORT}:${TELEPHONY_PORT}"
+      test_network:
+        ipv4_address: 192.168.103.4
+    depends_on:
+      - main
 
   iot_device:
     build:
@@ -64,12 +48,10 @@ services:
       - ./test/user-defined-devices/iot-device/.env
     restart: unless-stopped
     networks:
-      - planner_network
-    ports:
-      - "${MQTT_PORT}:${MQTT_PORT}"
-      - "${HTTP_PORT}:${HTTP_PORT}"
-      - "${UDP_PORT}:${UDP_PORT}"
-      - "${TELEMETRY_PORT}:${TELEMETRY_PORT}"
+      test_network:
+        ipv4_address: 192.168.103.5
+    depends_on:
+      - main
 
   printer:
     build:
@@ -79,9 +61,10 @@ services:
       - ./test/peripheral-devices/printer/.env
     restart: unless-stopped
     networks:
-      - planner_network
-    ports:
-      - "${PERIPH_PORT}:${PERIPH_PORT}"
+      test_network:
+        ipv4_address: 192.168.103.6
+    depends_on:
+      - main
 
   scanner:
     build:
@@ -91,9 +74,10 @@ services:
       - ./test/peripheral-devices/scanner/.env
     restart: unless-stopped
     networks:
-      - planner_network
-    ports:
-      - "${PERIPH_PORT}:${PERIPH_PORT}"
+      test_network:
+        ipv4_address: 192.168.103.7
+    depends_on:
+      - main
 
   file_server:
     build:
@@ -105,12 +89,21 @@ services:
       - ./test/service-devices/file-server/.env
     restart: unless-stopped
     networks:
-      - planner_network
-    ports:
-      - "${SMB_PORT}:${SMB_PORT}"
-      - "${NFS_PORT}:${NFS_PORT}"
-      - "${FTP_PORT}:${FTP_PORT}"
-      - "${SSH_PORT}:${SSH_PORT}"
+      test_network:
+        ipv4_address: 192.168.103.8
+    depends_on:
+      - main
+
+  web_server:
+    build:
+      context: ./test/service-devices/web-server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      test_network:
+        ipv4_address: 192.168.103.9
+    depends_on:
+      - main
 
   remote_access_server:
     build:
@@ -122,46 +115,33 @@ services:
       - ./test/service-devices/remote-access-server/.env
     restart: unless-stopped
     networks:
-      - planner_network
-    ports:
-      - "${SSH_PORT}:${SSH_PORT}"
+      test_network:
+        ipv4_address: 192.168.103.10
+    depends_on:
+      - main
 
-  web_server:
+  main:
     build:
-      context: ./test/service-devices/web-server
-      dockerfile: Dockerfile
+      context: ./main
+      dockerfile: Dockerfile.test
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+      - SYS_ADMIN
+    env_file:
+      - ./main/.env
     restart: unless-stopped
     networks:
-      - planner_network
-    ports:
-      - "80:80"
-      - "443:443"
-
-  # main:
-  #   build:
-  #     context: ./main
-  #     dockerfile: Dockerfile.test
-  #   env_file:
-  #     - ./main/.env
-  #   restart: unless-stopped
-  #   networks:
-  #     - planner_network
-  #   ports:
-  #     - "${TARGET_PORT}:${TARGET_PORT}"
-  #   depends_on:
-  #    - personal_computer
-  #    - laptop
-  #    - mobile_phone
-  #    - iot_device
-  #    - printer
-  #    - scanner
-  #    - file_server
-  #    - remote_access_server
-  #    - web_server
+      test_network:
+        ipv4_address: 192.168.103.11
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
 
 networks:
-  planner_network:
+  test_network:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.10.0/24
+        - subnet: 192.168.103.0/24

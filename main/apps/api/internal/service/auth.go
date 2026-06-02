@@ -1,17 +1,18 @@
 package service
 
 import (
+	"context"
+	"errors"
+	"fmt"
+
+	"github.com/gofrs/uuid"
+
 	"InfralyraApi/config"
 	"InfralyraApi/internal/handler/dto"
 	"InfralyraApi/internal/repository/psqlrepo"
 	"InfralyraApi/internal/repository/redisrepo"
 	"InfralyraApi/pkg/logger"
 	"InfralyraApi/pkg/utils"
-	"context"
-	"errors"
-	"fmt"
-
-	"github.com/gofrs/uuid"
 )
 
 type AuthService struct {
@@ -59,7 +60,7 @@ func (as *AuthService) InitUser(ctx context.Context, meta redisrepo.UserClient, 
 		return "", err
 	}
 
-	passRes := utils.CheckStrHash(user.Password, data.Username)
+	passRes := utils.CheckStrHash(user.Password, data.Password)
 
 	if !passRes {
 		logger.Logger.Errorf("❌ Ошибка вводимого пароля для: %s", data.Username)
@@ -178,7 +179,7 @@ func (as *AuthService) CheckCorrectSockRN(ctx context.Context, nsp, username, ro
 			"❌ Ошибка полючения комнты пользователя: %s",
 			err.Error(),
 		)
-		
+
 		return err
 	}
 

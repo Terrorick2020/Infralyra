@@ -37,5 +37,10 @@ type GetTraficDto struct {
 	Username     string `form:"username"`
 	RoomName     string `form:"roomname"`
 	Inface       string `form:"inface"`
-	PayloadLimit int    `form:"payloadLimit"`
+	Count        int16  `form:"count"`
+	Step         int16  `form:"step"`
+}
+
+type GetDevicesDto struct {
+	Inface string `form:"inface"`
 }

@@ -61,7 +61,7 @@ export interface PacketInfo {
   ethernet: PacketInfoEther;
   network: PacketInfoNet;
   transport: PacketInfoTrans;
-  application: Uint8Array;
+  application: string;
 }
 
 export interface ServiceInfo {

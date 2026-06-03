@@ -49,7 +49,7 @@ export function TraficPage() {
                   <mark>Порт получателя:</mark> {item.transport.dstPort}
                 </h6>
                 <h6 className={styles["info"]}>
-                  <mark>Полезная нагрузка:</mark> {item.application.join(" ")}
+                  <mark>Полезная нагрузка:</mark> {item.application}
                 </h6>
               </div>
             </div>

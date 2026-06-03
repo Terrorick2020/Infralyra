@@ -18,7 +18,7 @@ TEST_SSL_PATHES := ./test/service-devices/web-server \
  ./test/user-defined-devices/personal-computer
 
 HOSTNAME := 0.0.0.0
-TARGET_HOSTNAME := main
+TARGET_HOSTNAME := localhost
 TARGET_PORT := 80
 
 PERIPH_PORT := 9100

@@ -1,32 +1,45 @@
 "use client";
 
 import { useId, useState, useEffect } from "react";
-import { getDevUi } from '@/src/shared/config';
+import { useSelector } from "react-redux";
+import { getDevUi } from "@/src/shared/config";
 import type { DeviceWithIp } from ".";
-import api from '@/src/shared/config/axios';
+import type { IRootState } from "@/src/shared/store";
+import api from "@/src/shared/config/axios";
 
 export function useDevices() {
   const idKey = useId();
   const [devices, setDevices] = useState<DeviceWithIp[]>([]);
+  const settings = useSelector((state: IRootState) => state.settings);
 
   const asyncSetDevices = async () => {
+    if (!settings.pcapName) return;
+
     try {
-      const response = await api.get("/scan/get-devices")
+      const data: { inface: string } = {
+        inface: settings.pcapName,
+      };
 
-      if(response.status === 200) {
-        const data = response.data;
-        const res: DeviceWithIp[] = !data ? getDevUi() : data.data;
+      const response = await api.post("/scan/get-devices", data);
+      let resDevices: DeviceWithIp[] = getDevUi();
 
-        setDevices(prev => {
-          const combined = [...prev, ...res];
-
-          return Array.from(
-            new Map(combined.map(device => [device.device.mac, device])).values()
-          );
-        })
+      if (response.status === 200) {
+        const resData = response.data;
+        resDevices = !data ? getDevUi() : resData.data;
       }
+      
+      setDevices((prev) => {
+        const combined = [...prev, ...resDevices];
+
+        return Array.from(
+          new Map(
+            combined.map((device) => [device.device.mac, device]),
+          ).values(),
+        );
+      });
+
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -35,7 +48,7 @@ export function useDevices() {
 
     return () => {
       clearInterval(interSetDev);
-    }
+    };
   }, []);
 
   return { idKey, devices };

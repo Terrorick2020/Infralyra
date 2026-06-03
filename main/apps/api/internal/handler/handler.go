@@ -36,7 +36,7 @@ func (h *Handler) InitHttpRoutes() *gin.Engine {
 	{
 		scan.GET("/get-interfaces", h.getInterfaces)
 		scan.GET("/get-activity", h.getActivity)
-		scan.GET("/get-devices", h.getDevices)
+		scan.POST("/get-devices", h.getDevices)
 		scan.POST("/get-packets", h.getHttpSniff)
 	}
 

@@ -14,7 +14,7 @@ export const pack_ui: PacketInfo[] = [
       protocol: "UDP",
     },
     transport: { proto: "UDP", srcPort: 5683, dstPort: 5353 },
-    application: new Uint8Array([109, 68, 78, 83]),
+    application: "dsvsdrbdr ertbrt hre g e",
   },
   {
     timestamp: 1715001234567,
@@ -26,7 +26,7 @@ export const pack_ui: PacketInfo[] = [
       protocol: "TCP",
     },
     transport: { proto: "TCP", srcPort: 80, dstPort: 80 },
-    application: new Uint8Array([22, 3, 1, 2, 0]),
+    application: "dsvsdrbdr ertbrt hre g e",
   },
   {
     timestamp: 1715001234567,
@@ -38,7 +38,7 @@ export const pack_ui: PacketInfo[] = [
       protocol: "TCP",
     },
     transport: { proto: "TCP", srcPort: 80, dstPort: 80 },
-    application: new Uint8Array([71, 69, 84, 32, 47, 32, 72, 84, 84, 80]),
+    application: "dsvsdrbdr ertbrt hre g e",
   },
   {
     timestamp: 1715001234567,
@@ -50,7 +50,7 @@ export const pack_ui: PacketInfo[] = [
       protocol: "ICMP",
     },
     transport: { proto: "ICMP", srcPort: 0, dstPort: 0 },
-    application: new Uint8Array([8, 0, 0, 0]),
+    application: "dsvsdrbdr ertbrt hre g e",
   },
   {
     timestamp: 1715001234567,
@@ -62,7 +62,7 @@ export const pack_ui: PacketInfo[] = [
       protocol: "TCP",
     },
     transport: { proto: "ICMP", srcPort: 0, dstPort: 0 },
-    application: new Uint8Array([128, 0, 0, 0]),
+    application: "dsvsdrbdr ertbrt hre g e",
   },
   {
     timestamp: 1715001234567,
@@ -74,7 +74,7 @@ export const pack_ui: PacketInfo[] = [
       protocol: "TCP",
     },
     transport: { proto: "TCP", srcPort: 53000, dstPort: 443 },
-    application: new Uint8Array([23, 3, 3, 0, 50]),
+    application: "dsvsdrbdr ertbrt hre g e",
   },
   {
     timestamp: 1715001234567,
@@ -86,7 +86,7 @@ export const pack_ui: PacketInfo[] = [
       protocol: "UDP",
     },
     transport: { proto: "UDP", srcPort: 5683, dstPort: 5353 },
-    application: new Uint8Array([0, 0, 0, 0]),
+    application: "dsvsdrbdr ertbrt hre g e",
   },
   {
     timestamp: 1715001234567,
@@ -98,7 +98,7 @@ export const pack_ui: PacketInfo[] = [
       protocol: "TCP",
     },
     transport: { proto: "TCP", srcPort: 8080, dstPort: 80 },
-    application: new Uint8Array([80, 79, 83, 84, 32, 47]),
+    application: "dsvsdrbdr ertbrt hre g e",
   },
   {
     timestamp: 1715001234567,
@@ -110,7 +110,7 @@ export const pack_ui: PacketInfo[] = [
       protocol: "UDP",
     },
     transport: { proto: "UDP", srcPort: 5683, dstPort: 5353 },
-    application: new Uint8Array([68, 72, 67, 80]),
+    application: "dsvsdrbdr ertbrt hre g e",
   },
   {
     timestamp: 1715001234567,
@@ -122,7 +122,7 @@ export const pack_ui: PacketInfo[] = [
       protocol: "TCP",
     },
     transport: { proto: "TCP", srcPort: 8080, dstPort: 80 },
-    application: new Uint8Array([22, 3, 3, 0, 100]),
+    application: "dsvsdrbdr ertbrt hre g e",
   },
 ];
 

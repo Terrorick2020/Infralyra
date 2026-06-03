@@ -11,6 +11,9 @@ services:
     networks:
       test_network:
         ipv4_address: 192.168.103.2
+    depends_on:
+      main:
+        condition: service_healthy
 
   laptop:
     build:
@@ -25,7 +28,8 @@ services:
       test_network:
         ipv4_address: 192.168.103.3
     depends_on:
-      - main
+      main:
+        condition: service_healthy
 
   mobile_phone:
     build:
@@ -38,7 +42,8 @@ services:
       test_network:
         ipv4_address: 192.168.103.4
     depends_on:
-      - main
+      main:
+        condition: service_healthy
 
   iot_device:
     build:
@@ -51,7 +56,8 @@ services:
       test_network:
         ipv4_address: 192.168.103.5
     depends_on:
-      - main
+      main:
+        condition: service_healthy
 
   printer:
     build:
@@ -64,7 +70,8 @@ services:
       test_network:
         ipv4_address: 192.168.103.6
     depends_on:
-      - main
+      main:
+        condition: service_healthy
 
   scanner:
     build:
@@ -77,7 +84,8 @@ services:
       test_network:
         ipv4_address: 192.168.103.7
     depends_on:
-      - main
+      main:
+        condition: service_healthy
 
   file_server:
     build:
@@ -92,7 +100,8 @@ services:
       test_network:
         ipv4_address: 192.168.103.8
     depends_on:
-      - main
+      main:
+        condition: service_healthy
 
   web_server:
     build:
@@ -103,7 +112,8 @@ services:
       test_network:
         ipv4_address: 192.168.103.9
     depends_on:
-      - main
+      main:
+        condition: service_healthy
 
   remote_access_server:
     build:
@@ -118,7 +128,8 @@ services:
       test_network:
         ipv4_address: 192.168.103.10
     depends_on:
-      - main
+      main:
+        condition: service_healthy
 
   main:
     build:
@@ -138,6 +149,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - DOCKER_HOST=unix:///var/run/docker.sock
+    healthcheck:
+      test: ["CMD-SHELL", "docker ps --filter name=api-1 --filter status=running -q | grep -q . || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 300s
 
 networks:
   test_network:

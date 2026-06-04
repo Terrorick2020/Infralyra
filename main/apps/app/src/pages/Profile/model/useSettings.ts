@@ -15,7 +15,7 @@ interface SignUpPayload {
 
 export function useSettings() {
   const settings = useSelector((state: IRootState) => state.settings);
-  const [role, setRole] = useState<string>("admin");
+  const [role, _setRole] = useState<string>("admin");
   const [open, setOpen] = useState<boolean>(false);
   const [newUsername, setNewUsername] = useState("");
   const [newName, setNewName] = useState("");

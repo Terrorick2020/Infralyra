@@ -6,6 +6,7 @@ import (
 	"github.com/redis/go-redis/v9"
 
 	"InfralyraApi/config"
+	"InfralyraApi/pkg/logger"
 	"InfralyraApi/pkg/scan"
 )
 
@@ -54,9 +55,11 @@ func (rrs *RedisRepoScan) GetDevices(ctx context.Context, inface string) ([]scan
 	res_key := createKey(deviceKey, inface)
 
 	err := rrs.client.Get(ctx, res_key, &devices)
+	logger.Logger.Infof("Устройства: %v, %v", devices, err)
 	if err == redis.Nil {
-		return nil, nil
+		return []scan.DeviceWithIp{}, nil
 	}
+
 	
 	return  devices, err
 }

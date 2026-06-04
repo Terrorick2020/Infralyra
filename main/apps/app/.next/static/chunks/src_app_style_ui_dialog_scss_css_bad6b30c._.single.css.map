@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///turbopack:///[project]/src/app/style/ui/home/anonymous/VsCode/Projects/Infralyra/main/apps/app/src/app/style/ui/dialog.scss"],"sourcesContent":[":root .MuiTypography-root {\n    background: #2e2f3e;\n}\n\n:root .MuiDialogContent-root {\n    background: #2e2f3e;\n}\n\n:root .MuiDialogActions-root {\n    background: #2e2f3e;\n}"],"names":[],"mappings":"AAAA"}}]
+}

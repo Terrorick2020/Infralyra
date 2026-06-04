@@ -292,25 +292,20 @@ const pack_ui = [
         timestamp: 1715001234567,
         ethernet: {
             srcMAC: "00:1A:2B:3C:4D:5E",
-            dstMAC: "FF:FF:FF:FF:FF:FF"
+            dstMAC: "A4:5E:60:12:34:56"
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.10.1",
-            dstIP: "192.168.0.1",
+            srcIP: "192.168.103.2",
+            dstIP: "192.168.103.11",
             protocol: "UDP"
         },
         transport: {
             proto: "UDP",
-            srcPort: 5353,
+            srcPort: 5683,
             dstPort: 5353
         },
-        application: new Uint8Array([
-            109,
-            68,
-            78,
-            83
-        ])
+        application: "dsvsdrbdr ertbrt hre g e"
     },
     {
         timestamp: 1715001234567,
@@ -320,63 +315,46 @@ const pack_ui = [
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.10.2",
-            dstIP: "8.8.8.8",
+            srcIP: "192.168.103.3",
+            dstIP: "192.168.103.11",
             protocol: "TCP"
         },
         transport: {
             proto: "TCP",
-            srcPort: 51234,
-            dstPort: 443
+            srcPort: 80,
+            dstPort: 80
         },
-        application: new Uint8Array([
-            22,
-            3,
-            1,
-            2,
-            0
-        ])
+        application: "dsvsdrbdr ertbrt hre g e"
     },
     {
         timestamp: 1715001234567,
         ethernet: {
             srcMAC: "AA:BB:CC:DD:EE:FF",
-            dstMAC: "11:22:33:44:55:66"
+            dstMAC: "A4:5E:60:12:34:56"
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.10.1",
-            dstIP: "142.250.74.14",
+            srcIP: "192.168.103.2",
+            dstIP: "192.168.103.11",
             protocol: "TCP"
         },
         transport: {
             proto: "TCP",
-            srcPort: 52344,
+            srcPort: 80,
             dstPort: 80
         },
-        application: new Uint8Array([
-            71,
-            69,
-            84,
-            32,
-            47,
-            32,
-            72,
-            84,
-            84,
-            80
-        ])
+        application: "dsvsdrbdr ertbrt hre g e"
     },
     {
         timestamp: 1715001234567,
         ethernet: {
             srcMAC: "12:34:56:78:9A:BC",
-            dstMAC: "98:76:54:32:10:FE"
+            dstMAC: "A4:5E:60:12:34:56"
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.10.4",
-            dstIP: "1.1.1.1",
+            srcIP: "192.168.103.5",
+            dstIP: "192.168.103.11",
             protocol: "ICMP"
         },
         transport: {
@@ -384,47 +362,37 @@ const pack_ui = [
             srcPort: 0,
             dstPort: 0
         },
-        application: new Uint8Array([
-            8,
-            0,
-            0,
-            0
-        ])
+        application: "dsvsdrbdr ertbrt hre g e"
     },
     {
         timestamp: 1715001234567,
         ethernet: {
-            srcMAC: "DE:AD:BE:EF:00:01",
-            dstMAC: "FF:FF:FF:FF:FF:FF"
+            srcMAC: "12:34:56:78:9A:BC",
+            dstMAC: "A4:5E:60:12:34:56"
         },
         network: {
-            version: "IPv6",
-            srcIP: "fe80::1",
-            dstIP: "ff02::1",
-            protocol: "ICMPv6"
+            version: "IPv4",
+            srcIP: "192.168.103.5",
+            dstIP: "192.168.103.11",
+            protocol: "TCP"
         },
         transport: {
             proto: "ICMP",
             srcPort: 0,
             dstPort: 0
         },
-        application: new Uint8Array([
-            128,
-            0,
-            0,
-            0
-        ])
+        application: "dsvsdrbdr ertbrt hre g e"
     },
     {
         timestamp: 1715001234567,
         ethernet: {
             srcMAC: "00:AA:BB:CC:DD:EE",
-            dstMAC: "FF:EE:DD:CC:BB:AA"
+            dstMAC: "A4:5E:60:12:34:56"
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.10.5",
-            dstIP: "172.217.16.206",
+            srcIP: "192.168.103.6",
+            dstIP: "192.168.103.11",
             protocol: "TCP"
         },
         transport: {
@@ -432,112 +400,83 @@ const pack_ui = [
             srcPort: 53000,
             dstPort: 443
         },
-        application: new Uint8Array([
-            23,
-            3,
-            3,
-            0,
-            50
-        ])
+        application: "dsvsdrbdr ertbrt hre g e"
     },
     {
         timestamp: 1715001234567,
         ethernet: {
             srcMAC: "01:23:45:67:89:AB",
-            dstMAC: "BA:98:76:54:32:10"
+            dstMAC: "A4:5E:60:12:34:56"
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.0.6",
-            dstIP: "224.0.0.251",
+            srcIP: "192.168.0.7",
+            dstIP: "192.168.103.11",
             protocol: "UDP"
         },
         transport: {
             proto: "UDP",
-            srcPort: 5353,
+            srcPort: 5683,
             dstPort: 5353
         },
-        application: new Uint8Array([
-            0,
-            0,
-            0,
-            0
-        ])
+        application: "dsvsdrbdr ertbrt hre g e"
     },
     {
         timestamp: 1715001234567,
         ethernet: {
             srcMAC: "FE:DC:BA:98:76:54",
-            dstMAC: "12:34:56:78:9A:BC"
+            dstMAC: "A4:5E:60:12:34:56"
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.10.1",
-            dstIP: "93.184.216.34",
+            srcIP: "192.168.103.2",
+            dstIP: "192.168.103.11",
             protocol: "TCP"
         },
         transport: {
             proto: "TCP",
-            srcPort: 54000,
+            srcPort: 8080,
             dstPort: 80
         },
-        application: new Uint8Array([
-            80,
-            79,
-            83,
-            84,
-            32,
-            47
-        ])
+        application: "dsvsdrbdr ertbrt hre g e"
     },
     {
         timestamp: 1715001234567,
         ethernet: {
             srcMAC: "11:22:33:44:55:66",
-            dstMAC: "66:55:44:33:22:11"
+            dstMAC: "A4:5E:60:12:34:56"
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.10.7",
-            dstIP: "192.168.0.255",
+            srcIP: "192.168.103.8",
+            dstIP: "192.168.103.11",
             protocol: "UDP"
         },
         transport: {
             proto: "UDP",
-            srcPort: 68,
-            dstPort: 67
+            srcPort: 5683,
+            dstPort: 5353
         },
-        application: new Uint8Array([
-            68,
-            72,
-            67,
-            80
-        ])
+        application: "dsvsdrbdr ertbrt hre g e"
     },
     {
         timestamp: 1715001234567,
         ethernet: {
             srcMAC: "CA:FE:BA:BE:00:02",
-            dstMAC: "DE:AD:BE:EF:00:02"
+            dstMAC: "A4:5E:60:12:34:56"
         },
         network: {
             version: "IPv4",
-            srcIP: "192.168.10.6",
-            dstIP: "151.101.1.69",
+            srcIP: "192.168.103.9",
+            dstIP: "192.168.103.11",
             protocol: "TCP"
         },
         transport: {
             proto: "TCP",
-            srcPort: 55000,
-            dstPort: 443
+            srcPort: 8080,
+            dstPort: 80
         },
-        application: new Uint8Array([
-            22,
-            3,
-            3,
-            0,
-            100
-        ])
+        application: "dsvsdrbdr ertbrt hre g e"
     }
 ];
 const getPackUi = ()=>{
@@ -560,7 +499,7 @@ const dev_ui = [
     // 1. Ubuntu PC
     {
         device: {
-            ip: "192.168.10.1",
+            ip: "192.168.103.2",
             mac: "00:1A:2B:3C:4D:10",
             alive: true,
             hostname: "personal-computer-01",
@@ -628,7 +567,7 @@ const dev_ui = [
     // 2. Windows laptop
     {
         device: {
-            ip: "192.168.10.2",
+            ip: "192.168.103.3",
             mac: "00:1A:2B:3C:4D:11",
             alive: true,
             hostname: "laptop-01",
@@ -689,7 +628,7 @@ const dev_ui = [
     // 3. Android phone
     {
         device: {
-            ip: "192.168.10.3",
+            ip: "192.168.103.4",
             mac: "AA:BB:CC:DD:EE:01",
             alive: true,
             hostname: "mobile-phone-01",
@@ -741,7 +680,7 @@ const dev_ui = [
     },
     {
         device: {
-            ip: "192.168.10.4",
+            ip: "192.168.103.5",
             mac: "AA:BB:CC:DD:EE:02",
             alive: true,
             hostname: "iot-signal-sensor-01",
@@ -802,7 +741,7 @@ const dev_ui = [
     // 5. Network printer
     {
         device: {
-            ip: "192.168.10.5",
+            ip: "192.168.103.6",
             mac: "DE:AD:BE:EF:00:01",
             alive: true,
             hostname: "printer-01",
@@ -869,7 +808,7 @@ const dev_ui = [
     },
     {
         device: {
-            ip: "192.168.10.6",
+            ip: "192.168.103.7",
             mac: "DE:AD:BE:EF:00:02",
             alive: true,
             hostname: "scanner-01",
@@ -930,7 +869,7 @@ const dev_ui = [
     // 7. File server
     {
         device: {
-            ip: "192.168.10.7",
+            ip: "192.168.103.8",
             mac: "00:AA:BB:CC:DD:50",
             alive: true,
             hostname: "file-server-01",
@@ -1005,7 +944,7 @@ const dev_ui = [
     // 8. Web server (Debian)
     {
         device: {
-            ip: "192.168.10.8",
+            ip: "192.168.103.9",
             mac: "00:AA:BB:CC:DD:60",
             alive: true,
             hostname: "web-server-01",
@@ -1073,7 +1012,7 @@ const dev_ui = [
     // 9. Remote access server
     {
         device: {
-            ip: "192.168.10.9",
+            ip: "192.168.103.10",
             mac: "00:AA:BB:CC:DD:70",
             alive: true,
             hostname: "remote-access-server-01",
@@ -1129,74 +1068,6 @@ const dev_ui = [
                 168,
                 1,
                 70
-            ]),
-            Mask: new Uint8Array([
-                255,
-                255,
-                255,
-                0
-            ])
-        }
-    },
-    // 10. Gateway / router
-    {
-        device: {
-            ip: "192.168.10.10",
-            mac: "00:11:22:33:44:55",
-            alive: true,
-            hostname: "router",
-            os: "RouterOS",
-            osTtl: 255,
-            osMethod: "ICMP",
-            services: [
-                {
-                    port: 80,
-                    protocol: "TCP",
-                    product: "Router UI",
-                    version: "1.0",
-                    banner: "Admin Panel"
-                },
-                {
-                    port: 53,
-                    protocol: "UDP",
-                    product: "DNS",
-                    version: "1.0",
-                    banner: "DNS Resolver"
-                }
-            ],
-            iot: "gateway",
-            snmp: "enabled",
-            mdns: "enabled",
-            ssdp: "enabled",
-            webStack: "embedded"
-        },
-        interface: {
-            name: "wan0",
-            description: "Router WAN/LAN",
-            flags: 4163,
-            addresses: [
-                {
-                    ip: new Uint8Array([
-                        192,
-                        168,
-                        1,
-                        1
-                    ]),
-                    netmask: new Uint8Array([
-                        255,
-                        255,
-                        255,
-                        0
-                    ])
-                }
-            ]
-        },
-        net: {
-            IP: new Uint8Array([
-                192,
-                168,
-                1,
-                1
             ]),
             Mask: new Uint8Array([
                 255,

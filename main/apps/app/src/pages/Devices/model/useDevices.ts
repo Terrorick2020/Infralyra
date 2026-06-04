@@ -14,6 +14,7 @@ export function useDevices() {
 
   const asyncSetDevices = async () => {
     if (!settings.pcapName) return;
+    let resDevices: DeviceWithIp[] = getDevUi();
 
     try {
       const data: { inface: string } = {
@@ -21,7 +22,7 @@ export function useDevices() {
       };
 
       const response = await api.post("/scan/get-devices", data);
-      let resDevices: DeviceWithIp[] = getDevUi();
+      
 
       if (response.status === 200) {
         const resData = response.data;
@@ -39,6 +40,15 @@ export function useDevices() {
       });
 
     } catch (error) {
+      setDevices((prev) => {
+        const combined = [...prev, ...resDevices];
+
+        return Array.from(
+          new Map(
+            combined.map((device) => [device.device.mac, device]),
+          ).values(),
+        );
+      });
       console.log(error);
     }
   };
